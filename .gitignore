@@ -1,6 +1,7 @@
 node_modules/
 bore.exe
 cloudflared.exe
+ngrok.exe
 public_url.txt
 data/
 public/icons/

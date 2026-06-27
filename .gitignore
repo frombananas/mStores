@@ -11,3 +11,5 @@ public/screenshots/
 *_test*.txt
 *.zip
 *.msi
+tunnel.js
+tunnel_url.txt

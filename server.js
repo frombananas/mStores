@@ -5,9 +5,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '500mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(PUBLIC_DIR));
 
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
+const PUBLIC_DIR = process.env.PUBLIC_DIR || path.join(__dirname, 'public');
 
 function saveData() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -60,7 +61,7 @@ loadData();
 // Ensure directories exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 ['icons', 'apps', 'screenshots'].forEach(function(dir) {
-  const p = path.join(__dirname, 'public', dir);
+  const p = path.join(PUBLIC_DIR, dir);
   if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
 });
 
@@ -219,7 +220,7 @@ app.post('/api/apps/:id/icon', adminAuth, (req, res) => {
   try {
     const ext = matches[1] === 'svg+xml' ? 'svg' : matches[1];
     const filename = 'app_' + found.id + '.' + ext;
-    const filepath = path.join(__dirname, 'public', 'icons', filename);
+    const filepath = path.join(PUBLIC_DIR, 'icons', filename);
     fs.writeFileSync(filepath, matches[2], 'base64');
     found.icon_url = '/icons/' + filename;
     saveData();
@@ -238,7 +239,7 @@ app.post('/api/apps/:id/appfile', adminAuth, (req, res) => {
   const fallback = !matches ? (data.split(',')[1] || data) : matches[1];
   try {
     const filename = (name || 'app_' + found.id + '.msi').replace(/[^a-zA-Z0-9._-]/g, '_');
-    const filepath = path.join(__dirname, 'public', 'apps', filename);
+    const filepath = path.join(PUBLIC_DIR, 'apps', filename);
     fs.writeFileSync(filepath, fallback, 'base64');
     found.file_url = '/apps/' + filename;
     saveData();
@@ -258,7 +259,7 @@ app.post('/api/apps/:id/screenshots', adminAuth, (req, res) => {
   try {
     const count = (found.screenshots || []).length + 1;
     const filename = 'ss_' + found.id + '_' + count + '.png';
-    const filepath = path.join(__dirname, 'public', 'screenshots', filename);
+    const filepath = path.join(PUBLIC_DIR, 'screenshots', filename);
     fs.writeFileSync(filepath, matches[2], 'base64');
     if (!found.screenshots) found.screenshots = [];
     found.screenshots.push('/screenshots/' + filename);
@@ -338,7 +339,7 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
         if (matches) {
           const ext = matches[1] === 'svg+xml' ? 'svg' : matches[1];
           const filename = 'app_' + appId + '.' + ext;
-          const filepath = path.join(__dirname, 'public', 'icons', filename);
+          const filepath = path.join(PUBLIC_DIR, 'icons', filename);
           fs.writeFileSync(filepath, matches[2], 'base64');
           app.icon_url = '/icons/' + filename;
         }
@@ -351,7 +352,7 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
         const fallback = found.file_data.split(',')[1] || found.file_data;
         const safeName = (found.file_name || 'app_' + appId + '.msi');
         const filename = safeName.replace(/[^a-zA-Z0-9._-]/g, '_');
-        const filepath = path.join(__dirname, 'public', 'apps', filename);
+        const filepath = path.join(PUBLIC_DIR, 'apps', filename);
         fs.writeFileSync(filepath, fallback, 'base64');
         app.file_url = '/apps/' + filename;
       } catch(e) { console.error('[file]', e.message); }
@@ -360,7 +361,7 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
     // Save screenshots if provided
     if (found.screenshots_data && found.screenshots_data.length) {
       try {
-        const ssDir = path.join(__dirname, 'public', 'screenshots');
+        const ssDir = path.join(PUBLIC_DIR, 'screenshots');
         found.screenshots_data.forEach(function(data, i) {
           const matches = data.match(/^data:image\/(png|jpeg|jpg|gif|webp);base64,(.+)$/);
           if (matches) {
@@ -442,7 +443,7 @@ app.get('/api/apps/:id/download', (req, res) => {
   const found = apps.find(a => a.id === parseInt(req.params.id));
   if (!found) return res.status(404).json({ error: 'App not found' });
   if (!found.file_url) return res.status(404).json({ error: 'No file uploaded' });
-  const filepath = path.join(__dirname, 'public', found.file_url.replace(/^\//, ''));
+  const filepath = path.join(PUBLIC_DIR, found.file_url.replace(/^\//, ''));
   if (!fs.existsSync(filepath)) return res.status(404).json({ error: 'File not found' });
   const filename = path.basename(found.file_url);
   res.setHeader('Content-Disposition', 'attachment; filename="' + filename + '"');

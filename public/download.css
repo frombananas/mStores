@@ -49,6 +49,8 @@ body { overflow-y: auto; }
 
 .back-btn:hover { opacity: 0.6; }
 
+.app-icon-header { object-fit: cover; }
+
 .title {
   font-size: 42px; font-weight: 200; color: #000;
   margin-left: 20px; letter-spacing: 0.2px;

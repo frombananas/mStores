@@ -5,14 +5,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '500mb' }));
-// Static: code files always from repo, uploads from PUBLIC_DIR
+
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
+const PUBLIC_DIR = process.env.PUBLIC_DIR || path.join(__dirname, 'public');
+
+// Static: code files from repo, uploads from PUBLIC_DIR
 app.use(express.static(path.join(__dirname, 'public')));
 if (PUBLIC_DIR !== path.join(__dirname, 'public')) {
   app.use(express.static(PUBLIC_DIR));
 }
-
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
-const PUBLIC_DIR = process.env.PUBLIC_DIR || path.join(__dirname, 'public');
 
 function saveData() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });

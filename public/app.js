@@ -1,0 +1,580 @@
+(function(){
+  var allApps = [];
+
+  function makeIcon(name, color, size) {
+    var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '"><rect width="' + size + '" height="' + size + '" fill="' + color + '"/><text x="' + (size/2) + '" y="' + (size/2 + 6) + '" text-anchor="middle" fill="white" font-family="Segoe UI,sans-serif" font-size="' + Math.floor(size/3) + '" font-weight="300">' + initials + '</text></svg>';
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
+
+  function renderStars(rating) {
+    var html = '';
+    for (var i = 1; i <= 5; i++) {
+      if (rating >= i) html += '<span class="star full"></span>';
+      else if (rating >= i - 0.5) html += '<span class="star half"></span>';
+      else html += '<span class="star empty"></span>';
+    }
+    return html;
+  }
+
+  function createSpotlightTile(app, delay) {
+    var div = document.createElement('div');
+    div.className = 'spotlight-tile tile';
+    div.style.animationDelay = delay + 'ms';
+    div.classList.add('slide-in');
+    div.dataset.id = app.id;
+
+    var hero = '';
+    if (app.screenshots && app.screenshots.length) {
+      hero = '<div class="spotlight-hero"><img src="' + app.screenshots[0] + '" alt=""></div>';
+    } else {
+      hero = '<div class="spotlight-hero" style="background:' + app.color_theme + ';"><div class="spotlight-hero-placeholder"><span style="color:rgba(255,255,255,0.3);font-size:48px;font-weight:200;">' + app.name + '</span></div></div>';
+    }
+
+    var iconHtml = '';
+    if (app.icon_url) {
+      iconHtml = '<img src="' + app.icon_url + '" alt="">';
+    } else {
+      var initials = app.name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" fill="' + app.color_theme + '"/><text x="80" y="98" text-anchor="middle" fill="white" font-family="Segoe UI,sans-serif" font-size="60" font-weight="300">' + initials + '</text></svg>';
+      iconHtml = '<img src="data:image/svg+xml,' + encodeURIComponent(svg) + '" alt="">';
+    }
+
+    div.innerHTML =
+      hero +
+      '<div class="spotlight-info">' +
+        '<div class="spotlight-icon-frame">' + iconHtml + '</div>' +
+        '<div class="spotlight-text">' +
+          '<span class="spotlight-name" style="color:' + app.color_theme + '">' + app.name + '</span>' +
+          '<span class="spotlight-dev">' + app.developer + '</span>' +
+          '<span class="spotlight-desc">' + (app.description || '') + '</span>' +
+        '</div>' +
+      '</div>';
+    return div;
+  }
+
+  function createSurfaceItem(app, delay) {
+    var div = document.createElement('div');
+    div.className = 'surface-item tile';
+    div.style.animationDelay = delay + 'ms';
+    div.classList.add('slide-in');
+    div.dataset.id = app.id;
+    var icon = app.icon_url || makeIcon(app.name, app.color_theme, 80);
+    div.innerHTML =
+      '<div class="surface-icon"><img src="' + icon + '" width="80" height="80" alt=""></div>' +
+      '<div class="surface-info">' +
+        '<span class="surface-name">' + app.name + '</span>' +
+        '<span class="surface-price">' + app.price + (app.installed ? ' &bull; Установлено' : '') + '</span>' +
+        '<div class="surface-rating">' + renderStars(app.rating) + '</div>' +
+      '</div>';
+    return div;
+  }
+
+  function createFeaturedTile(app, delay) {
+    var div = document.createElement('div');
+    div.className = 'featured-tile tile';
+    div.style.animationDelay = delay + 'ms';
+    div.classList.add('slide-in');
+    div.dataset.id = app.id;
+    var icon = app.icon_url || makeIcon(app.name, app.color_theme, 130);
+
+    var catMap = {
+      social: 'Соцсети', games: 'Игры', productivity: 'Продукты',
+      entertainment: 'Развлечения', news: 'Новости', creativity: 'Творчество',
+      music: 'Музыка', photo: 'Фото', other: 'Другое'
+    };
+    var cat = catMap[app.category] || app.category;
+    var price = app.price === 'Free' ? 'Бесплатно' : app.price;
+
+    div.innerHTML =
+      '<div class="featured-icon"><img src="' + icon + '" width="130" height="130" alt=""></div>' +
+      '<span class="featured-name">' + app.name + '</span>' +
+      '<span class="featured-price">' + price + '</span>' +
+      '<div class="featured-rating-row">' +
+        '<div class="featured-stars">' + renderStars(app.rating) + '</div>' +
+        '<span class="featured-reviews">' + (app.reviewCount || 0) + '</span>' +
+      '</div>' +
+      '<span class="featured-category">' + cat + '</span>';
+    return div;
+  }
+
+  function fetchApps(query) {
+    var params = '';
+    if (query) params = '?search=' + encodeURIComponent(query);
+    return fetch('/api/apps' + params).then(function(r){ return r.json(); });
+  }
+
+  function fetchApp(id) {
+    return fetch('/api/apps/' + id).then(function(r){ return r.json(); });
+  }
+
+  function installApp(id) {
+    return fetch('/api/apps/' + id + '/install', { method: 'POST' }).then(function(r){ return r.json(); });
+  }
+
+  var currentModalApp = null;
+
+  function openModal(id) {
+    fetchApp(id).then(function(app){
+      if (!app) return;
+      currentModalApp = app;
+      var overlay = document.getElementById('modalOverlay');
+      var hero = document.getElementById('modalHero');
+      hero.style.backgroundColor = app.color_theme;
+      var icon = makeIcon(app.name, 'rgba(255,255,255,0.2)', 90);
+      document.getElementById('modalHeroIcon').innerHTML = '<img src="' + icon + '" width="90" height="90" alt="">';
+      document.getElementById('modalTitle').textContent = app.name;
+      document.getElementById('modalDev').textContent = app.developer;
+      document.getElementById('modalRating').innerHTML = renderStars(app.rating);
+      document.getElementById('modalDesc').textContent = app.description;
+      var catMap = { social: 'Соцсети', games: 'Игры', productivity: 'Продукты', entertainment: 'Развлечения', news: 'Новости', creativity: 'Творчество', music: 'Музыка', photo: 'Фото', other: 'Другое' };
+      document.getElementById('modalCategory').textContent = catMap[app.category] || app.category;
+      document.getElementById('modalPrice').textContent = app.price;
+      document.getElementById('modalRatingVal').textContent = app.rating + ' / 5';
+      document.getElementById('moreInfoLink').href = '/download.html?id=' + app.id;
+      updateInstallBtn(app);
+      overlay.classList.add('active');
+    });
+  }
+
+  function updateInstallBtn(app) {
+    var btn = document.getElementById('installBtn');
+    if (app.installed) {
+      btn.textContent = 'Установлено';
+      btn.className = 'install-btn installed';
+    } else {
+      btn.textContent = 'Установить';
+      btn.className = 'install-btn';
+    }
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    currentModalApp = null;
+  }
+
+  function handleInstall() {
+    if (!currentModalApp) return;
+    installApp(currentModalApp.id).then(function(result){
+      if (result.success) {
+        currentModalApp.installed = result.installed;
+        updateInstallBtn(currentModalApp);
+        for (var i = 0; i < allApps.length; i++) {
+          if (allApps[i].id === currentModalApp.id) {
+            allApps[i].installed = result.installed;
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  function renderHome(apps) {
+    var spotlightEl = document.getElementById('spotlightContainer');
+    var surfaceEl = document.getElementById('surfaceList');
+    var featuredEl = document.getElementById('featuredGrid');
+    var newEl = document.getElementById('newGrid');
+    var topFreeEl = document.getElementById('topFreeList');
+
+    spotlightEl.innerHTML = '';
+    surfaceEl.innerHTML = '';
+    featuredEl.innerHTML = '';
+    newEl.innerHTML = '';
+    topFreeEl.innerHTML = '';
+
+    if (apps.length === 0) return;
+
+    var sorted = apps.slice().sort(function(a,b){ return b.rating - a.rating; });
+    var spotlightApps = sorted.slice(0, 1);
+    var delay = 0;
+    var step = 60;
+    spotlightApps.forEach(function(app){
+      var el = createSpotlightTile(app, delay);
+      spotlightEl.appendChild(el);
+      delay += step;
+    });
+
+    var surfaceApps = apps.slice(1, 9);
+    surfaceApps.forEach(function(app){
+      var el = createSurfaceItem(app, delay);
+      surfaceEl.appendChild(el);
+      delay += step;
+    });
+
+    var featuredApps = apps.slice(3, 12);
+    featuredApps.forEach(function(app){
+      var el = createFeaturedTile(app, delay);
+      featuredEl.appendChild(el);
+      delay += step;
+    });
+
+    var newApps = apps.slice(7, 16);
+    newApps.forEach(function(app){
+      var el = createFeaturedTile(app, delay);
+      newEl.appendChild(el);
+      delay += step;
+    });
+
+    var topFreeApps = apps.filter(function(a){ return a.price === 'Free'; }).slice(0, 8);
+    topFreeApps.forEach(function(app){
+      var el = createSurfaceItem(app, delay);
+      topFreeEl.appendChild(el);
+      delay += step;
+    });
+
+    document.querySelectorAll('.tile').forEach(function(el){
+      el.addEventListener('click', tileClickHandler);
+    });
+  }
+
+  function tileClickHandler(e) {
+    var el = e.currentTarget;
+    var id = el.dataset.id;
+    if (id) window.location.href = '/download.html?id=' + id;
+  }
+
+  function doSearch() {
+    var query = document.getElementById('searchInput').value.trim();
+    if (!query) {
+      showHome();
+      return;
+    }
+    fetchApps(query).then(function(results){
+      var track = document.getElementById('panoramaTrack');
+
+      var existing = document.querySelector('.search-section');
+      if (existing) existing.remove();
+
+      // Hide normal sections
+      track.querySelectorAll('.panorama-section').forEach(function(s){
+        s.style.display = 'none';
+        s.style.width = '0';
+        s.style.minWidth = '0';
+        s.style.marginRight = '0';
+      });
+
+      var section = document.createElement('div');
+      section.className = 'search-section';
+      section.style.cssText = 'display:flex;flex-direction:column;min-width:100vw;padding:40px 24px;';
+
+      var header = document.createElement('div');
+      header.style.cssText = 'margin-bottom:24px;';
+
+      var title = document.createElement('h2');
+      title.className = 'section-title';
+      title.style.cssText = 'font-size:1.8rem;font-weight:200;color:#333;margin-bottom:6px;';
+      title.textContent = 'Результаты поиска';
+
+      var word = results.length === 1 ? ' результат' : (results.length >= 2 && results.length <= 4 ? ' результата' : ' результатов');
+      var info = document.createElement('p');
+      info.style.cssText = 'font-size:14px;font-weight:300;color:#777;';
+      info.textContent = results.length + word + ' по "' + query + '"';
+
+      header.appendChild(title);
+      header.appendChild(info);
+
+      var grid = document.createElement('div');
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,150px);gap:16px;';
+
+      results.forEach(function(app, i){
+        var el = createFeaturedTile(app, 0);
+        el.style.animation = 'none';
+        grid.appendChild(el);
+      });
+
+      section.appendChild(header);
+      section.appendChild(grid);
+      track.appendChild(section);
+
+      grid.querySelectorAll('.tile').forEach(function(el){
+        el.addEventListener('click', tileClickHandler);
+      });
+
+      document.getElementById('panorama').scrollLeft = 0;
+    });
+  }
+
+  function showHome() {
+    var existing = document.querySelector('.search-section');
+    if (existing) existing.remove();
+    document.querySelectorAll('.panorama-section').forEach(function(s){
+      s.style.display = '';
+      s.style.width = '';
+      s.style.minWidth = '';
+      s.style.marginRight = '';
+    });
+  }
+
+  /* ─── Auth ───────────────────────────────────── */
+
+  function saveToken(token) {
+    localStorage.setItem('store_token', token || '');
+  }
+
+  function getToken() {
+    return localStorage.getItem('store_token') || '';
+  }
+
+  function loadUser() {
+    var token = getToken();
+    if (!token) return;
+    fetch('/api/me', { headers: { 'x-auth-token': token } })
+      .then(function(r){ return r.json(); })
+      .then(function(user){
+        if (user && user.displayName) setLoggedIn(user);
+      }).catch(function(){});
+  }
+
+  function setLoggedIn(user) {
+    document.getElementById('authBtn').style.display = 'none';
+    document.getElementById('userDisplay').style.display = 'inline-flex';
+    document.getElementById('userDisplay').innerHTML = '<img src="' + (user.avatar_url || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5huors2BmL35-tFrF2_ojZW0bJ4YPK5tV5yvIvSsGTtiC1mqWGpWhf8w&s=10') + '" style="width:22px;height:22px;object-fit:cover;margin-right:6px;">' + user.displayName;
+    document.getElementById('logoutBtn').style.display = 'inline';
+    document.getElementById('submitAppBtn').style.display = 'inline';
+  }
+
+  function setLoggedOut() {
+    localStorage.removeItem('store_token');
+    document.getElementById('authBtn').style.display = 'inline';
+    document.getElementById('userDisplay').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'none';
+    document.getElementById('submitAppBtn').style.display = 'none';
+  }
+
+  function openAuth() {
+    document.getElementById('authOverlay').classList.add('active');
+    document.getElementById('loginMsg').textContent = '';
+    document.getElementById('regMsg').textContent = '';
+  }
+
+  function closeAuth() {
+    document.getElementById('authOverlay').classList.remove('active');
+  }
+
+  function initAuth() {
+    loadUser();
+
+    document.getElementById('authBtn').addEventListener('click', openAuth);
+    document.getElementById('authCloseBtn').addEventListener('click', closeAuth);
+    document.getElementById('authOverlay').addEventListener('click', function(e){
+      if (e.target === this) closeAuth();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeAuth();
+    });
+
+    document.querySelectorAll('.auth-tab').forEach(function(tab){
+      tab.addEventListener('click', function(){
+        document.querySelectorAll('.auth-tab').forEach(function(t){ t.classList.remove('active'); });
+        this.classList.add('active');
+        var isLogin = this.dataset.tab === 'login';
+        document.getElementById('authFormLogin').style.display = isLogin ? 'flex' : 'none';
+        document.getElementById('authFormRegister').style.display = isLogin ? 'none' : 'flex';
+      });
+    });
+
+    function handleLogin() {
+      var username = document.getElementById('loginUsername').value.trim();
+      var password = document.getElementById('loginPassword').value;
+      var msg = document.getElementById('loginMsg');
+      if (!username || !password) { msg.textContent = 'Заполните все поля'; return; }
+      fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username, password: password })
+      }).then(function(r){ return r.json(); }).then(function(res){
+        if (res.success) {
+          saveToken(res.token);
+          setLoggedIn(res.user);
+        closeAuth();
+      } else {
+        msg.textContent = res.error;
+      }
+    }).catch(function(){ msg.textContent = 'Ошибка соединения'; });
+  }
+
+  function handleRegister() {
+      var username = document.getElementById('regUsername').value.trim();
+      var displayName = document.getElementById('regDisplayName').value.trim() || username;
+      var password = document.getElementById('regPassword').value;
+      var msg = document.getElementById('regMsg');
+      if (!username || !password) { msg.textContent = 'Заполните все поля'; return; }
+      fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username, displayName: displayName, password: password })
+      }).then(function(r){ return r.json(); }).then(function(res){
+        if (res.success) {
+          saveToken(res.token);
+          setLoggedIn(res.user);
+        closeAuth();
+      } else {
+        msg.textContent = res.error;
+      }
+    }).catch(function(){ msg.textContent = 'Ошибка соединения'; });
+  }
+
+    document.getElementById('loginBtn').addEventListener('click', handleLogin);
+    document.getElementById('registerBtn').addEventListener('click', handleRegister);
+
+    document.getElementById('loginPassword').addEventListener('keydown', function(e){
+      if (e.key === 'Enter') handleLogin();
+    });
+    document.getElementById('regPassword').addEventListener('keydown', function(e){
+      if (e.key === 'Enter') handleRegister();
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', function(){
+      setLoggedOut();
+    });
+  }
+
+  /* ─── End Auth ───────────────────────────────── */
+
+  function init() {
+    initAuth();
+
+    fetchApps().then(function(apps){
+      allApps = apps;
+      renderHome(apps);
+    });
+
+    var panorama = document.getElementById('panorama');
+    panorama.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      panorama.scrollBy({ left: e.deltaY * 5, behavior: 'smooth' });
+    }, { passive: false });
+
+    document.getElementById('searchInput').addEventListener('keydown', function(e){
+      if (e.key === 'Enter') doSearch();
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function(){
+      if (!this.value.trim()) {
+        showHome();
+      }
+    });
+
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    document.getElementById('modalOverlay').addEventListener('click', function(e){
+      if (e.target === this) closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeModal();
+    });
+    document.getElementById('installBtn').addEventListener('click', handleInstall);
+
+    document.querySelector('.header-logo').addEventListener('click', function(e){
+      e.preventDefault();
+      document.getElementById('searchInput').value = '';
+      showHome();
+      document.getElementById('panorama').scrollLeft = 0;
+    });
+
+    // Submit app
+    document.getElementById('submitAppBtn').addEventListener('click', function(){
+      document.getElementById('submitOverlay').style.display = 'flex';
+      document.getElementById('submitMsg').textContent = '';
+    });
+    document.getElementById('submitCloseBtn').addEventListener('click', function(){
+      document.getElementById('submitOverlay').style.display = 'none';
+    });
+    document.getElementById('submitOverlay').addEventListener('click', function(e){
+      if (e.target === this) this.style.display = 'none';
+    });
+    document.getElementById('submitAppBtnSend').addEventListener('click', function(){
+      var name = document.getElementById('subName').value.trim();
+      var developer = document.getElementById('subDeveloper').value.trim();
+      var msg = document.getElementById('submitMsg');
+      var btn = this;
+      if (!name || !developer) { msg.textContent = 'Название и разработчик обязательны'; return; }
+      var token = getToken();
+      btn.textContent = 'Отправка...';
+      btn.disabled = true;
+      msg.textContent = '';
+
+      var iconInput = document.getElementById('subIcon');
+      var fileInput = document.getElementById('subAppFile');
+      var ssInput = document.getElementById('subScreenshots');
+
+      var tasks = [];
+      var iconData = '';
+      var fileData = '';
+      var fileName = '';
+      var screenshotsData = [];
+
+      if (iconInput && iconInput.files && iconInput.files[0]) {
+        tasks.push(readFile64(iconInput.files[0]).then(function(d){ iconData = d; }));
+      }
+
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        tasks.push(readFile64(fileInput.files[0]).then(function(d){ fileData = d; fileName = fileInput.files[0].name; }));
+      }
+
+      if (ssInput && ssInput.files) {
+        for (var i = 0; i < ssInput.files.length; i++) {
+          (function(f){
+            tasks.push(readFile64(f).then(function(d){ screenshotsData.push(d); }));
+          })(ssInput.files[i]);
+        }
+      }
+
+      var doSend = function(){
+        fetch('/api/submissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-auth-token': token },
+          body: JSON.stringify({
+            name: name,
+            developer: developer,
+            description: document.getElementById('subDescription').value.trim(),
+            platform: document.getElementById('subPlatform').value,
+            category: document.getElementById('subCategory').value,
+            price: document.getElementById('subPrice').value.trim() || 'Free',
+            icon_data: iconData,
+            file_data: fileData,
+            file_name: fileName,
+            screenshots_data: screenshotsData
+          })
+        }).then(function(r){ return r.json(); }).then(function(d){
+          if (d.success) {
+            msg.style.color = '#1da84c';
+            msg.textContent = 'Заявка отправлена! После модерации приложение появится в магазине.';
+            document.getElementById('subName').value = '';
+            document.getElementById('subDeveloper').value = '';
+            document.getElementById('subDescription').value = '';
+            document.getElementById('subPrice').value = 'Free';
+            if (iconInput) iconInput.value = '';
+            if (fileInput) fileInput.value = '';
+            if (ssInput) ssInput.value = '';
+          } else {
+            msg.style.color = '#E81123';
+            msg.textContent = d.error || 'Ошибка';
+          }
+        }).catch(function(){
+          msg.style.color = '#E81123';
+          msg.textContent = 'Ошибка соединения';
+        }).then(function(){
+          btn.textContent = 'Отправить';
+          btn.disabled = false;
+        });
+      };
+
+      if (tasks.length) {
+        Promise.all(tasks).then(doSend);
+      } else {
+        doSend();
+      }
+    });
+  }
+
+  function readFile64(file) {
+    return new Promise(function(resolve){
+      var reader = new FileReader();
+      reader.onload = function(){ resolve(reader.result); };
+      reader.onerror = function(){ resolve(''); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();

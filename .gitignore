@@ -1,0 +1,13 @@
+node_modules/
+bore.exe
+cloudflared.exe
+public_url.txt
+data/
+public/icons/
+public/apps/
+public/screenshots/
+*_err*.txt
+*_out*.txt
+*_test*.txt
+*.zip
+*.msi

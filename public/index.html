@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mStore</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <header class="metro-header">
+    <nav class="header-nav">
+      <a href="#" class="header-logo" data-nav="home">
+        <img src="/favicon.png" width="40" height="40" alt="" style="display:block;">
+        <span>mStore</span>
+      </a>
+      <span class="submit-app-link" id="submitAppBtn" style="display:none;">Подать заявку</span>
+    </nav>
+    <div class="header-search">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Поиск приложений" autocomplete="off">
+      <button class="header-user-btn" id="authBtn">Войти</button>
+      <span class="header-user-name" id="userDisplay" style="display:none;color:#fff;font-size:13px;font-weight:300;align-items:center;"></span>
+      <button class="header-logout-btn" id="logoutBtn" style="display:none;">Выйти</button>
+    </div>
+  </header>
+
+  <main class="panorama" id="panorama">
+    <div class="panorama-track" id="panoramaTrack">
+
+      <section class="panorama-section" id="sectionSpotlight">
+        <h2 class="section-title">В центре внимания</h2>
+        <div class="spotlight-container" id="spotlightContainer"></div>
+      </section>
+
+      <section class="panorama-section" id="sectionSurface">
+        <h2 class="section-title">Рекомендуем</h2>
+        <div class="surface-list" id="surfaceList"></div>
+      </section>
+
+      <section class="panorama-section" id="sectionFeatured">
+        <h2 class="section-title">Избранное</h2>
+        <div class="featured-grid" id="featuredGrid"></div>
+      </section>
+
+      <section class="panorama-section" id="sectionNew">
+        <h2 class="section-title">Новинки</h2>
+        <div class="featured-grid" id="newGrid"></div>
+      </section>
+
+      <section class="panorama-section" id="sectionTopFree">
+        <h2 class="section-title">Бесплатные</h2>
+        <div class="surface-list" id="topFreeList"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <div class="submit-overlay" id="submitOverlay" style="display:none;">
+    <div class="submit-panel">
+      <button class="auth-close" id="submitCloseBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+      <div class="auth-header">
+        <img src="/favicon.png" width="36" height="36" alt="">
+        <span>Подать заявку</span>
+      </div>
+      <div class="auth-body">
+        <input type="text" id="subName" class="auth-input" placeholder="Название приложения" maxlength="50">
+        <input type="text" id="subDeveloper" class="auth-input" placeholder="Разработчик" maxlength="50">
+        <select id="subPlatform" class="auth-input">
+          <option value="windows">Windows</option>
+          <option value="android">Android</option>
+          <option value="iphone">iPhone</option>
+          <option value="windowsphone">Windows Phone</option>
+        </select>
+        <select id="subCategory" class="auth-input">
+          <option value="Social">Social</option>
+          <option value="Games">Games</option>
+          <option value="Productivity">Productivity</option>
+          <option value="Music">Music</option>
+          <option value="Photo">Photo</option>
+          <option value="Weather">Weather</option>
+          <option value="News">News</option>
+          <option value="Sports">Sports</option>
+        </select>
+        <input type="text" id="subPrice" class="auth-input" placeholder="Цена (Free или сумма)" value="Free">
+        <textarea id="subDescription" class="auth-input" placeholder="Описание" style="resize:vertical;min-height:60px;" maxlength="500"></textarea>
+        <div style="margin:8px 0;">
+          <label style="display:block;font-size:12px;font-weight:400;color:#555;margin-bottom:4px;">Иконка (PNG/JPEG)</label>
+          <input type="file" id="subIcon" accept="image/png,image/jpeg,image/gif,image/webp" style="font-size:12px;">
+        </div>
+        <div style="margin:8px 0;">
+          <label style="display:block;font-size:12px;font-weight:400;color:#555;margin-bottom:4px;">Файл приложения</label>
+          <input type="file" id="subAppFile" style="font-size:12px;">
+        </div>
+        <div style="margin:8px 0;">
+          <label style="display:block;font-size:12px;font-weight:400;color:#555;margin-bottom:4px;">Скриншоты</label>
+          <input type="file" id="subScreenshots" accept="image/png,image/jpeg,image/gif,image/webp" multiple style="font-size:12px;">
+        </div>
+        <button class="auth-submit" id="submitAppBtnSend">Отправить</button>
+        <p class="auth-msg" id="submitMsg"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-panel" id="authPanel">
+      <button class="auth-close" id="authCloseBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+      <div class="auth-header">
+        <img src="/favicon.png" width="36" height="36" alt="" style="display:block;">
+        <span>Metro Store</span>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Вход</button>
+        <button class="auth-tab" data-tab="register">Регистрация</button>
+      </div>
+      <div class="auth-body">
+        <div class="auth-form" id="authFormLogin">
+          <input type="text" class="auth-input" id="loginUsername" placeholder="Имя пользователя" maxlength="30">
+          <input type="password" class="auth-input" id="loginPassword" placeholder="Пароль">
+          <button class="auth-submit" id="loginBtn">Войти</button>
+          <p class="auth-msg" id="loginMsg"></p>
+        </div>
+        <div class="auth-form" id="authFormRegister" style="display:none;">
+          <input type="text" class="auth-input" id="regUsername" placeholder="Имя пользователя" maxlength="30">
+          <input type="text" class="auth-input" id="regDisplayName" placeholder="Отображаемое имя" maxlength="30">
+          <input type="password" class="auth-input" id="regPassword" placeholder="Пароль">
+          <button class="auth-submit" id="registerBtn">Регистрация</button>
+          <p class="auth-msg" id="regMsg"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-panel" id="modalPanel">
+      <button class="modal-close-btn" id="modalCloseBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+      <div class="modal-hero" id="modalHero">
+        <div class="modal-hero-icon" id="modalHeroIcon"></div>
+        <div class="modal-hero-info">
+          <h1 class="modal-hero-title" id="modalTitle"></h1>
+          <p class="modal-hero-dev" id="modalDev"></p>
+          <div class="modal-hero-rating" id="modalRating"></div>
+        </div>
+      </div>
+      <div class="modal-content">
+        <p class="modal-description" id="modalDesc"></p>
+        <div class="modal-meta">
+          <div class="meta-item">
+            <span class="meta-label">Категория</span>
+            <span class="meta-value" id="modalCategory"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Цена</span>
+            <span class="meta-value" id="modalPrice"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Рейтинг</span>
+            <span class="meta-value" id="modalRatingVal"></span>
+          </div>
+        </div>
+        <button class="install-btn" id="installBtn">Установить</button>
+        <a class="more-info-link" id="moreInfoLink" href="#">Подробнее</a>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="/app.js"></script>
+</body>
+</html>

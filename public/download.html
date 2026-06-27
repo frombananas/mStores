@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>О приложении</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/download.css">
+</head>
+<body>
+
+  <main class="page">
+
+    <div class="top-row">
+      <button class="back-btn" id="backBtn" title="Back">
+        <img src="/arrow_back.png" width="56" height="72" alt="Back" style="object-fit:cover;">
+      </button>
+      <img class="app-icon-header" id="appIconHeader" src="" alt="" style="width:80px;height:80px;margin-left:8px;display:none;">
+      <h1 class="title" id="appTitle">App Name</h1>
+    </div>
+
+    <div class="content-grid">
+
+      <div class="col-left">
+        <button class="download-btn" id="downloadBtn">Скачать</button>
+
+        <h3 class="desc-title">Описание:</h3>
+        <p class="desc" id="appDescription">
+          Загрузка...
+        </p>
+
+        <div class="meta" id="metaBlock">
+          <div class="meta-row"><span class="meta-label">Размер:</span><span class="meta-val" id="fileSize">12.8 MB</span></div>
+          <div class="meta-row"><span class="meta-label">Издатель:</span><span class="meta-val" id="publisher">—</span></div>
+          <div class="meta-row"><span class="meta-label">Права:</span><span class="meta-val" id="copyright">—</span></div>
+          <div class="meta-row"><span class="meta-label">Платформа:</span><span class="meta-val" id="appPlatform">—</span></div>
+          <div class="meta-row"><span class="meta-label">Категория:</span><span class="meta-val" id="appCategory">—</span></div>
+          <div class="meta-row"><span class="meta-label">Цена:</span><span class="meta-val" id="appPrice">—</span></div>
+          <div class="meta-row"><span class="meta-label">Рейтинг:</span><span class="meta-val" id="appRating">—</span></div>
+        </div>
+      </div>
+
+      <div class="col-right">
+        <div class="screenshots-gallery" id="screenshotsGallery">
+          <img class="hero-img" id="heroImg" alt="Скриншот" src="">
+          <div class="screenshot-thumbs" id="screenshotThumbs"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <section class="reviews" id="reviewsSection">
+      <h2 class="notes-title">Отзывы</h2>
+      <div class="reviews-list" id="reviewsList"></div>
+      <div class="review-form" id="reviewFormEl">
+        <h3 class="review-form-title">Написать отзыв</h3>
+        <div class="review-author-display" id="reviewAuthorDisplay" style="display:none;font-size:13px;color:#888;margin-bottom:8px;">Вы пишете как <strong id="reviewAuthorName"></strong></div>
+        <div class="review-stars" id="reviewStars">
+          <span class="rstar" data-v="1">&#9733;</span>
+          <span class="rstar" data-v="2">&#9733;</span>
+          <span class="rstar" data-v="3">&#9733;</span>
+          <span class="rstar" data-v="4">&#9733;</span>
+          <span class="rstar" data-v="5">&#9733;</span>
+        </div>
+        <textarea id="reviewComment" class="review-input review-textarea" placeholder="Напишите отзыв..." maxlength="500"></textarea>
+        <button class="submit-btn" id="reviewSubmitBtn">Отправить</button>
+        <p class="review-msg" id="reviewMsg"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/download.js"></script>
+</body>
+</html>

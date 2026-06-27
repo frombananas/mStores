@@ -4,7 +4,7 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json({ limit: '1gb' }));
+app.use(express.json({ limit: '2gb' }));
 
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 const PUBLIC_DIR = process.env.PUBLIC_DIR || path.join(__dirname, 'public');

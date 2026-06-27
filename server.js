@@ -4,7 +4,7 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json({ limit: '200mb' }));
+app.use(express.json({ limit: '500mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const DATA_DIR = path.join(__dirname, 'data');
@@ -218,10 +218,9 @@ app.post('/api/apps/:id/icon', adminAuth, (req, res) => {
   if (!matches) return res.status(400).json({ error: 'Invalid image format' });
   try {
     const ext = matches[1] === 'svg+xml' ? 'svg' : matches[1];
-    const buffer = Buffer.from(matches[2], 'base64');
     const filename = 'app_' + found.id + '.' + ext;
     const filepath = path.join(__dirname, 'public', 'icons', filename);
-    fs.writeFileSync(filepath, buffer);
+    fs.writeFileSync(filepath, matches[2], 'base64');
     found.icon_url = '/icons/' + filename;
     saveData();
     res.json({ success: true, icon_url: found.icon_url });
@@ -238,15 +237,14 @@ app.post('/api/apps/:id/appfile', adminAuth, (req, res) => {
   const matches = data.match(/^data:application\/octet-stream;base64,(.+)$/);
   const fallback = !matches ? (data.split(',')[1] || data) : matches[1];
   try {
-    const buffer = Buffer.from(fallback, 'base64');
     const filename = (name || 'app_' + found.id + '.msi').replace(/[^a-zA-Z0-9._-]/g, '_');
     const filepath = path.join(__dirname, 'public', 'apps', filename);
-    fs.writeFileSync(filepath, buffer);
+    fs.writeFileSync(filepath, fallback, 'base64');
     found.file_url = '/apps/' + filename;
     saveData();
     res.json({ success: true, file_url: found.file_url });
   } catch(e) {
-    res.status(400).json({ error: 'Файл слишком большой. Максимум ~100 МБ.' });
+    res.status(400).json({ error: 'Файл слишком большой.' });
   }
 });
 
@@ -258,11 +256,10 @@ app.post('/api/apps/:id/screenshots', adminAuth, (req, res) => {
   const matches = data.match(/^data:image\/(png|jpeg|jpg|gif|webp);base64,(.+)$/);
   if (!matches) return res.status(400).json({ error: 'Invalid image format' });
   try {
-    const buffer = Buffer.from(matches[2], 'base64');
     const count = (found.screenshots || []).length + 1;
     const filename = 'ss_' + found.id + '_' + count + '.png';
     const filepath = path.join(__dirname, 'public', 'screenshots', filename);
-    fs.writeFileSync(filepath, buffer);
+    fs.writeFileSync(filepath, matches[2], 'base64');
     if (!found.screenshots) found.screenshots = [];
     found.screenshots.push('/screenshots/' + filename);
     saveData();
@@ -340,10 +337,9 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
         const matches = found.icon_data.match(/^data:image\/(png|jpeg|jpg|gif|webp|svg\+xml);base64,(.+)$/);
         if (matches) {
           const ext = matches[1] === 'svg+xml' ? 'svg' : matches[1];
-          const buffer = Buffer.from(matches[2], 'base64');
           const filename = 'app_' + appId + '.' + ext;
           const filepath = path.join(__dirname, 'public', 'icons', filename);
-          fs.writeFileSync(filepath, buffer);
+          fs.writeFileSync(filepath, matches[2], 'base64');
           app.icon_url = '/icons/' + filename;
         }
       } catch(e) { console.error('[icon]', e.message); }
@@ -353,11 +349,10 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
     if (found.file_data) {
       try {
         const fallback = found.file_data.split(',')[1] || found.file_data;
-        const buffer = Buffer.from(fallback, 'base64');
         const safeName = (found.file_name || 'app_' + appId + '.msi');
         const filename = safeName.replace(/[^a-zA-Z0-9._-]/g, '_');
         const filepath = path.join(__dirname, 'public', 'apps', filename);
-        fs.writeFileSync(filepath, buffer);
+        fs.writeFileSync(filepath, fallback, 'base64');
         app.file_url = '/apps/' + filename;
       } catch(e) { console.error('[file]', e.message); }
     }
@@ -369,10 +364,9 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
         found.screenshots_data.forEach(function(data, i) {
           const matches = data.match(/^data:image\/(png|jpeg|jpg|gif|webp);base64,(.+)$/);
           if (matches) {
-            const buffer = Buffer.from(matches[2], 'base64');
             const filename = 'ss_' + appId + '_' + (i + 1) + '.png';
             const filepath = path.join(ssDir, filename);
-            fs.writeFileSync(filepath, buffer);
+            fs.writeFileSync(filepath, matches[2], 'base64');
             app.screenshots.push('/screenshots/' + filename);
           }
         });

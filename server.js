@@ -351,6 +351,20 @@ app.get('/api/categories', (req, res) => {
   res.json([...new Set(rows.map(a => a.category))]);
 });
 
+// ─── Deploy (HTTP-based pull+restart, works without SSH) ──────────────────
+
+app.post('/__deploy', adminAuth, (req, res) => {
+  const { execSync } = require('child_process');
+  try {
+    const out1 = execSync('cd /opt/mStores && git pull origin main 2>&1').toString();
+    const out2 = execSync('cd /opt/mStores && npm install --omit=dev 2>&1').toString();
+    res.json({ success: true, git: out1, npm: out2 });
+    setTimeout(() => process.exit(0), 500);
+  } catch(e) {
+    res.status(500).json({ error: e.toString() });
+  }
+});
+
 // ─── Error handler ───────────────────────────────────────────────────────
 
 app.use((err, req, res, next) => {

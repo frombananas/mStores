@@ -1,19 +1,23 @@
 (function(){
   var TOKEN = '';
-  var currentIconData = null;
-  var currentFileData = null;
-  var currentFileName = '';
-  var currentScreenshots = [];
+  var currentIconFile = null;
+  var currentFileFile = null;
+  var currentScreenshotFiles = [];
   var currentExistingScreenshots = [];
 
   function api(path, opts) {
     opts = opts || {};
-    var headers = { 'Content-Type': 'application/json' };
+    var headers = {};
     if (TOKEN) headers['x-admin-token'] = TOKEN;
+    var body = opts.body;
+    if (!opts.noJson) {
+      headers['Content-Type'] = 'application/json';
+      body = body ? JSON.stringify(body) : undefined;
+    }
     return fetch(path, {
       method: opts.method || 'GET',
       headers: headers,
-      body: opts.body ? JSON.stringify(opts.body) : undefined
+      body: body
     }).then(function(r){
       return r.text().then(function(text){
         try { return JSON.parse(text); }
@@ -112,10 +116,9 @@
   }
 
   window.editApp = function(id) {
-    currentIconData = null;
-    currentFileData = null;
-    currentFileName = '';
-    currentScreenshots = [];
+    currentIconFile = null;
+    currentFileFile = null;
+    currentScreenshotFiles = [];
     currentExistingScreenshots = [];
     document.getElementById('screenshotsPreview').innerHTML = '';
     api('/api/apps/' + id).then(function(app){
@@ -174,10 +177,9 @@
   }
 
   function openAddForm() {
-    currentIconData = null;
-    currentFileData = null;
-    currentFileName = '';
-    currentScreenshots = [];
+    currentIconFile = null;
+    currentFileFile = null;
+    currentScreenshotFiles = [];
     currentExistingScreenshots = [];
     document.getElementById('editId').value = '';
     document.getElementById('fName').value = '';
@@ -198,17 +200,10 @@
 
   function closeForm() {
     document.getElementById('appModalOverlay').style.display = 'none';
-    currentIconData = null;
-    currentFileData = null;
-    currentFileName = '';
-    currentScreenshots = [];
+    currentIconFile = null;
+    currentFileFile = null;
+    currentScreenshotFiles = [];
     currentExistingScreenshots = [];
-  }
-
-  function readFileAsDataURL(file, cb) {
-    var reader = new FileReader();
-    reader.onload = function(){ cb(reader.result); };
-    reader.readAsDataURL(file);
   }
 
   function submitForm(e) {
@@ -229,25 +224,33 @@
     };
     var method = id ? 'PUT' : 'POST';
     var url = id ? '/api/apps/' + id : '/api/apps';
-    api(url, { method: method, body: data }).then(function(res){
+    api(url, { method: method, body: JSON.stringify(data) }).then(function(res){
       if (!res.success) { btn.textContent = id ? 'Сохранить' : 'Добавить'; btn.disabled = false; alert('Ошибка: ' + (res.error || 'неизвестно')); return; }
       var appId = res.app ? res.app.id : id;
       var chain = Promise.resolve();
-      if (currentIconData) {
+      if (currentIconFile) {
         chain = chain.then(function(){
-          return api('/api/apps/' + appId + '/icon', { method: 'POST', body: { data: currentIconData } });
+          var fd = new FormData();
+          fd.append('icon', currentIconFile);
+          return api('/api/apps/' + appId + '/icon', { method: 'POST', body: fd, noJson: true });
         });
       }
-      if (currentFileData) {
+      if (currentFileFile) {
         chain = chain.then(function(){
-          return api('/api/apps/' + appId + '/appfile', { method: 'POST', body: { data: currentFileData, name: currentFileName } });
+          var fd = new FormData();
+          fd.append('appfile', currentFileFile);
+          return api('/api/apps/' + appId + '/appfile', { method: 'POST', body: fd, noJson: true });
         });
       }
-      currentScreenshots.forEach(function(ss){
+      if (currentScreenshotFiles.length) {
         chain = chain.then(function(){
-          return api('/api/apps/' + appId + '/screenshots', { method: 'POST', body: { data: ss } });
+          var fd = new FormData();
+          currentScreenshotFiles.forEach(function(ss){
+            fd.append('screenshots', ss);
+          });
+          return api('/api/apps/' + appId + '/screenshots', { method: 'POST', body: fd, noJson: true });
         });
-      });
+      }
       chain.then(function(){
         closeForm();
         refreshList();
@@ -292,21 +295,16 @@
     document.getElementById('fIcon').addEventListener('change', function(){
       var file = this.files[0];
       if (!file) return;
-      readFileAsDataURL(file, function(data){
-        currentIconData = data;
-        document.getElementById('iconPreviewImg').src = data;
-        document.getElementById('iconPreview').style.display = '';
-      });
+      currentIconFile = file;
+      document.getElementById('iconPreviewImg').src = URL.createObjectURL(file);
+      document.getElementById('iconPreview').style.display = '';
     });
 
     document.getElementById('fAppFile').addEventListener('change', function(){
       var file = this.files[0];
       if (!file) return;
-      readFileAsDataURL(file, function(data){
-        currentFileData = data;
-        currentFileName = file.name;
-        document.getElementById('fileInfo').textContent = 'Файл: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
-      });
+      currentFileFile = file;
+      document.getElementById('fileInfo').textContent = 'Файл: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
     });
 
     document.getElementById('fScreenshots').addEventListener('change', function(){
@@ -314,13 +312,11 @@
       var preview = document.getElementById('screenshotsPreview');
       for (var i = 0; i < files.length; i++) {
         (function(file){
-          readFileAsDataURL(file, function(data){
-            currentScreenshots.push(data);
-            var wrap = document.createElement('div');
-            wrap.style.position = 'relative';
-            wrap.innerHTML = '<img src="' + data + '" width="100" height="70" alt="" style="border:1px solid #ddd;object-fit:cover;">';
-            preview.appendChild(wrap);
-          });
+          currentScreenshotFiles.push(file);
+          var wrap = document.createElement('div');
+          wrap.style.position = 'relative';
+          wrap.innerHTML = '<img src="' + URL.createObjectURL(file) + '" width="100" height="70" alt="" style="border:1px solid #ddd;object-fit:cover;">';
+          preview.appendChild(wrap);
         })(files[i]);
       }
     });

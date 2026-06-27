@@ -493,86 +493,56 @@
       btn.disabled = true;
       msg.textContent = '';
 
+      var fd = new FormData();
+      fd.append('name', name);
+      fd.append('developer', developer);
+      fd.append('description', document.getElementById('subDescription').value.trim());
+      fd.append('platform', document.getElementById('subPlatform').value);
+      fd.append('category', document.getElementById('subCategory').value);
+      fd.append('price', document.getElementById('subPrice').value.trim() || 'Free');
+
       var iconInput = document.getElementById('subIcon');
       var fileInput = document.getElementById('subAppFile');
       var ssInput = document.getElementById('subScreenshots');
 
-      var tasks = [];
-      var iconData = '';
-      var fileData = '';
-      var fileName = '';
-      var screenshotsData = [];
-
       if (iconInput && iconInput.files && iconInput.files[0]) {
-        tasks.push(readFile64(iconInput.files[0]).then(function(d){ iconData = d; }));
+        fd.append('icon', iconInput.files[0]);
       }
-
       if (fileInput && fileInput.files && fileInput.files[0]) {
-        tasks.push(readFile64(fileInput.files[0]).then(function(d){ fileData = d; fileName = fileInput.files[0].name; }));
+        fd.append('appfile', fileInput.files[0]);
       }
-
       if (ssInput && ssInput.files) {
         for (var i = 0; i < ssInput.files.length; i++) {
-          (function(f){
-            tasks.push(readFile64(f).then(function(d){ screenshotsData.push(d); }));
-          })(ssInput.files[i]);
+          fd.append('screenshots', ssInput.files[i]);
         }
       }
 
-      var doSend = function(){
-        fetch('/api/submissions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-auth-token': token },
-          body: JSON.stringify({
-            name: name,
-            developer: developer,
-            description: document.getElementById('subDescription').value.trim(),
-            platform: document.getElementById('subPlatform').value,
-            category: document.getElementById('subCategory').value,
-            price: document.getElementById('subPrice').value.trim() || 'Free',
-            icon_data: iconData,
-            file_data: fileData,
-            file_name: fileName,
-            screenshots_data: screenshotsData
-          })
-        }).then(function(r){ return r.json(); }).then(function(d){
-          if (d.success) {
-            msg.style.color = '#1da84c';
-            msg.textContent = 'Заявка отправлена! После модерации приложение появится в магазине.';
-            document.getElementById('subName').value = '';
-            document.getElementById('subDeveloper').value = '';
-            document.getElementById('subDescription').value = '';
-            document.getElementById('subPrice').value = 'Free';
-            if (iconInput) iconInput.value = '';
-            if (fileInput) fileInput.value = '';
-            if (ssInput) ssInput.value = '';
-          } else {
-            msg.style.color = '#E81123';
-            msg.textContent = d.error || 'Ошибка';
-          }
-        }).catch(function(){
+      fetch('/api/submissions', {
+        method: 'POST',
+        headers: { 'x-auth-token': token },
+        body: fd
+      }).then(function(r){ return r.json(); }).then(function(d){
+        if (d.success) {
+          msg.style.color = '#1da84c';
+          msg.textContent = 'Заявка отправлена! После модерации приложение появится в магазине.';
+          document.getElementById('subName').value = '';
+          document.getElementById('subDeveloper').value = '';
+          document.getElementById('subDescription').value = '';
+          document.getElementById('subPrice').value = 'Free';
+          if (iconInput) iconInput.value = '';
+          if (fileInput) fileInput.value = '';
+          if (ssInput) ssInput.value = '';
+        } else {
           msg.style.color = '#E81123';
-          msg.textContent = 'Ошибка соединения';
-        }).then(function(){
-          btn.textContent = 'Отправить';
-          btn.disabled = false;
-        });
-      };
-
-      if (tasks.length) {
-        Promise.all(tasks).then(doSend);
-      } else {
-        doSend();
-      }
-    });
-  }
-
-  function readFile64(file) {
-    return new Promise(function(resolve){
-      var reader = new FileReader();
-      reader.onload = function(){ resolve(reader.result); };
-      reader.onerror = function(){ resolve(''); };
-      reader.readAsDataURL(file);
+          msg.textContent = d.error || 'Ошибка';
+        }
+      }).catch(function(){
+        msg.style.color = '#E81123';
+        msg.textContent = 'Ошибка соединения';
+      }).then(function(){
+        btn.textContent = 'Отправить';
+        btn.disabled = false;
+      });
     });
   }
 

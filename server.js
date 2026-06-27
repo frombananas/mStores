@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const isVercel = !!process.env.VERCEL;
@@ -12,7 +13,7 @@ const PUBLIC_DIR = process.env.PUBLIC_DIR || (isVercel ? '/tmp/public' : path.jo
 process.env.DB_PATH = path.join(DATA_DIR, 'store.db');
 const db = require('./db');
 
-app.use(express.json({ limit: '2gb' }));
+app.use(express.json({ limit: '100mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 if (PUBLIC_DIR !== path.join(__dirname, 'public')) {
   app.use(express.static(PUBLIC_DIR));
@@ -20,10 +21,17 @@ if (PUBLIC_DIR !== path.join(__dirname, 'public')) {
 
 // Ensure directories
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+const uploadsDir = path.join(DATA_DIR, 'uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 ['icons', 'apps', 'screenshots'].forEach(dir => {
   const p = path.join(PUBLIC_DIR, dir);
   if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
 });
+
+const ul = multer({ storage: multer.diskStorage({
+  destination: function(req, file, cb) { cb(null, uploadsDir); },
+  filename: function(req, file, cb) { cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname || '')); }
+}), limits: { fileSize: 2 * 1024 * 1024 * 1024 } });
 
 // ─── Auth helpers ────────────────────────────────────────────────────────
 
@@ -91,51 +99,44 @@ app.delete('/api/apps/:id', adminAuth, (req, res) => {
 
 // ─── File uploads ────────────────────────────────────────────────────────
 
-app.post('/api/apps/:id/icon', adminAuth, (req, res) => {
+app.post('/api/apps/:id/icon', adminAuth, ul.single('icon'), (req, res) => {
   const id = parseInt(req.params.id);
   if (!db.getApp(id)) return res.status(404).json({ error: 'App not found' });
-  const { data } = req.body;
-  if (!data) return res.status(400).json({ error: 'No image data' });
-  const m = data.match(/^data:image\/(png|jpeg|jpg|gif|webp|svg\+xml);base64,(.+)$/);
-  if (!m) return res.status(400).json({ error: 'Invalid image format' });
+  if (!req.file) return res.status(400).json({ error: 'No file' });
   try {
-    const ext = m[1] === 'svg+xml' ? 'svg' : m[1];
+    const ext = path.extname(req.file.originalname).replace(/^\./, '').toLowerCase() || 'png';
     const filename = 'app_' + id + '.' + ext;
-    fs.writeFileSync(path.join(PUBLIC_DIR, 'icons', filename), m[2], 'base64');
+    fs.renameSync(req.file.path, path.join(PUBLIC_DIR, 'icons', filename));
     const url = '/icons/' + filename;
     db.setAppIcon(id, url);
     res.json({ success: true, icon_url: url });
   } catch(e) { res.status(400).json({ error: 'Иконка слишком большая.' }); }
 });
 
-app.post('/api/apps/:id/appfile', adminAuth, (req, res) => {
+app.post('/api/apps/:id/appfile', adminAuth, ul.single('appfile'), (req, res) => {
   const id = parseInt(req.params.id);
   if (!db.getApp(id)) return res.status(404).json({ error: 'App not found' });
-  const { data, name } = req.body;
-  if (!data) return res.status(400).json({ error: 'No file data' });
-  const m = data.match(/^data:application\/octet-stream;base64,(.+)$/);
-  const raw = !m ? (data.split(',')[1] || data) : m[1];
+  if (!req.file) return res.status(400).json({ error: 'No file' });
   try {
-    const filename = (name || 'app_' + id + '.msi').replace(/[^a-zA-Z0-9._-]/g, '_');
-    fs.writeFileSync(path.join(PUBLIC_DIR, 'apps', filename), raw, 'base64');
+    const filename = (req.file.originalname || 'app_' + id + '.msi').replace(/[^a-zA-Z0-9._-]/g, '_');
+    fs.renameSync(req.file.path, path.join(PUBLIC_DIR, 'apps', filename));
     const url = '/apps/' + filename;
     db.setAppFile(id, url);
     res.json({ success: true, file_url: url });
   } catch(e) { res.status(400).json({ error: 'Файл слишком большой.' }); }
 });
 
-app.post('/api/apps/:id/screenshots', adminAuth, (req, res) => {
+app.post('/api/apps/:id/screenshots', adminAuth, ul.array('screenshots', 20), (req, res) => {
   const id = parseInt(req.params.id);
   if (!db.getApp(id)) return res.status(404).json({ error: 'App not found' });
-  const { data } = req.body;
-  if (!data) return res.status(400).json({ error: 'No image data' });
-  const m = data.match(/^data:image\/(png|jpeg|jpg|gif|webp);base64,(.+)$/);
-  if (!m) return res.status(400).json({ error: 'Invalid image format' });
+  if (!req.files || !req.files.length) return res.status(400).json({ error: 'No files' });
   try {
-    const count = db.getScreenshots(id).length + 1;
-    const filename = 'ss_' + id + '_' + count + '.png';
-    fs.writeFileSync(path.join(PUBLIC_DIR, 'screenshots', filename), m[2], 'base64');
-    db.addScreenshot(id, '/screenshots/' + filename);
+    req.files.forEach(function(file, i) {
+      const count = db.getScreenshots(id).length + 1;
+      const filename = 'ss_' + id + '_' + count + '.png';
+      fs.renameSync(file.path, path.join(PUBLIC_DIR, 'screenshots', filename));
+      db.addScreenshot(id, '/screenshots/' + filename);
+    });
     res.json({ success: true });
   } catch(e) { res.status(400).json({ error: 'Скриншот слишком большой.' }); }
 });
@@ -204,26 +205,65 @@ app.get('/api/me', (req, res) => {
 
 // ─── Submissions ─────────────────────────────────────────────────────────
 
+const submissionUpload = multer({ storage: multer.diskStorage({
+  destination: function(req, file, cb) { cb(null, uploadsDir); },
+  filename: function(req, file, cb) { cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname || '')); }
+}), limits: { fileSize: 2 * 1024 * 1024 * 1024 } }).fields([
+  { name: 'icon', maxCount: 1 },
+  { name: 'appfile', maxCount: 1 },
+  { name: 'screenshots', maxCount: 20 }
+]);
+
 app.post('/api/submissions', (req, res) => {
-  const token = req.headers['x-auth-token'];
-  if (!token) return res.status(401).json({ error: 'Требуется вход' });
-  const user = getUserFromToken(token);
-  if (!user) return res.status(401).json({ error: 'Требуется вход' });
-  const { name, developer, description, platform, category, price, icon_data, file_data, file_name, screenshots_data } = req.body;
-  if (!name || !developer) return res.status(400).json({ error: 'Название и разработчик обязательны' });
-  const sub = db.createSubmission({
-    userId: user.id,
-    authorName: user.display_name,
-    name, developer, description: description || '',
-    platform: platform || 'windows',
-    category: category || 'other',
-    price: price || 'Free',
-    icon_data: icon_data || '',
-    file_data: file_data || '',
-    file_name: file_name || '',
-    screenshots_data: screenshots_data || []
+  submissionUpload(req, res, function(err) {
+    if (err) return res.status(400).json({ error: err.message });
+    const token = req.headers['x-auth-token'];
+    if (!token) return res.status(401).json({ error: 'Требуется вход' });
+    const user = getUserFromToken(token);
+    if (!user) return res.status(401).json({ error: 'Требуется вход' });
+    const { name, developer, description, platform, category, price } = req.body;
+    if (!name || !developer) return res.status(400).json({ error: 'Название и разработчик обязательны' });
+    let iconData = '';
+    let fileData = '';
+    let fileName = '';
+    let screenshotsData = [];
+    try {
+      if (req.files && req.files.icon && req.files.icon[0]) {
+        const ext = path.extname(req.files.icon[0].originalname).replace(/^\./, '').toLowerCase() || 'png';
+        const fn = (user.id || 'u') + '_icon_' + Date.now() + '.' + ext;
+        fs.renameSync(req.files.icon[0].path, path.join(uploadsDir, fn));
+        iconData = fn;
+      }
+      if (req.files && req.files.appfile && req.files.appfile[0]) {
+        fileName = req.files.appfile[0].originalname || '';
+        const fn = (user.id || 'u') + '_app_' + Date.now() + path.extname(fileName);
+        fs.renameSync(req.files.appfile[0].path, path.join(uploadsDir, fn));
+        fileData = fn;
+      }
+      if (req.files && req.files.screenshots) {
+        req.files.screenshots.forEach(function(ss, i) {
+          const fn = (user.id || 'u') + '_ss_' + Date.now() + '_' + i + '.png';
+          fs.renameSync(ss.path, path.join(uploadsDir, fn));
+          screenshotsData.push(fn);
+        });
+      }
+    } catch(e) {
+      return res.status(400).json({ error: 'Файл слишком большой.' });
+    }
+    const sub = db.createSubmission({
+      userId: user.id,
+      authorName: user.display_name,
+      name, developer, description: description || '',
+      platform: platform || 'windows',
+      category: category || 'other',
+      price: price || 'Free',
+      icon_data: iconData,
+      file_data: fileData,
+      file_name: fileName,
+      screenshots_data: screenshotsData
+    });
+    res.json({ success: true, submission: sub });
   });
-  res.json({ success: true, submission: sub });
 });
 
 app.put('/api/submissions/:id', adminAuth, (req, res) => {
@@ -244,11 +284,11 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
     // Save icon
     if (found.icon_data) {
       try {
-        const m = found.icon_data.match(/^data:image\/(png|jpeg|jpg|gif|webp|svg\+xml);base64,(.+)$/);
-        if (m) {
-          const ext = m[1] === 'svg+xml' ? 'svg' : m[1];
+        const src = path.join(uploadsDir, found.icon_data);
+        if (fs.existsSync(src)) {
+          const ext = path.extname(found.icon_data).replace(/^\./, '').toLowerCase() || 'png';
           const fn = 'app_' + app.id + '.' + ext;
-          fs.writeFileSync(path.join(PUBLIC_DIR, 'icons', fn), m[2], 'base64');
+          fs.copyFileSync(src, path.join(PUBLIC_DIR, 'icons', fn));
           db.setAppIcon(app.id, '/icons/' + fn);
         }
       } catch(e) { console.error('[icon]', e.message); }
@@ -256,20 +296,22 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
     // Save file
     if (found.file_data) {
       try {
-        const raw = found.file_data.split(',')[1] || found.file_data;
-        const fn = (found.file_name || 'app_' + app.id + '.msi').replace(/[^a-zA-Z0-9._-]/g, '_');
-        fs.writeFileSync(path.join(PUBLIC_DIR, 'apps', fn), raw, 'base64');
-        db.setAppFile(app.id, '/apps/' + fn);
+        const src = path.join(uploadsDir, found.file_data);
+        if (fs.existsSync(src)) {
+          const fn = (found.file_name || 'app_' + app.id + '.msi').replace(/[^a-zA-Z0-9._-]/g, '_');
+          fs.copyFileSync(src, path.join(PUBLIC_DIR, 'apps', fn));
+          db.setAppFile(app.id, '/apps/' + fn);
+        }
       } catch(e) { console.error('[file]', e.message); }
     }
     // Save screenshots
     if (found.screenshots_data && found.screenshots_data.length) {
       try {
-        found.screenshots_data.forEach(function(data, i) {
-          const m = data.match(/^data:image\/(png|jpeg|jpg|gif|webp);base64,(.+)$/);
-          if (m) {
+        found.screenshots_data.forEach(function(name, i) {
+          const src = path.join(uploadsDir, name);
+          if (fs.existsSync(src)) {
             const fn = 'ss_' + app.id + '_' + (i + 1) + '.png';
-            fs.writeFileSync(path.join(PUBLIC_DIR, 'screenshots', fn), m[2], 'base64');
+            fs.copyFileSync(src, path.join(PUBLIC_DIR, 'screenshots', fn));
             db.addScreenshot(app.id, '/screenshots/' + fn);
           }
         });

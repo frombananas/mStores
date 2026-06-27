@@ -6,8 +6,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '2gb' }));
 
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
-const PUBLIC_DIR = process.env.PUBLIC_DIR || path.join(__dirname, 'public');
+const isVercel = !!process.env.VERCEL;
+const DATA_DIR = process.env.DATA_DIR || (isVercel ? '/tmp/data' : path.join(__dirname, 'data'));
+const PUBLIC_DIR = process.env.PUBLIC_DIR || (isVercel ? '/tmp/public' : path.join(__dirname, 'public'));
 
 // Static: code files from repo, uploads from PUBLIC_DIR
 app.use(express.static(path.join(__dirname, 'public')));
@@ -462,32 +463,37 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Внутренняя ошибка сервера' });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log('Metro Store running at http://localhost:' + PORT);
+// Only listen when running directly (not on Vercel)
+if (!isVercel) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log('Metro Store running at http://localhost:' + PORT);
 
-  const os = require('os');
-  const ifaces = os.networkInterfaces();
-  for (const name of Object.keys(ifaces)) {
-    for (const iface of ifaces[name]) {
-      if (iface.family === 'IPv4' && !iface.internal) {
-        console.log('Local network: http://' + iface.address + ':' + PORT);
+    const os = require('os');
+    const ifaces = os.networkInterfaces();
+    for (const name of Object.keys(ifaces)) {
+      for (const iface of ifaces[name]) {
+        if (iface.family === 'IPv4' && !iface.internal) {
+          console.log('Local network: http://' + iface.address + ':' + PORT);
+        }
       }
     }
-  }
 
-  // Tunnel via localtunnel npm
-  try {
-    const lt = require('localtunnel');
-    lt({ port: PORT }).then(tunnel => {
-      console.log('Public URL: ' + tunnel.url);
-      fs.writeFileSync(path.join(__dirname, 'public_url.txt'), tunnel.url, 'utf8');
-      tunnel.on('close', () => {
-        console.log('[tunnel] closed');
+    // Tunnel via localtunnel npm
+    try {
+      const lt = require('localtunnel');
+      lt({ port: PORT }).then(tunnel => {
+        console.log('Public URL: ' + tunnel.url);
+        fs.writeFileSync(path.join(__dirname, 'public_url.txt'), tunnel.url, 'utf8');
+        tunnel.on('close', () => {
+          console.log('[tunnel] closed');
+        });
+      }).catch(err => {
+        console.log('[tunnel] error: ' + err.message);
       });
-    }).catch(err => {
-      console.log('[tunnel] error: ' + err.message);
-    });
-  } catch(e) {
-    console.log('[tunnel] not available');
-  }
-});
+    } catch(e) {
+      console.log('[tunnel] not available');
+    }
+  });
+}
+
+module.exports = app;

@@ -12,6 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "better-sqlite3": "^12.11.1",
     "express": "^5.2.1",
     "localtunnel": "^2.0.2",
     "nat-upnp": "^1.1.1"

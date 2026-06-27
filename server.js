@@ -330,13 +330,6 @@ if (!isVercel) {
         }
       }
     }
-    try {
-      const lt = require('localtunnel');
-      lt({ port: PORT }).then(tunnel => {
-        console.log('Public URL: ' + tunnel.url);
-        fs.writeFileSync(path.join(__dirname, 'public_url.txt'), tunnel.url, 'utf8');
-      }).catch(err => console.log('[tunnel] ' + err.message));
-    } catch(e) { console.log('[tunnel] not available'); }
   });
 }
 

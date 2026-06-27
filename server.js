@@ -216,14 +216,18 @@ app.post('/api/apps/:id/icon', adminAuth, (req, res) => {
   if (!data) return res.status(400).json({ error: 'No image data' });
   const matches = data.match(/^data:image\/(png|jpeg|jpg|gif|webp|svg\+xml);base64,(.+)$/);
   if (!matches) return res.status(400).json({ error: 'Invalid image format' });
-  const ext = matches[1] === 'svg+xml' ? 'svg' : matches[1];
-  const buffer = Buffer.from(matches[2], 'base64');
-  const filename = 'app_' + found.id + '.' + ext;
-  const filepath = path.join(__dirname, 'public', 'icons', filename);
-  fs.writeFileSync(filepath, buffer);
-  found.icon_url = '/icons/' + filename;
-  saveData();
-  res.json({ success: true, icon_url: found.icon_url });
+  try {
+    const ext = matches[1] === 'svg+xml' ? 'svg' : matches[1];
+    const buffer = Buffer.from(matches[2], 'base64');
+    const filename = 'app_' + found.id + '.' + ext;
+    const filepath = path.join(__dirname, 'public', 'icons', filename);
+    fs.writeFileSync(filepath, buffer);
+    found.icon_url = '/icons/' + filename;
+    saveData();
+    res.json({ success: true, icon_url: found.icon_url });
+  } catch(e) {
+    res.status(400).json({ error: 'Иконка слишком большая.' });
+  }
 });
 
 app.post('/api/apps/:id/appfile', adminAuth, (req, res) => {
@@ -232,23 +236,18 @@ app.post('/api/apps/:id/appfile', adminAuth, (req, res) => {
   const { data, name } = req.body;
   if (!data) return res.status(400).json({ error: 'No file data' });
   const matches = data.match(/^data:application\/octet-stream;base64,(.+)$/);
-  if (!matches) {
-    const fallback = data.split(',')[1] || data;
+  const fallback = !matches ? (data.split(',')[1] || data) : matches[1];
+  try {
     const buffer = Buffer.from(fallback, 'base64');
     const filename = (name || 'app_' + found.id + '.msi').replace(/[^a-zA-Z0-9._-]/g, '_');
     const filepath = path.join(__dirname, 'public', 'apps', filename);
     fs.writeFileSync(filepath, buffer);
     found.file_url = '/apps/' + filename;
     saveData();
-    return res.json({ success: true, file_url: found.file_url });
+    res.json({ success: true, file_url: found.file_url });
+  } catch(e) {
+    res.status(400).json({ error: 'Файл слишком большой. Максимум ~100 МБ.' });
   }
-  const buffer = Buffer.from(matches[1], 'base64');
-  const filename = (name || 'app_' + found.id + '.msi').replace(/[^a-zA-Z0-9._-]/g, '_');
-  const filepath = path.join(__dirname, 'public', 'apps', filename);
-  fs.writeFileSync(filepath, buffer);
-  found.file_url = '/apps/' + filename;
-  saveData();
-  res.json({ success: true, file_url: found.file_url });
 });
 
 app.post('/api/apps/:id/screenshots', adminAuth, (req, res) => {
@@ -258,15 +257,19 @@ app.post('/api/apps/:id/screenshots', adminAuth, (req, res) => {
   if (!data) return res.status(400).json({ error: 'No image data' });
   const matches = data.match(/^data:image\/(png|jpeg|jpg|gif|webp);base64,(.+)$/);
   if (!matches) return res.status(400).json({ error: 'Invalid image format' });
-  const buffer = Buffer.from(matches[2], 'base64');
-  const count = (found.screenshots || []).length + 1;
-  const filename = 'ss_' + found.id + '_' + count + '.png';
-  const filepath = path.join(__dirname, 'public', 'screenshots', filename);
-  fs.writeFileSync(filepath, buffer);
-  if (!found.screenshots) found.screenshots = [];
-  found.screenshots.push('/screenshots/' + filename);
-  saveData();
-  res.json({ success: true, screenshots: found.screenshots });
+  try {
+    const buffer = Buffer.from(matches[2], 'base64');
+    const count = (found.screenshots || []).length + 1;
+    const filename = 'ss_' + found.id + '_' + count + '.png';
+    const filepath = path.join(__dirname, 'public', 'screenshots', filename);
+    fs.writeFileSync(filepath, buffer);
+    if (!found.screenshots) found.screenshots = [];
+    found.screenshots.push('/screenshots/' + filename);
+    saveData();
+    res.json({ success: true, screenshots: found.screenshots });
+  } catch(e) {
+    res.status(400).json({ error: 'Скриншот слишком большой.' });
+  }
 });
 
 app.delete('/api/apps/:id/screenshots/:index', adminAuth, (req, res) => {

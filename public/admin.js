@@ -224,7 +224,7 @@
     };
     var method = id ? 'PUT' : 'POST';
     var url = id ? '/api/apps/' + id : '/api/apps';
-    api(url, { method: method, body: JSON.stringify(data) }).then(function(res){
+    api(url, { method: method, body: data }).then(function(res){
       if (!res.success) { btn.textContent = id ? 'Сохранить' : 'Добавить'; btn.disabled = false; alert('Ошибка: ' + (res.error || 'неизвестно')); return; }
       var appId = res.app ? res.app.id : id;
       var chain = Promise.resolve();

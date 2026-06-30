@@ -259,7 +259,7 @@ body { overflow-y: auto; }
 }
 
 .err-title {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 300;
   font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
   color: #000;
@@ -268,7 +268,7 @@ body { overflow-y: auto; }
 }
 
 .err-desc {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 300;
   font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
   color: #555;

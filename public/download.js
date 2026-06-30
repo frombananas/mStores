@@ -7,11 +7,8 @@
     ov.classList.add('show');
     ov.style.display = 'flex';
     document.getElementById('errBtn').addEventListener('click', function(){
-      ov.classList.add('hide');
-      setTimeout(function(){
-        ov.classList.remove('show', 'hide');
-        ov.style.display = 'none';
-      }, 250);
+      ov.classList.remove('show');
+      setTimeout(function(){ ov.style.display = 'none'; }, 150);
     }, { once: true });
   }
 

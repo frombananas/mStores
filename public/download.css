@@ -60,17 +60,18 @@ body { overflow-y: auto; }
   display: flex; gap: 40px; align-items: flex-start;
 }
 
-.col-left { width: 40%; min-width: 0; }
+.col-left { width: 35%; min-width: 0; }
 
-.col-right { width: 60%; min-width: 0; }
+.col-right { width: 65%; min-width: 0; }
 
 .download-btn {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #5c2d91; color: #fff;
+  background-color: #008A00; color: #fff;
   border: none; font-size: 14px; font-weight: 600;
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer; letter-spacing: 0.3px;
+  margin-bottom: 20px;
 }
 
 .download-btn:hover { transform: scale(0.98); }
@@ -107,7 +108,7 @@ body { overflow-y: auto; }
 
 .hero-img {
   width: 100%; height: auto; display: block;
-  max-height: 400px; object-fit: contain; border: none;
+  max-height: 560px; object-fit: contain; border: none;
 }
 
 .notes-title {
@@ -213,7 +214,7 @@ body { overflow-y: auto; }
 
 .screenshots-gallery .hero-img {
   width: 100%; height: auto; display: block;
-  max-height: 400px; object-fit: contain; border: 1px solid #e5e5e5;
+  max-height: 560px; object-fit: contain; border: 1px solid #e5e5e5;
   background: #fafafa;
 }
 

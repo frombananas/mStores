@@ -575,6 +575,7 @@
       var progressText = document.getElementById('submitProgressText');
       if (!name || !developer) { msg.textContent = 'Название и разработчик обязательны'; return; }
       var token = getToken();
+      if (!token) { msg.style.color = '#E81123'; msg.textContent = 'Сначала войдите в аккаунт'; return; }
       btn.textContent = 'Отправка...';
       btn.disabled = true;
       msg.textContent = '';
@@ -605,7 +606,7 @@
 
       progressDiv.style.display = '';
       progressBar.style.width = '0%';
-      progressText.textContent = '0%';
+      progressText.textContent = 'Загрузка...';
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/api/submissions');
@@ -616,6 +617,9 @@
           var pct = Math.round((e.loaded / e.total) * 100);
           progressBar.style.width = pct + '%';
           progressText.textContent = pct + '%';
+        } else {
+          progressBar.style.width = '100%';
+          progressText.textContent = 'Обработка...';
         }
       });
 

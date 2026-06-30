@@ -2,15 +2,6 @@
   var allApps = [];
   var currentUser = null;
 
-  function showError(title, desc) {
-    document.getElementById('errTitle').textContent = title;
-    document.getElementById('errDesc').textContent = desc || '';
-    document.getElementById('errOverlay').style.display = 'flex';
-    document.getElementById('errBtn').addEventListener('click', function(){
-      document.getElementById('errOverlay').style.display = 'none';
-    }, { once: true });
-  }
-
   function makeIcon(name, color, size) {
     var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '"><rect width="' + size + '" height="' + size + '" fill="' + color + '"/><text x="' + (size/2) + '" y="' + (size/2 + 6) + '" text-anchor="middle" fill="white" font-family="Segoe UI,sans-serif" font-size="' + Math.floor(size/3) + '" font-weight="300">' + initials + '</text></svg>';

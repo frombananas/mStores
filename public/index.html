@@ -15,14 +15,21 @@
         <img src="/favicon.png" width="40" height="40" alt="" style="display:block;">
         <span>mStore</span>
       </a>
-      <span class="submit-app-link" id="submitAppBtn" style="display:none;">Подать заявку</span>
     </nav>
     <div class="header-search">
       <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" id="searchInput" placeholder="Поиск приложений" autocomplete="off">
-      <button class="header-user-btn" id="authBtn">Войти</button>
-      <span class="header-user-name" id="userDisplay" style="display:none;color:#fff;font-size:13px;font-weight:300;align-items:center;"></span>
-      <button class="header-logout-btn" id="logoutBtn" style="display:none;">Выйти</button>
+      <div class="account-dropdown" id="accountDropdown">
+        <button class="account-btn" id="accountBtn">
+          <span class="account-avatar" id="accountAvatar" style="display:none;"></span>
+          <span id="accountLabel">Войти</span>
+        </button>
+        <div class="account-menu" id="accountMenu" style="display:none;">
+          <button class="account-item" data-action="submit" id="menuSubmit">Подать заявку</button>
+          <button class="account-item" data-action="changepass" id="menuChangepass">Сменить пароль</button>
+          <button class="account-item" data-action="logout" id="menuLogout">Выйти</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -112,9 +119,9 @@
       </button>
       <div class="auth-header">
         <img src="/favicon.png" width="36" height="36" alt="" style="display:block;">
-        <span>Metro Store</span>
+        <span id="authTitle">Metro Store</span>
       </div>
-      <div class="auth-tabs">
+      <div class="auth-tabs" id="authTabs">
         <button class="auth-tab active" data-tab="login">Вход</button>
         <button class="auth-tab" data-tab="register">Регистрация</button>
       </div>
@@ -131,6 +138,12 @@
           <input type="password" class="auth-input" id="regPassword" placeholder="Пароль">
           <button class="auth-submit" id="registerBtn">Регистрация</button>
           <p class="auth-msg" id="regMsg"></p>
+        </div>
+        <div class="auth-form" id="authFormChangepass" style="display:none;">
+          <input type="password" class="auth-input" id="cpOldPassword" placeholder="Старый пароль">
+          <input type="password" class="auth-input" id="cpNewPassword" placeholder="Новый пароль">
+          <button class="auth-submit" id="cpBtn">Сменить пароль</button>
+          <p class="auth-msg" id="cpMsg"></p>
         </div>
       </div>
     </div>

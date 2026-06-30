@@ -1,5 +1,6 @@
 (function(){
   var allApps = [];
+  var currentUser = null;
 
   function makeIcon(name, color, size) {
     var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
@@ -327,20 +328,28 @@
   }
 
   function setLoggedIn(user) {
-    document.getElementById('authBtn').style.display = 'none';
-    document.getElementById('userDisplay').style.display = 'inline-flex';
-    var avatar = user.avatar_url ? '<img src="' + user.avatar_url + '" style="width:22px;height:22px;object-fit:cover;margin-right:6px;">' : '<span style="width:22px;height:22px;margin-right:6px;display:inline-flex;align-items:center;justify-content:center;background:#5C2D91;color:#fff;font-size:11px;font-weight:400;">' + (user.displayName || user.username || '?')[0].toUpperCase() + '</span>';
-    document.getElementById('userDisplay').innerHTML = avatar + user.displayName;
-    document.getElementById('logoutBtn').style.display = 'inline';
-    document.getElementById('submitAppBtn').style.display = 'inline';
+    var avatar = user.avatar_url ? '<img src="' + user.avatar_url + '" style="width:20px;height:20px;object-fit:cover;">' : '<span class="account-avatar">' + (user.displayName || user.username || '?')[0].toUpperCase() + '</span>';
+    document.getElementById('accountAvatar').innerHTML = avatar;
+    document.getElementById('accountAvatar').style.display = 'inline-flex';
+    document.getElementById('accountLabel').textContent = user.displayName || user.username;
+    document.getElementById('menuSubmit').style.display = '';
+    document.getElementById('menuChangepass').style.display = '';
+    document.getElementById('menuLogout').style.display = '';
+    if (user.username === 'admin') {
+      document.getElementById('menuChangepass').style.display = 'none';
+    }
+    currentUser = user;
   }
 
   function setLoggedOut() {
     localStorage.removeItem('store_token');
-    document.getElementById('authBtn').style.display = 'inline';
-    document.getElementById('userDisplay').style.display = 'none';
-    document.getElementById('logoutBtn').style.display = 'none';
-    document.getElementById('submitAppBtn').style.display = 'none';
+    document.getElementById('accountAvatar').style.display = 'none';
+    document.getElementById('accountLabel').textContent = 'Войти';
+    document.getElementById('menuSubmit').style.display = 'none';
+    document.getElementById('menuChangepass').style.display = 'none';
+    document.getElementById('menuLogout').style.display = 'none';
+    document.getElementById('accountMenu').style.display = 'none';
+    currentUser = null;
   }
 
   function openAuth() {
@@ -356,7 +365,50 @@
   function initAuth() {
     loadUser();
 
-    document.getElementById('authBtn').addEventListener('click', openAuth);
+    // Account dropdown
+    document.getElementById('accountBtn').addEventListener('click', function(e){
+      e.stopPropagation();
+      var token = getToken();
+      if (!token) {
+        openAuth();
+        return;
+      }
+      var menu = document.getElementById('accountMenu');
+      menu.style.display = menu.style.display === 'none' ? '' : 'none';
+    });
+
+    // Dropdown menu items
+    document.getElementById('menuSubmit').addEventListener('click', function(e){
+      e.stopPropagation();
+      document.getElementById('accountMenu').style.display = 'none';
+      document.getElementById('submitOverlay').style.display = 'flex';
+    });
+    document.getElementById('menuLogout').addEventListener('click', function(e){
+      e.stopPropagation();
+      document.getElementById('accountMenu').style.display = 'none';
+      setLoggedOut();
+    });
+    document.getElementById('menuChangepass').addEventListener('click', function(e){
+      e.stopPropagation();
+      document.getElementById('accountMenu').style.display = 'none';
+      document.getElementById('authOverlay').classList.add('active');
+      document.getElementById('loginMsg').textContent = '';
+      document.getElementById('regMsg').textContent = '';
+      // Show change password form
+      document.getElementById('authTitle').textContent = 'Сменить пароль';
+      document.getElementById('authFormLogin').style.display = 'none';
+      document.getElementById('authFormRegister').style.display = 'none';
+      document.getElementById('authFormChangepass').style.display = 'flex';
+      document.getElementById('cpOldPassword').value = '';
+      document.getElementById('cpNewPassword').value = '';
+      document.getElementById('cpMsg').textContent = '';
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', function(){
+      document.getElementById('accountMenu').style.display = 'none';
+    });
+
     document.getElementById('authCloseBtn').addEventListener('click', closeAuth);
     document.getElementById('authOverlay').addEventListener('click', function(e){
       if (e.target === this) closeAuth();
@@ -372,6 +424,7 @@
         var isLogin = this.dataset.tab === 'login';
         document.getElementById('authFormLogin').style.display = isLogin ? 'flex' : 'none';
         document.getElementById('authFormRegister').style.display = isLogin ? 'none' : 'flex';
+        document.getElementById('authFormChangepass').style.display = 'none';
       });
     });
 
@@ -426,12 +479,35 @@
       if (e.key === 'Enter') handleRegister();
     });
 
-    document.getElementById('logoutBtn').addEventListener('click', function(){
-      setLoggedOut();
+    document.getElementById('cpBtn').addEventListener('click', function(){
+      var oldPw = document.getElementById('cpOldPassword').value;
+      var newPw = document.getElementById('cpNewPassword').value;
+      var msg = document.getElementById('cpMsg');
+      if (!oldPw || !newPw) { msg.textContent = 'Заполните все поля'; return; }
+      fetch('/api/changepass', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-auth-token': getToken() },
+        body: JSON.stringify({ oldPassword: oldPw, newPassword: newPw })
+      }).then(function(r){ return r.json(); }).then(function(res){
+        if (res.success) {
+          msg.style.color = '#008A00';
+          msg.textContent = 'Пароль изменён';
+        } else {
+          msg.style.color = '#E81123';
+          msg.textContent = res.error || 'Ошибка';
+        }
+      }).catch(function(){ msg.textContent = 'Ошибка соединения'; });
     });
   }
 
-  /* ─── End Auth ───────────────────────────────── */
+  function closeAuth() {
+    document.getElementById('authOverlay').classList.remove('active');
+    document.getElementById('authFormLogin').style.display = 'flex';
+    document.getElementById('authFormRegister').style.display = 'none';
+    document.getElementById('authFormChangepass').style.display = 'none';
+    document.querySelector('.auth-tab[data-tab="login"]').classList.add('active');
+    document.querySelector('.auth-tab[data-tab="register"]').classList.remove('active');
+  }
 
   function init() {
     initAuth();
@@ -474,10 +550,6 @@
     });
 
     // Submit app
-    document.getElementById('submitAppBtn').addEventListener('click', function(){
-      document.getElementById('submitOverlay').style.display = 'flex';
-      document.getElementById('submitMsg').textContent = '';
-    });
     document.getElementById('submitCloseBtn').addEventListener('click', function(){
       document.getElementById('submitOverlay').style.display = 'none';
     });

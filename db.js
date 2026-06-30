@@ -112,6 +112,7 @@ const stmtCountReviews = db.prepare(`SELECT COUNT(*) as cnt FROM reviews WHERE a
 const stmtGetUser = db.prepare(`SELECT * FROM users WHERE id = ?`);
 const stmtGetUserByName = db.prepare(`SELECT * FROM users WHERE username = ?`);
 const stmtInsertUser = db.prepare(`INSERT INTO users (username, password, display_name, avatar_url) VALUES (?, ?, ?, ?)`);
+const stmtChangePass = db.prepare(`UPDATE users SET password = ? WHERE id = ?`);
 
 // Submissions
 const stmtInsertSub = db.prepare(`INSERT INTO submissions (user_id,author_name,name,developer,description,platform,category,price,icon_data,file_data,file_name,screenshots_data) VALUES (@uid,@aname,@name,@dev,@desc,@plat,@cat,@price,@icon,@file,@fname,@ss)`);
@@ -186,6 +187,7 @@ module.exports = {
   // Users
   getUser(id) { return stmtGetUser.get(id); },
   getUserByName(username) { return stmtGetUserByName.get(username); },
+  changePassword(id, passwordHash) { stmtChangePass.run(passwordHash, id); },
   createUser(username, passwordHash, displayName) {
     try {
       const info = stmtInsertUser.run(username, passwordHash, displayName, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYcH2Ux5jTji1CDmRQ2FHCkWa9BYLAQ9m9bw&s');

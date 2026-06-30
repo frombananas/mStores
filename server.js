@@ -203,6 +203,18 @@ app.get('/api/me', (req, res) => {
   res.json({ id: u.id, username: u.username, displayName: u.display_name, avatar_url: u.avatar_url });
 });
 
+app.post('/api/changepass', (req, res) => {
+  const token = req.headers['x-auth-token'];
+  if (!token) return res.status(401).json({ error: 'No token' });
+  const u = getUserFromToken(token);
+  if (!u) return res.status(401).json({ error: 'Invalid token' });
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword) return res.status(400).json({ error: 'Заполните все поля' });
+  if (u.password !== hashPassword(oldPassword)) return res.status(400).json({ error: 'Неверный старый пароль' });
+  db.changePassword(u.id, hashPassword(newPassword));
+  res.json({ success: true });
+});
+
 // ─── Submissions ─────────────────────────────────────────────────────────
 
 const submissionUpload = multer({ storage: multer.diskStorage({

@@ -251,18 +251,13 @@ body { overflow-y: auto; }
 
 .err-bar {
   background: #fff;
-  width: 100%;
-  padding: 20px 36px;
+  width: 640px;
+  max-width: 90vw;
+  margin: 0 auto;
+  padding: 24px 28px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.err-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
+  gap: 14px;
 }
 
 .err-title {
@@ -290,7 +285,7 @@ body { overflow-y: auto; }
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer;
   white-space: nowrap;
-  flex-shrink: 0;
+  align-self: center;
 }
 
 .err-btn:hover { opacity: 0.9; }

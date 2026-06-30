@@ -779,7 +779,7 @@ html, body {
   position: absolute;
   left: 0;
   top: 100%;
-  background: #fff;
+  background: #f4f4f4;
   min-width: 180px;
   z-index: 300;
 }
@@ -789,7 +789,7 @@ html, body {
   width: 100%;
   padding: 10px 16px;
   border: none;
-  background: #fff;
+  background: #f4f4f4;
   color: #333;
   font-size: 14px;
   font-weight: 300;
@@ -800,7 +800,8 @@ html, body {
 }
 
 .account-item:hover {
-  background: #f0f0f0;
+  background: #008A00;
+  color: #fff;
 }
 
 .submit-overlay {

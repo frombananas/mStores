@@ -3,9 +3,12 @@
   function showError(title, desc) {
     document.getElementById('errTitle').textContent = title;
     document.getElementById('errDesc').textContent = desc || '';
-    document.getElementById('errOverlay').style.display = 'flex';
+    var ov = document.getElementById('errOverlay');
+    ov.classList.add('show');
+    ov.style.display = 'flex';
     document.getElementById('errBtn').addEventListener('click', function(){
-      window.location.href = '/';
+      ov.classList.remove('show');
+      setTimeout(function(){ window.location.href = '/'; }, 200);
     }, { once: true });
   }
 

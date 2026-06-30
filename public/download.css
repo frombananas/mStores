@@ -242,9 +242,25 @@ body { overflow-y: auto; }
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.5);
   z-index: 999;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.err-overlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+.err-overlay.show .err-bar {
+  animation: errSlideIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+@keyframes errSlideIn {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .err-bar {

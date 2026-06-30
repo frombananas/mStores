@@ -757,43 +757,28 @@ html, body {
 
 .account-dropdown {
   position: relative;
-}
-
-.account-btn {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 300;
-  font-family: 'Segoe UI', sans-serif;
-  padding: 4px 14px;
-  cursor: pointer;
-  white-space: nowrap;
   display: flex;
   align-items: center;
-  gap: 6px;
+  height: 100%;
 }
 
-.account-btn:hover {
-  background: rgba(255,255,255,0.25);
-}
-
-.account-avatar {
-  width: 20px; height: 20px;
-  background: #5C2D91;
+.submit-app-link-header {
+  background: none;
+  border: none;
   color: #fff;
-  font-size: 10px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 18px;
+  font-weight: 300;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
+  padding: 0;
 }
+
+.submit-app-link-header:hover { opacity: 0.8; }
 
 .account-menu {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 100%;
-  margin-top: 4px;
   background: #fff;
   min-width: 180px;
   z-index: 300;

@@ -328,9 +328,6 @@
   }
 
   function setLoggedIn(user) {
-    var avatar = user.avatar_url ? '<img src="' + user.avatar_url + '" style="width:20px;height:20px;object-fit:cover;">' : '<span class="account-avatar">' + (user.displayName || user.username || '?')[0].toUpperCase() + '</span>';
-    document.getElementById('accountAvatar').innerHTML = avatar;
-    document.getElementById('accountAvatar').style.display = 'inline-flex';
     document.getElementById('accountLabel').textContent = user.displayName || user.username;
     document.getElementById('menuSubmit').style.display = '';
     document.getElementById('menuChangepass').style.display = '';
@@ -343,8 +340,7 @@
 
   function setLoggedOut() {
     localStorage.removeItem('store_token');
-    document.getElementById('accountAvatar').style.display = 'none';
-    document.getElementById('accountLabel').textContent = 'Войти';
+    document.getElementById('accountLabel').textContent = 'Учетная запись';
     document.getElementById('menuSubmit').style.display = 'none';
     document.getElementById('menuChangepass').style.display = 'none';
     document.getElementById('menuLogout').style.display = 'none';
@@ -369,11 +365,25 @@
     document.getElementById('accountBtn').addEventListener('click', function(e){
       e.stopPropagation();
       var token = getToken();
+      var menu = document.getElementById('accountMenu');
       if (!token) {
-        openAuth();
+        // Toggle dropdown: show login/register item
+        menu.innerHTML = '<button class="account-item" id="menuLoginItem">Войти</button><button class="account-item" id="menuRegisterItem">Регистрация</button>';
+        menu.style.display = menu.style.display === 'none' ? '' : 'none';
+        document.getElementById('menuLoginItem').addEventListener('click', function(ev){
+          ev.stopPropagation();
+          menu.style.display = 'none';
+          openAuth();
+          document.querySelector('.auth-tab[data-tab="login"]').click();
+        });
+        document.getElementById('menuRegisterItem').addEventListener('click', function(ev){
+          ev.stopPropagation();
+          menu.style.display = 'none';
+          openAuth();
+          document.querySelector('.auth-tab[data-tab="register"]').click();
+        });
         return;
       }
-      var menu = document.getElementById('accountMenu');
       menu.style.display = menu.style.display === 'none' ? '' : 'none';
     });
 

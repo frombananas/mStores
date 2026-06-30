@@ -1,6 +1,5 @@
 *, *::before, *::after {
   margin: 0; padding: 0; box-sizing: border-box;
-  border-radius: 0 !important; box-shadow: none !important;
 }
 
 html, body {
@@ -13,9 +12,9 @@ html, body {
 body { overflow-y: auto; }
 
 .page {
-  max-width: 1060px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 48px 40px 64px;
+  padding: 40px 36px 64px;
   opacity: 0;
   animation: pageSlideIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
 }
@@ -37,7 +36,7 @@ body { overflow-y: auto; }
 .top-row {
   display: flex;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .back-btn {
@@ -52,52 +51,38 @@ body { overflow-y: auto; }
 .app-icon-header { object-fit: cover; }
 
 .title {
-  font-size: 42px; font-weight: 200; color: #000;
-  margin-left: 20px; letter-spacing: 0.2px;
+  font-size: 36px; font-weight: 200; color: #000;
+  margin-left: 16px; letter-spacing: 0.2px;
 }
-
-.content-grid {
-  display: flex; gap: 40px; align-items: flex-start;
-}
-
-.col-left { width: 35%; min-width: 0; }
-
-.col-right { width: 65%; min-width: 0; }
 
 .download-btn {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #008A00; color: #fff;
+  background-color: #5c2d91; color: #fff;
   border: none; font-size: 14px; font-weight: 600;
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer; letter-spacing: 0.3px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
-.download-btn:hover { transform: scale(0.98); }
-.download-btn:active { transform: scale(0.96); }
+.download-btn:hover { opacity: 0.9; }
+.download-btn:active { transform: scale(0.97); }
 
 .download-btn.done {
   background-color: #555; cursor: default; pointer-events: none;
 }
 
-.link-purple {
-  color: #5c2d91; text-decoration: none; cursor: pointer;
-}
-
-.link-purple:hover { text-decoration: underline; }
-
 .desc {
   font-size: 18px; font-weight: 300; color: #555;
-  line-height: 1.4; margin-bottom: 28px;
+  line-height: 1.4; margin-bottom: 24px;
 }
 
 .desc-title {
   font-size: 14px; font-weight: 400; color: #333;
-  margin-bottom: 8px; margin-top: 16px;
+  margin-bottom: 8px; margin-top: 0;
 }
 
-.meta { display: flex; flex-direction: column; gap: 4px; }
+.meta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
 
 .meta-row {
   font-size: 12px; color: #888;
@@ -108,7 +93,8 @@ body { overflow-y: auto; }
 
 .hero-img {
   width: 100%; height: auto; display: block;
-  max-height: 560px; object-fit: contain; border: none;
+  max-height: 540px; object-fit: contain;
+  border: 1px solid #e5e5e5; background: #fafafa;
 }
 
 .notes-title {
@@ -117,7 +103,7 @@ body { overflow-y: auto; }
 }
 
 .reviews {
-  margin-top: 40px; border-top: 1px solid #e5e5e5;
+  margin-top: 32px; border-top: 1px solid #e5e5e5;
   padding-top: 32px;
 }
 
@@ -187,7 +173,6 @@ body { overflow-y: auto; }
 
 .review-stars .rstar {
   cursor: pointer; color: #ccc;
-  transition: color 0.1s;
 }
 
 .review-stars .rstar:hover,
@@ -201,7 +186,7 @@ body { overflow-y: auto; }
   font-family: 'Segoe UI', sans-serif; cursor: pointer;
 }
 
-.submit-btn:hover { background-color: #4a2373; }
+.submit-btn:hover { opacity: 0.9; }
 .submit-btn:active { transform: scale(0.97); }
 
 .review-msg {
@@ -209,17 +194,12 @@ body { overflow-y: auto; }
 }
 
 .screenshots-gallery {
-  display: flex; flex-direction: column; gap: 10px;
-}
-
-.screenshots-gallery .hero-img {
-  width: 100%; height: auto; display: block;
-  max-height: 560px; object-fit: contain; border: 1px solid #e5e5e5;
-  background: #fafafa;
+  margin-bottom: 24px;
 }
 
 .screenshot-thumbs {
   display: flex; gap: 8px; flex-wrap: wrap;
+  margin-top: 10px;
 }
 
 .ss-thumb {
@@ -227,17 +207,14 @@ body { overflow-y: auto; }
   object-fit: cover; cursor: pointer;
   border: 2px solid transparent;
   opacity: 0.7;
-  transition: opacity 0.1s, border-color 0.1s;
 }
 
 .ss-thumb:hover { opacity: 1; }
-
 .ss-thumb.active { border-color: #5c2d91; opacity: 1; }
 
-@media (max-width: 800px) {
-  .content-grid { flex-direction: column; }
-  .col-left, .col-right { width: 100%; }
-  .title { font-size: 28px; margin-left: 14px; }
-  .page { padding: 28px 20px 40px; }
-  .review-form { padding: 14px; }
+@media (max-width: 700px) {
+  .title { font-size: 24px; }
+  .page { padding: 24px 16px 40px; }
+  .hero-img { max-height: 300px; }
+  .desc { font-size: 16px; }
 }

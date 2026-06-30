@@ -66,7 +66,7 @@ function adminAuth(req, res, next) {
 // ─── Apps API ────────────────────────────────────────────────────────────
 
 app.get('/api/apps', (req, res) => {
-  const list = db.listApps(req.query.q || '');
+  const list = db.listApps(req.query.search || req.query.q || '');
   res.json(list);
 });
 

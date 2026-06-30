@@ -255,11 +255,11 @@ body { overflow-y: auto; }
 }
 
 .err-overlay.show .err-bar {
-  animation: errAppear 0.25s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  animation: errSlideIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
 }
 
 .err-overlay.hide .err-bar {
-  animation: errDisappear 0.2s ease-in forwards;
+  animation: errSlideOut 0.2s ease-in forwards;
 }
 
 .err-overlay.hide {
@@ -267,14 +267,14 @@ body { overflow-y: auto; }
   transition: opacity 0.2s ease-in;
 }
 
-@keyframes errAppear {
-  from { opacity: 0; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1); }
+@keyframes errSlideIn {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes errDisappear {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 0; transform: scale(0.85); }
+@keyframes errSlideOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-40px); }
 }
 
 .err-bar {

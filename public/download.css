@@ -288,6 +288,7 @@ body { overflow-y: auto; }
   font-weight: 400;
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
 .err-btn:hover {

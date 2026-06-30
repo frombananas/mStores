@@ -14,6 +14,13 @@
     return s;
   }
 
+  function makeAvatar(name, size) {
+    var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2).toUpperCase();
+    var colors = ['#0078D7','#E81123','#1DA84C','#FF8C00','#5C2D91','#00B7C3','#E74856','#038387','#744DA9','#D13438'];
+    var color = colors[initials.charCodeAt(0) % colors.length];
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '"><rect width="' + size + '" height="' + size + '" fill="' + color + '"/><text x="' + (size/2) + '" y="' + (size/2 + size*0.16) + '" text-anchor="middle" fill="white" font-family="Segoe UI,sans-serif" font-size="' + Math.floor(size*0.45) + '" font-weight="300">' + initials + '</text></svg>';
+  }
+
   function loadAppData() {
     var id = getQueryParam('id');
     if (!id) {
@@ -110,9 +117,9 @@
           for (var i = 1; i <= 5; i++) {
             starsHtml += '<span class="rstar' + (i <= r.rating ? ' active' : '') + '">&#9733;</span>';
           }
-          var avatar = r.avatar_url || '';
+          var avatar = r.avatar_url || makeAvatar(r.author, 40);
           card.innerHTML =
-            '<div class="review-avatar-wrap"><img src="' + avatar + '" alt="" class="review-avatar"></div>' +
+            '<div class="review-avatar-wrap">' + (r.avatar_url ? '<img src="' + avatar + '" alt="" class="review-avatar">' : avatar) + '</div>' +
             '<div class="review-body">' +
               '<div class="review-author">' + esc(r.author) + '<span class="review-date">' + r.date + '</span></div>' +
               '<div class="review-stars-display">' + starsHtml + '</div>' +

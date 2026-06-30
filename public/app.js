@@ -329,7 +329,8 @@
   function setLoggedIn(user) {
     document.getElementById('authBtn').style.display = 'none';
     document.getElementById('userDisplay').style.display = 'inline-flex';
-    document.getElementById('userDisplay').innerHTML = '<img src="' + (user.avatar_url || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5huors2BmL35-tFrF2_ojZW0bJ4YPK5tV5yvIvSsGTtiC1mqWGpWhf8w&s=10') + '" style="width:22px;height:22px;object-fit:cover;margin-right:6px;">' + user.displayName;
+    var avatar = user.avatar_url ? '<img src="' + user.avatar_url + '" style="width:22px;height:22px;object-fit:cover;margin-right:6px;">' : '<span style="width:22px;height:22px;margin-right:6px;display:inline-flex;align-items:center;justify-content:center;background:#5C2D91;color:#fff;font-size:11px;font-weight:400;">' + (user.displayName || user.username || '?')[0].toUpperCase() + '</span>';
+    document.getElementById('userDisplay').innerHTML = avatar + user.displayName;
     document.getElementById('logoutBtn').style.display = 'inline';
     document.getElementById('submitAppBtn').style.display = 'inline';
   }

@@ -255,6 +255,8 @@ body { overflow-y: auto; }
   padding: 24px 36px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 16px;
 }
 
@@ -282,13 +284,12 @@ body { overflow-y: auto; }
   background: #008A00;
   color: #fff;
   border: none;
-  padding: 12px 28px;
-  font-size: 14px;
+  padding: 8px 20px;
+  font-size: 13px;
   font-weight: 400;
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer;
   white-space: nowrap;
-  align-self: flex-start;
 }
 
 .err-btn:hover { opacity: 0.9; }

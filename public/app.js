@@ -47,6 +47,7 @@
         '<div class="spotlight-text">' +
           '<span class="spotlight-name" style="color:' + app.color_theme + '">' + app.name + '</span>' +
           '<span class="spotlight-dev">' + app.developer + '</span>' +
+          '<div class="spotlight-stars">' + renderStars(app.rating) + '</div>' +
           '<span class="spotlight-desc">' + (app.description || '') + '</span>' +
         '</div>' +
       '</div>';

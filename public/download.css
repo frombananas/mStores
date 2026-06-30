@@ -13,8 +13,8 @@ html, body {
 body { overflow-y: auto; }
 
 .page {
-  width: 100%;
-  margin: 0;
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 32px 24px 64px 0;
   opacity: 0;
   animation: pageSlideIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;

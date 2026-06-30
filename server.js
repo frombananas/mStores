@@ -28,6 +28,13 @@ if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
   if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
 });
 
+const LOG_FILE = path.join(DATA_DIR, 'server.log');
+function log(msg) {
+  const line = '[' + new Date().toISOString() + '] ' + msg + '\n';
+  fs.appendFileSync(LOG_FILE, line, 'utf8');
+  console.log(line.trim());
+}
+
 const ul = multer({ storage: multer.diskStorage({
   destination: function(req, file, cb) { cb(null, uploadsDir); },
   filename: function(req, file, cb) { cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname || '')); }
@@ -109,6 +116,7 @@ app.post('/api/apps/:id/icon', adminAuth, ul.single('icon'), (req, res) => {
     fs.renameSync(req.file.path, path.join(PUBLIC_DIR, 'icons', filename));
     const url = '/icons/' + filename;
     db.setAppIcon(id, url);
+    log('ICON uploaded app#' + id + ' ' + req.file.originalname + ' (' + (req.file.size / 1024 / 1024).toFixed(1) + 'MB)');
     res.json({ success: true, icon_url: url });
   } catch(e) { res.status(400).json({ error: 'Иконка слишком большая.' }); }
 });
@@ -122,6 +130,7 @@ app.post('/api/apps/:id/appfile', adminAuth, ul.single('appfile'), (req, res) =>
     fs.renameSync(req.file.path, path.join(PUBLIC_DIR, 'apps', filename));
     const url = '/apps/' + filename;
     db.setAppFile(id, url);
+    log('FILE uploaded app#' + id + ' ' + filename + ' (' + (req.file.size / 1024 / 1024).toFixed(1) + 'MB)');
     res.json({ success: true, file_url: url });
   } catch(e) { res.status(400).json({ error: 'Файл слишком большой.' }); }
 });
@@ -274,6 +283,7 @@ app.post('/api/submissions', (req, res) => {
       file_name: fileName,
       screenshots_data: screenshotsData
     });
+    log('SUBMIT #' + sub.id + ' ' + name + ' by ' + user.display_name);
     res.json({ success: true, submission: sub });
   });
 });
@@ -330,9 +340,11 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
       } catch(e) { console.error('[ss]', e.message); }
     }
     db.updateSubmissionStatus(id, 'approved');
+    log('APPROVE #' + id + ' → app#' + app.id + ' ' + found.name);
     res.json({ success: true, app: db.getApp(app.id) });
   } else if (action === 'reject') {
     db.updateSubmissionStatus(id, 'rejected');
+    log('REJECT #' + id + ' ' + found.name);
     res.json({ success: true });
   } else {
     res.status(400).json({ error: 'Некорректное действие' });
@@ -361,6 +373,14 @@ app.get('/api/apps/:id/download', (req, res) => {
 app.get('/api/categories', (req, res) => {
   const rows = db.listApps('');
   res.json([...new Set(rows.map(a => a.category))]);
+});
+
+// ─── Logs ────────────────────────────────────────────────────────────────
+
+app.get('/api/logs', adminAuth, (req, res) => {
+  if (!fs.existsSync(LOG_FILE)) return res.json([]);
+  const lines = fs.readFileSync(LOG_FILE, 'utf8').trim().split('\n').slice(-200);
+  res.json(lines);
 });
 
 // ─── Deploy (HTTP-based pull+restart, works without SSH) ──────────────────

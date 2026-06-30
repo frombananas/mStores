@@ -570,6 +570,9 @@
       var developer = document.getElementById('subDeveloper').value.trim();
       var msg = document.getElementById('submitMsg');
       var btn = this;
+      var progressDiv = document.getElementById('submitProgress');
+      var progressBar = document.getElementById('submitProgressBar');
+      var progressText = document.getElementById('submitProgressText');
       if (!name || !developer) { msg.textContent = 'Название и разработчик обязательны'; return; }
       var token = getToken();
       btn.textContent = 'Отправка...';
@@ -600,32 +603,57 @@
         }
       }
 
-      fetch('/api/submissions', {
-        method: 'POST',
-        headers: { 'x-auth-token': token },
-        body: fd
-      }).then(function(r){ return r.json(); }).then(function(d){
-        if (d.success) {
-          msg.style.color = '#008A00';
-          msg.textContent = 'Заявка отправлена! После модерации приложение появится в магазине.';
-          document.getElementById('subName').value = '';
-          document.getElementById('subDeveloper').value = '';
-          document.getElementById('subDescription').value = '';
-          document.getElementById('subPrice').value = 'Free';
-          if (iconInput) iconInput.value = '';
-          if (fileInput) fileInput.value = '';
-          if (ssInput) ssInput.value = '';
-        } else {
-          msg.style.color = '#E81123';
-          msg.textContent = d.error || 'Ошибка';
+      progressDiv.style.display = '';
+      progressBar.style.width = '0%';
+      progressText.textContent = '0%';
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/submissions');
+      xhr.setRequestHeader('x-auth-token', token);
+
+      xhr.upload.addEventListener('progress', function(e){
+        if (e.lengthComputable) {
+          var pct = Math.round((e.loaded / e.total) * 100);
+          progressBar.style.width = pct + '%';
+          progressText.textContent = pct + '%';
         }
-      }).catch(function(){
-        msg.style.color = '#E81123';
-        msg.textContent = 'Ошибка соединения';
-      }).then(function(){
+      });
+
+      xhr.addEventListener('load', function(){
+        try {
+          var d = JSON.parse(xhr.responseText);
+          if (d.success) {
+            msg.style.color = '#008A00';
+            msg.textContent = 'Заявка отправлена! После модерации приложение появится в магазине.';
+            document.getElementById('subName').value = '';
+            document.getElementById('subDeveloper').value = '';
+            document.getElementById('subDescription').value = '';
+            document.getElementById('subPrice').value = 'Free';
+            if (iconInput) iconInput.value = '';
+            if (fileInput) fileInput.value = '';
+            if (ssInput) ssInput.value = '';
+          } else {
+            msg.style.color = '#E81123';
+            msg.textContent = d.error || 'Ошибка';
+          }
+        } catch(e) {
+          msg.style.color = '#E81123';
+          msg.textContent = 'Ошибка сервера';
+        }
         btn.textContent = 'Отправить';
         btn.disabled = false;
+        setTimeout(function(){ progressDiv.style.display = 'none'; }, 2000);
       });
+
+      xhr.addEventListener('error', function(){
+        msg.style.color = '#E81123';
+        msg.textContent = 'Ошибка соединения';
+        btn.textContent = 'Отправить';
+        btn.disabled = false;
+        progressDiv.style.display = 'none';
+      });
+
+      xhr.send(fd);
     });
   }
 

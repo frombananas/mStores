@@ -329,21 +329,41 @@
 
   function setLoggedIn(user) {
     document.getElementById('accountLabel').textContent = user.displayName || user.username;
-    document.getElementById('menuSubmit').style.display = '';
-    document.getElementById('menuChangepass').style.display = '';
-    document.getElementById('menuLogout').style.display = '';
+    // Restore logged-in menu
+    var menu = document.getElementById('accountMenu');
+    menu.innerHTML = '<button class="account-item" data-action="submit" id="menuSubmit">Подать заявку</button><button class="account-item" data-action="changepass" id="menuChangepass">Сменить пароль</button><button class="account-item" data-action="logout" id="menuLogout">Выйти</button>';
     if (user.username === 'admin') {
       document.getElementById('menuChangepass').style.display = 'none';
     }
+    document.getElementById('menuSubmit').addEventListener('click', function(ev){
+      ev.stopPropagation();
+      menu.style.display = 'none';
+      document.getElementById('submitOverlay').style.display = 'flex';
+    });
+    document.getElementById('menuLogout').addEventListener('click', function(ev){
+      ev.stopPropagation();
+      menu.style.display = 'none';
+      setLoggedOut();
+    });
+    document.getElementById('menuChangepass').addEventListener('click', function(ev){
+      ev.stopPropagation();
+      menu.style.display = 'none';
+      document.getElementById('authOverlay').classList.add('active');
+      document.getElementById('authTitle').textContent = 'Сменить пароль';
+      document.getElementById('authFormLogin').style.display = 'none';
+      document.getElementById('authFormRegister').style.display = 'none';
+      document.getElementById('authFormChangepass').style.display = 'flex';
+      document.getElementById('authTabs').style.display = 'none';
+      document.getElementById('cpOldPassword').value = '';
+      document.getElementById('cpNewPassword').value = '';
+      document.getElementById('cpMsg').textContent = '';
+    });
     currentUser = user;
   }
 
   function setLoggedOut() {
     localStorage.removeItem('store_token');
     document.getElementById('accountLabel').textContent = 'Учетная запись';
-    document.getElementById('menuSubmit').style.display = 'none';
-    document.getElementById('menuChangepass').style.display = 'none';
-    document.getElementById('menuLogout').style.display = 'none';
     document.getElementById('accountMenu').style.display = 'none';
     currentUser = null;
   }
@@ -352,10 +372,16 @@
     document.getElementById('authOverlay').classList.add('active');
     document.getElementById('loginMsg').textContent = '';
     document.getElementById('regMsg').textContent = '';
-  }
-
-  function closeAuth() {
-    document.getElementById('authOverlay').classList.remove('active');
+    document.getElementById('cpMsg').textContent = '';
+    document.getElementById('authTitle').textContent = 'Metro Store';
+    document.getElementById('authFormLogin').style.display = 'flex';
+    document.getElementById('authFormRegister').style.display = 'none';
+    document.getElementById('authFormChangepass').style.display = 'none';
+    document.getElementById('authTabs').style.display = '';
+    var loginTab = document.querySelector('.auth-tab[data-tab="login"]');
+    var regTab = document.querySelector('.auth-tab[data-tab="register"]');
+    if (loginTab) loginTab.classList.add('active');
+    if (regTab) regTab.classList.remove('active');
   }
 
   function initAuth() {
@@ -385,33 +411,6 @@
         return;
       }
       menu.style.display = menu.style.display === 'none' ? '' : 'none';
-    });
-
-    // Dropdown menu items
-    document.getElementById('menuSubmit').addEventListener('click', function(e){
-      e.stopPropagation();
-      document.getElementById('accountMenu').style.display = 'none';
-      document.getElementById('submitOverlay').style.display = 'flex';
-    });
-    document.getElementById('menuLogout').addEventListener('click', function(e){
-      e.stopPropagation();
-      document.getElementById('accountMenu').style.display = 'none';
-      setLoggedOut();
-    });
-    document.getElementById('menuChangepass').addEventListener('click', function(e){
-      e.stopPropagation();
-      document.getElementById('accountMenu').style.display = 'none';
-      document.getElementById('authOverlay').classList.add('active');
-      document.getElementById('loginMsg').textContent = '';
-      document.getElementById('regMsg').textContent = '';
-      // Show change password form
-      document.getElementById('authTitle').textContent = 'Сменить пароль';
-      document.getElementById('authFormLogin').style.display = 'none';
-      document.getElementById('authFormRegister').style.display = 'none';
-      document.getElementById('authFormChangepass').style.display = 'flex';
-      document.getElementById('cpOldPassword').value = '';
-      document.getElementById('cpNewPassword').value = '';
-      document.getElementById('cpMsg').textContent = '';
     });
 
     // Close dropdown on outside click

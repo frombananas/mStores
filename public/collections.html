@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collections — mStore</title>
+  <title>Коллекции — mStore</title>
   <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/collections.css">
 </head>
 <body>
 
-<header class="col-header">
-  <nav class="col-nav">
-    <a href="/" class="col-nav-item">Store</a>
-    <a href="#" class="col-nav-item">Top apps <span class="col-arrow">&#9660;</span></a>
-    <a href="#" class="col-nav-item">Categories <span class="col-arrow">&#9660;</span></a>
-    <a href="/collections.html" class="col-nav-item active">Collections</a>
-    <a href="#" class="col-nav-item">Account</a>
+<header class="metro-header">
+  <nav class="header-nav">
+    <a href="/" class="header-logo">
+      <img src="/favicon.png" width="40" height="40" alt="" style="display:block;">
+      <span>mStore</span>
+    </a>
   </nav>
-  <div class="col-search-wrap">
-    <svg class="col-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" class="col-search" placeholder="Поиск">
+  <div class="header-search">
+    <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="searchInput" placeholder="Поиск приложений" autocomplete="off">
   </div>
 </header>
 
@@ -28,198 +28,34 @@
     <a href="/" class="col-back">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </a>
-    <h1 class="col-title">Collections</h1>
-    <span class="col-count">20 collections</span>
+    <h1 class="col-title">Коллекции</h1>
+    <span class="col-count">20 коллекций</span>
   </div>
 
   <div class="col-grid">
-    <!-- Row 1 -->
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#E47911"></div>
-        <div class="col-tile" style="background:#232F3E"></div>
-        <div class="col-tile" style="background:#FF9900"></div>
-        <div class="col-tile" style="background:#FFB347"></div>
-      </div>
-      <span class="col-label">Red stripe deals</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#7FBA00"></div>
-        <div class="col-tile" style="background:#00A4EF"></div>
-        <div class="col-tile" style="background:#FFB900"></div>
-        <div class="col-tile" style="background:#E81123"></div>
-      </div>
-      <span class="col-label">Games by Microsoft Studio</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#5C2D91"></div>
-        <div class="col-tile" style="background:#0078D7"></div>
-        <div class="col-tile" style="background:#00BCF2"></div>
-        <div class="col-tile" style="background:#10893E"></div>
-      </div>
-      <span class="col-label">Great on 8</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#E81123"></div>
-        <div class="col-tile" style="background:#DA0030"></div>
-        <div class="col-tile" style="background:#FF4444"></div>
-        <div class="col-tile" style="background:#CC1100"></div>
-      </div>
-      <span class="col-label">Radio stations</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#107C10"></div>
-        <div class="col-tile" style="background:#008A00"></div>
-        <div class="col-tile" style="background:#00B33C"></div>
-        <div class="col-tile" style="background:#4CAF50"></div>
-      </div>
-      <span class="col-label">Money and budget</span>
-    </div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#E47911"><span>%</span></div><div class="col-tile" style="background:#232F3E"><span>A</span></div><div class="col-tile" style="background:#FF9900"><span>S</span></div><div class="col-tile" style="background:#FFB347"><span>D</span></div></div><span class="col-label">Горячие скидки</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#7FBA00"><span>X</span></div><div class="col-tile" style="background:#00A4EF"><span>F</span></div><div class="col-tile" style="background:#FFB900"><span>M</span></div><div class="col-tile" style="background:#E81123"><span>G</span></div></div><span class="col-label">Игры Microsoft Studio</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#5C2D91"><span>8</span></div><div class="col-tile" style="background:#0078D7"><span>8</span></div><div class="col-tile" style="background:#00BCF2"><span>8</span></div><div class="col-tile" style="background:#10893E"><span>8</span></div></div><span class="col-label">Великолепно на 8</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#E81123"><span>&#9835;</span></div><div class="col-tile" style="background:#DA0030"><span>&#9835;</span></div><div class="col-tile" style="background:#FF4444"><span>&#9835;</span></div><div class="col-tile" style="background:#CC1100"><span>&#9835;</span></div></div><span class="col-label">Радиостанции</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#107C10"><span>$</span></div><div class="col-tile" style="background:#008A00"><span>$</span></div><div class="col-tile" style="background:#00B33C"><span>$</span></div><div class="col-tile" style="background:#4CAF50"><span>$</span></div></div><span class="col-label">Деньги и бюджет</span></div>
 
-    <!-- Row 2 -->
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#0078D7"></div>
-        <div class="col-tile" style="background:#00A4EF"></div>
-        <div class="col-tile" style="background:#0072C6"></div>
-        <div class="col-tile" style="background:#2B579A"></div>
-      </div>
-      <span class="col-label">Apps by Microsoft</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#E74856"></div>
-        <div class="col-tile" style="background:#FF8C00"></div>
-        <div class="col-tile" style="background:#744DA9"></div>
-        <div class="col-tile" style="background:#018574"></div>
-      </div>
-      <span class="col-label">Essential apps</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#D4A83C"></div>
-        <div class="col-tile" style="background:#C8A96E"></div>
-        <div class="col-tile" style="background:#BCABAE"></div>
-        <div class="col-tile" style="background:#B0ADEE"></div>
-      </div>
-      <span class="col-label">Kitchen helpers</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#CC0000"></div>
-        <div class="col-tile" style="background:#1A1A2E"></div>
-        <div class="col-tile" style="background:#16213E"></div>
-        <div class="col-tile" style="background:#0F3460"></div>
-      </div>
-      <span class="col-label">World news</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#FF6B35"></div>
-        <div class="col-tile" style="background:#F7C59F"></div>
-        <div class="col-tile" style="background:#EFEFD0"></div>
-        <div class="col-tile" style="background:#004E89"></div>
-      </div>
-      <span class="col-label">Fitness fanatic</span>
-    </div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#0078D7"><span>M</span></div><div class="col-tile" style="background:#00A4EF"><span>S</span></div><div class="col-tile" style="background:#0072C6"><span>W</span></div><div class="col-tile" style="background:#2B579A"><span>O</span></div></div><span class="col-label">Приложения Microsoft</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#E74856"><span>&#9733;</span></div><div class="col-tile" style="background:#FF8C00"><span>&#9733;</span></div><div class="col-tile" style="background:#744DA9"><span>&#9733;</span></div><div class="col-tile" style="background:#018574"><span>&#9733;</span></div></div><span class="col-label">Важные приложения</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#D4A83C"><span>&#9749;</span></div><div class="col-tile" style="background:#C8A96E"><span>&#9749;</span></div><div class="col-tile" style="background:#BCABAE"><span>&#9749;</span></div><div class="col-tile" style="background:#B0ADEE"><span>&#9749;</span></div></div><span class="col-label">Кухонные помощники</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#CC0000"><span>N</span></div><div class="col-tile" style="background:#1A1A2E"><span>W</span></div><div class="col-tile" style="background:#16213E"><span>S</span></div><div class="col-tile" style="background:#0F3460"><span>J</span></div></div><span class="col-label">Новости мира</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#FF6B35"><span>&#9878;</span></div><div class="col-tile" style="background:#F7C59F"><span>&#9878;</span></div><div class="col-tile" style="background:#EFEFD0"><span>&#9878;</span></div><div class="col-tile" style="background:#004E89"><span>&#9878;</span></div></div><span class="col-label">Фитнес фанатик</span></div>
 
-    <!-- Row 3 -->
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#5C2D91"></div>
-        <div class="col-tile" style="background:#B4009E"></div>
-        <div class="col-tile" style="background:#8E24AA"></div>
-        <div class="col-tile" style="background:#AB47BC"></div>
-      </div>
-      <span class="col-label">Surface picks</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#00AFF0"></div>
-        <div class="col-tile" style="background:#24C0EB"></div>
-        <div class="col-tile" style="background:#48D1CC"></div>
-        <div class="col-tile" style="background:#6CE2AD"></div>
-      </div>
-      <span class="col-label">Keep connected</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#FF0084"></div>
-        <div class="col-tile" style="background:#E81123"></div>
-        <div class="col-tile" style="background:#FF8C00"></div>
-        <div class="col-tile" style="background:#FFB900"></div>
-      </div>
-      <span class="col-label">Picture-perfect photos</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#2E7D32"></div>
-        <div class="col-tile" style="background:#1B5E20"></div>
-        <div class="col-tile" style="background:#388E3C"></div>
-        <div class="col-tile" style="background:#4CAF50"></div>
-      </div>
-      <span class="col-label">Students and scholars</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#5D4037"></div>
-        <div class="col-tile" style="background:#795548"></div>
-        <div class="col-tile" style="background:#8D6E63"></div>
-        <div class="col-tile" style="background:#A1887F"></div>
-      </div>
-      <span class="col-label">Reading room</span>
-    </div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#5C2D91"><span>S</span></div><div class="col-tile" style="background:#B4009E"><span>P</span></div><div class="col-tile" style="background:#8E24AA"><span>S</span></div><div class="col-tile" style="background:#AB47BC"><span>P</span></div></div><span class="col-label">Выбор Surface</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#00AFF0"><span>&#9993;</span></div><div class="col-tile" style="background:#24C0EB"><span>&#9742;</span></div><div class="col-tile" style="background:#48D1CC"><span>&#9993;</span></div><div class="col-tile" style="background:#6CE2AD"><span>&#9742;</span></div></div><span class="col-label">Будь на связи</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#FF0084"><span>&#128247;</span></div><div class="col-tile" style="background:#E81123"><span>&#128247;</span></div><div class="col-tile" style="background:#FF8C00"><span>&#128247;</span></div><div class="col-tile" style="background:#FFB900"><span>&#128247;</span></div></div><span class="col-label">Идеальные фото</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#2E7D32"><span>&#9997;</span></div><div class="col-tile" style="background:#1B5E20"><span>&#9997;</span></div><div class="col-tile" style="background:#388E3C"><span>&#9997;</span></div><div class="col-tile" style="background:#4CAF50"><span>&#9997;</span></div></div><span class="col-label">Студенты и учёные</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#5D4037"><span>&#128214;</span></div><div class="col-tile" style="background:#795548"><span>&#128214;</span></div><div class="col-tile" style="background:#8D6E63"><span>&#128214;</span></div><div class="col-tile" style="background:#A1887F"><span>&#128214;</span></div></div><span class="col-label">Читальный зал</span></div>
 
-    <!-- Row 4 -->
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#D83B01"></div>
-        <div class="col-tile" style="background:#0078D7"></div>
-        <div class="col-tile" style="background:#107C10"></div>
-        <div class="col-tile" style="background:#FFB900"></div>
-      </div>
-      <span class="col-label">Microsoft Office</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#E81123"></div>
-        <div class="col-tile" style="background:#D13438"></div>
-        <div class="col-tile" style="background:#C0504D"></div>
-        <div class="col-tile" style="background:#AE6C62"></div>
-      </div>
-      <span class="col-label">Staff picks</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#0078D7"></div>
-        <div class="col-tile" style="background:#5C2D91"></div>
-        <div class="col-tile" style="background:#008A00"></div>
-        <div class="col-tile" style="background:#E81123"></div>
-      </div>
-      <span class="col-label">Seasonal rotations</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#00BCF2"></div>
-        <div class="col-tile" style="background:#0078D7"></div>
-        <div class="col-tile" style="background:#6B69D6"></div>
-        <div class="col-tile" style="background:#018574"></div>
-      </div>
-      <span class="col-label">The traveler</span>
-    </div>
-    <div class="col-card">
-      <div class="col-tiles">
-        <div class="col-tile" style="background:#1877F2"></div>
-        <div class="col-tile" style="background:#1DA1F2"></div>
-        <div class="col-tile" style="background:#E4405F"></div>
-        <div class="col-tile" style="background:#25D366"></div>
-      </div>
-      <span class="col-label">Social circle</span>
-    </div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#D83B01"><span>W</span></div><div class="col-tile" style="background:#0078D7"><span>X</span></div><div class="col-tile" style="background:#107C10"><span>P</span></div><div class="col-tile" style="background:#FFB900"><span>O</span></div></div><span class="col-label">Microsoft Office</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#E81123"><span>&#9829;</span></div><div class="col-tile" style="background:#D13438"><span>&#9829;</span></div><div class="col-tile" style="background:#C0504D"><span>&#9829;</span></div><div class="col-tile" style="background:#AE6C62"><span>&#9829;</span></div></div><span class="col-label">Выбор редакции</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#0078D7"><span>&#128260;</span></div><div class="col-tile" style="background:#5C2D91"><span>&#128260;</span></div><div class="col-tile" style="background:#008A00"><span>&#128260;</span></div><div class="col-tile" style="background:#E81123"><span>&#128260;</span></div></div><span class="col-label">Сезонная ротация</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#00BCF2"><span>&#9992;</span></div><div class="col-tile" style="background:#0078D7"><span>&#9992;</span></div><div class="col-tile" style="background:#6B69D6"><span>&#9992;</span></div><div class="col-tile" style="background:#018574"><span>&#9992;</span></div></div><span class="col-label">Путешественник</span></div>
+    <div class="col-card"><div class="col-tiles"><div class="col-tile" style="background:#1877F2"><span>f</span></div><div class="col-tile" style="background:#1DA1F2"><span>t</span></div><div class="col-tile" style="background:#E4405F"><span>i</span></div><div class="col-tile" style="background:#25D366"><span>w</span></div></div><span class="col-label">Социальная сеть</span></div>
   </div>
 </main>
 

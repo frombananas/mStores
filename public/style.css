@@ -939,13 +939,16 @@ html, body {
 
 .err-bar {
   background: #fff;
-  width: 640px;
-  max-width: 90vw;
-  margin: 0 auto;
-  padding: 24px 28px;
+  width: 100%;
+  padding: 28px 40px;
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.err-text-col {
+  min-width: 0;
 }
 
 .err-title {
@@ -953,6 +956,7 @@ html, body {
   font-weight: 400;
   font-family: 'Segoe UI WP', 'Segoe UI', sans-serif;
   color: #000;
+  margin-bottom: 6px;
 }
 
 .err-desc {
@@ -973,7 +977,7 @@ html, body {
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer;
   white-space: nowrap;
-  align-self: center;
+  flex-shrink: 0;
 }
 
 .err-btn:hover { opacity: 0.9; }

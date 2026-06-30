@@ -934,22 +934,19 @@ html, body {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 200px;
+  padding-top: 320px;
 }
 
 .err-bar {
   background: #fff;
-  width: 640px;
-  max-width: 90vw;
-  padding: 24px 28px;
+  width: 100%;
+  padding: 24px 36px;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .err-text {
-  flex: 1;
   min-width: 0;
 }
 
@@ -973,14 +970,13 @@ html, body {
   background: #008A00;
   color: #fff;
   border: none;
-  padding: 10px 24px;
+  padding: 12px 28px;
   font-size: 14px;
   font-weight: 400;
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer;
   white-space: nowrap;
-  flex-shrink: 0;
-  align-self: flex-end;
+  align-self: flex-start;
 }
 
 .err-btn:hover { opacity: 0.9; }

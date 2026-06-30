@@ -13,9 +13,9 @@ html, body {
 body { overflow-y: auto; }
 
 .page {
-  max-width: 1400px;
+  max-width: 1060px;
   margin: 0 auto;
-  padding: 32px 24px 64px 0;
+  padding: 48px 40px 64px;
   opacity: 0;
   animation: pageSlideIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
 }
@@ -38,14 +38,13 @@ body { overflow-y: auto; }
   display: flex;
   align-items: center;
   margin-bottom: 40px;
-  margin-left: -24px;
 }
 
 .back-btn {
   background: none; border: none; cursor: pointer;
   padding: 0; line-height: 0; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  margin-right: 4px; margin-left: -8px;
+  margin-right: 4px;
 }
 
 .back-btn:hover { opacity: 0.6; }
@@ -54,7 +53,7 @@ body { overflow-y: auto; }
 
 .title {
   font-size: 42px; font-weight: 200; color: #000;
-  letter-spacing: 0.2px;
+  margin-left: 20px; letter-spacing: 0.2px;
 }
 
 .content-grid {

@@ -38,6 +38,7 @@ body { overflow-y: auto; }
   display: flex;
   align-items: center;
   margin-bottom: 40px;
+  margin-left: -24px;
 }
 
 .back-btn {

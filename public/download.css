@@ -245,10 +245,13 @@ body { overflow-y: auto; }
   display: none;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .err-overlay.show {
   display: flex;
+  opacity: 1;
 }
 
 .err-bar {

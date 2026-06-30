@@ -38,7 +38,7 @@ function log(msg) {
 const ul = multer({ storage: multer.diskStorage({
   destination: function(req, file, cb) { cb(null, uploadsDir); },
   filename: function(req, file, cb) { cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname || '')); }
-}), limits: { fileSize: 2 * 1024 * 1024 * 1024 } });
+}), limits: { fileSize: 500 * 1024 * 1024 } });
 
 // ─── Auth helpers ────────────────────────────────────────────────────────
 
@@ -239,7 +239,7 @@ app.post('/api/changepass', (req, res) => {
 const submissionUpload = multer({ storage: multer.diskStorage({
   destination: function(req, file, cb) { cb(null, uploadsDir); },
   filename: function(req, file, cb) { cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname || '')); }
-}), limits: { fileSize: 2 * 1024 * 1024 * 1024 } }).fields([
+}), limits: { fileSize: 500 * 1024 * 1024 } }).fields([
   { name: 'icon', maxCount: 1 },
   { name: 'appfile', maxCount: 1 },
   { name: 'screenshots', maxCount: 20 }

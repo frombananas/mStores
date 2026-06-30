@@ -816,7 +816,7 @@ html, body {
 }
 
 .submit-panel {
-  background: #fff; width: 420px; max-width: 90vw;
+  background: transparent; width: 420px; max-width: 90vw;
   padding: 24px; position: relative;
   box-sizing: border-box;
 }

@@ -1,5 +1,6 @@
 *, *::before, *::after {
   margin: 0; padding: 0; box-sizing: border-box;
+  border-radius: 0 !important; box-shadow: none !important;
 }
 
 html, body {
@@ -12,9 +13,9 @@ html, body {
 body { overflow-y: auto; }
 
 .page {
-  max-width: 900px;
+  max-width: 1060px;
   margin: 0 auto;
-  padding: 40px 36px 64px;
+  padding: 48px 40px 64px;
   opacity: 0;
   animation: pageSlideIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
 }
@@ -36,19 +37,14 @@ body { overflow-y: auto; }
 .top-row {
   display: flex;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 
 .back-btn {
-  background: #fff;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  width: 44px; height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  background: none; border: none; cursor: pointer;
+  padding: 0; line-height: 0; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-right: 4px;
 }
 
 .back-btn:hover { opacity: 0.6; }
@@ -56,62 +52,48 @@ body { overflow-y: auto; }
 .app-icon-header { object-fit: cover; }
 
 .title {
-  font-size: 36px; font-weight: 200; color: #000;
-  margin-left: 16px; letter-spacing: 0.2px;
+  font-size: 42px; font-weight: 200; color: #000;
+  margin-left: 20px; letter-spacing: 0.2px;
 }
 
-.hero-area {
-  margin-bottom: 28px;
+.content-grid {
+  display: flex; gap: 40px; align-items: flex-start;
 }
 
-.hero-img {
-  width: 100%;
-  max-height: 520px;
-  object-fit: contain;
-  display: block;
-  background: #fafafa;
-}
+.col-left { width: 40%; min-width: 0; }
 
-.screenshot-thumbs {
-  display: flex; gap: 8px; flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.ss-thumb {
-  width: 80px; height: 56px;
-  object-fit: cover; cursor: pointer;
-  border: 2px solid transparent;
-  opacity: 0.7;
-}
-
-.ss-thumb:hover { opacity: 1; }
-.ss-thumb.active { border-color: #008A00; opacity: 1; }
-
-.info-area {
-  margin-bottom: 32px;
-}
+.col-right { width: 60%; min-width: 0; }
 
 .download-btn {
   display: inline-block;
-  padding: 12px 36px;
-  background-color: #008A00;
-  color: #fff;
-  border: none; font-size: 16px; font-weight: 400;
+  padding: 10px 20px;
+  background-color: #5c2d91; color: #fff;
+  border: none; font-size: 14px; font-weight: 600;
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer; letter-spacing: 0.3px;
-  margin-bottom: 24px;
 }
 
-.download-btn:hover { opacity: 0.9; }
-.download-btn:active { transform: scale(0.97); }
+.download-btn:hover { transform: scale(0.98); }
+.download-btn:active { transform: scale(0.96); }
 
 .download-btn.done {
   background-color: #555; cursor: default; pointer-events: none;
 }
 
+.link-purple {
+  color: #5c2d91; text-decoration: none; cursor: pointer;
+}
+
+.link-purple:hover { text-decoration: underline; }
+
 .desc {
-  font-size: 20px; font-weight: 300; color: #555;
-  line-height: 1.5; margin-bottom: 24px;
+  font-size: 18px; font-weight: 300; color: #555;
+  line-height: 1.4; margin-bottom: 28px;
+}
+
+.desc-title {
+  font-size: 14px; font-weight: 400; color: #333;
+  margin-bottom: 8px; margin-top: 16px;
 }
 
 .meta { display: flex; flex-direction: column; gap: 4px; }
@@ -123,13 +105,18 @@ body { overflow-y: auto; }
 
 .meta-label { min-width: 96px; flex-shrink: 0; }
 
+.hero-img {
+  width: 100%; height: auto; display: block;
+  max-height: 400px; object-fit: contain; border: none;
+}
+
 .notes-title {
   font-size: 22px; font-weight: 300; color: #333;
   margin-bottom: 16px;
 }
 
 .reviews {
-  margin-top: 12px; border-top: 1px solid #e5e5e5;
+  margin-top: 40px; border-top: 1px solid #e5e5e5;
   padding-top: 32px;
 }
 
@@ -188,7 +175,7 @@ body { overflow-y: auto; }
   margin-bottom: 10px; outline: none;
 }
 
-.review-input:focus { border-color: #008A00; }
+.review-input:focus { border-color: #5c2d91; }
 
 .review-textarea { resize: vertical; min-height: 60px; }
 
@@ -199,6 +186,7 @@ body { overflow-y: auto; }
 
 .review-stars .rstar {
   cursor: pointer; color: #ccc;
+  transition: color 0.1s;
 }
 
 .review-stars .rstar:hover,
@@ -212,16 +200,43 @@ body { overflow-y: auto; }
   font-family: 'Segoe UI', sans-serif; cursor: pointer;
 }
 
-.submit-btn:hover { opacity: 0.9; }
+.submit-btn:hover { background-color: #4a2373; }
 .submit-btn:active { transform: scale(0.97); }
 
 .review-msg {
-  font-size: 12px; color: #008A00; margin-top: 6px;
+  font-size: 12px; color: #5c2d91; margin-top: 6px;
 }
 
-@media (max-width: 700px) {
-  .title { font-size: 24px; }
-  .hero-img { max-height: 300px; }
-  .page { padding: 24px 16px 40px; }
-  .desc { font-size: 16px; }
+.screenshots-gallery {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.screenshots-gallery .hero-img {
+  width: 100%; height: auto; display: block;
+  max-height: 400px; object-fit: contain; border: 1px solid #e5e5e5;
+  background: #fafafa;
+}
+
+.screenshot-thumbs {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+
+.ss-thumb {
+  width: 72px; height: 50px;
+  object-fit: cover; cursor: pointer;
+  border: 2px solid transparent;
+  opacity: 0.7;
+  transition: opacity 0.1s, border-color 0.1s;
+}
+
+.ss-thumb:hover { opacity: 1; }
+
+.ss-thumb.active { border-color: #5c2d91; opacity: 1; }
+
+@media (max-width: 800px) {
+  .content-grid { flex-direction: column; }
+  .col-left, .col-right { width: 100%; }
+  .title { font-size: 28px; margin-left: 14px; }
+  .page { padding: 28px 20px 40px; }
+  .review-form { padding: 14px; }
 }

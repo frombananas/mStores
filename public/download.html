@@ -12,41 +12,30 @@
   <main class="page">
 
     <div class="top-row">
-      <button class="back-btn" id="backBtn" title="Back">
-        <img src="/arrow_back.png" width="56" height="72" alt="Back" style="object-fit:cover;">
+      <button class="back-btn" id="backBtn" title="Назад">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
-      <img class="app-icon-header" id="appIconHeader" src="" alt="" style="width:80px;height:80px;margin-left:8px;display:none;">
+      <img class="app-icon-header" id="appIconHeader" src="" alt="" style="width:64px;height:64px;margin-left:8px;display:none;">
       <h1 class="title" id="appTitle">App Name</h1>
     </div>
 
-    <div class="content-grid">
+    <div class="hero-area">
+      <img class="hero-img" id="heroImg" alt="Скриншот" src="">
+      <div class="screenshot-thumbs" id="screenshotThumbs"></div>
+    </div>
 
-      <div class="col-left">
-        <button class="download-btn" id="downloadBtn">Скачать</button>
-
-        <h3 class="desc-title">Описание:</h3>
-        <p class="desc" id="appDescription">
-          Загрузка...
-        </p>
-
-        <div class="meta" id="metaBlock">
-          <div class="meta-row"><span class="meta-label">Размер:</span><span class="meta-val" id="fileSize">12.8 MB</span></div>
-          <div class="meta-row"><span class="meta-label">Издатель:</span><span class="meta-val" id="publisher">—</span></div>
-          <div class="meta-row"><span class="meta-label">Права:</span><span class="meta-val" id="copyright">—</span></div>
-          <div class="meta-row"><span class="meta-label">Платформа:</span><span class="meta-val" id="appPlatform">—</span></div>
-          <div class="meta-row"><span class="meta-label">Категория:</span><span class="meta-val" id="appCategory">—</span></div>
-          <div class="meta-row"><span class="meta-label">Цена:</span><span class="meta-val" id="appPrice">—</span></div>
-          <div class="meta-row"><span class="meta-label">Рейтинг:</span><span class="meta-val" id="appRating">—</span></div>
-        </div>
+    <div class="info-area">
+      <button class="download-btn" id="downloadBtn">Скачать</button>
+      <p class="desc" id="appDescription">Загрузка...</p>
+      <div class="meta" id="metaBlock">
+        <div class="meta-row"><span class="meta-label">Размер:</span><span class="meta-val" id="fileSize">12.8 MB</span></div>
+        <div class="meta-row"><span class="meta-label">Издатель:</span><span class="meta-val" id="publisher">—</span></div>
+        <div class="meta-row"><span class="meta-label">Права:</span><span class="meta-val" id="copyright">—</span></div>
+        <div class="meta-row"><span class="meta-label">Платформа:</span><span class="meta-val" id="appPlatform">—</span></div>
+        <div class="meta-row"><span class="meta-label">Категория:</span><span class="meta-val" id="appCategory">—</span></div>
+        <div class="meta-row"><span class="meta-label">Цена:</span><span class="meta-val" id="appPrice">—</span></div>
+        <div class="meta-row"><span class="meta-label">Рейтинг:</span><span class="meta-val" id="appRating">—</span></div>
       </div>
-
-      <div class="col-right">
-        <div class="screenshots-gallery" id="screenshotsGallery">
-          <img class="hero-img" id="heroImg" alt="Скриншот" src="">
-          <div class="screenshot-thumbs" id="screenshotThumbs"></div>
-        </div>
-      </div>
-
     </div>
 
     <section class="reviews" id="reviewsSection">

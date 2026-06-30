@@ -122,7 +122,9 @@
         var el = document.getElementById('reviewsList');
         if (!el) return;
         el.innerHTML = '';
-        if (!list.length) {
+        var count = Array.isArray(list) ? list.length : 0;
+        document.getElementById('notesTitle').textContent = 'Отзывы (' + count + ')';
+        if (!count) {
           el.innerHTML = '<p style="color:#999;font-size:13px;font-weight:300;">Ещё нет отзывов. Будьте первым!</p>';
           return;
         }

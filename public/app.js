@@ -559,9 +559,6 @@
     });
 
     // Submit app
-    document.getElementById('submitCloseBtn').addEventListener('click', function(){
-      document.getElementById('submitOverlay').style.display = 'none';
-    });
     document.getElementById('submitOverlay').addEventListener('click', function(e){
       if (e.target === this) this.style.display = 'none';
     });

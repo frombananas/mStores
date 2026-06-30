@@ -806,12 +806,12 @@ html, body {
 
 .submit-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 200; background: rgba(0,0,0,0.5);
+  z-index: 200; background: #f4f4f4;
   display: flex; align-items: center; justify-content: center;
 }
 
 .submit-panel {
-  background: #fff; width: 420px; max-width: 90vw;
+  background: #f4f4f4; width: 420px; max-width: 90vw;
   padding: 24px; position: relative;
   box-sizing: border-box;
 }

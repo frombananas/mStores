@@ -93,6 +93,7 @@
     list.forEach(function(app){
       var tr = document.createElement('tr');
       var iconHtml = app.icon_url ? '<img src="' + app.icon_url + '" width="24" height="24" alt="" style="vertical-align:middle;margin-right:4px;">' : '';
+      var starColor = app.spotlight ? 'color:#FF8C00;font-weight:bold;' : 'color:#ccc;';
       tr.innerHTML =
         '<td>' + app.id + '</td>' +
         '<td>' + iconHtml + esc(app.name) + '</td>' +
@@ -101,7 +102,9 @@
         '<td>' + esc(app.category) + '</td>' +
         '<td>' + esc(app.price) + '</td>' +
         '<td>' + app.rating + '</td>' +
+        '<td style="font-size:18px;text-align:center;"><span style="' + starColor + '">\u2605</span></td>' +
         '<td class="actions">' +
+          '<button class="admin-btn admin-btn-small admin-btn-green" onclick="spotlightApp(' + app.id + ')">В центр</button>' +
           '<button class="admin-btn admin-btn-small" onclick="editApp(' + app.id + ')">Edit</button>' +
           '<button class="admin-btn admin-btn-small admin-btn-red" onclick="deleteApp(' + app.id + ')">Delete</button>' +
         '</td>';
@@ -169,6 +172,12 @@
     if (!confirm('Удалить это приложение?')) return;
     api('/api/apps/' + id, { method: 'DELETE' }).then(function(res){
       if (res.success) refreshList();
+    });
+  };
+
+  window.spotlightApp = function(id) {
+    api('/api/apps/' + id + '/spotlight', { method: 'POST' }).then(function(r){
+      if (r.success) refreshList();
     });
   };
 

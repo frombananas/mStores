@@ -186,7 +186,10 @@
 
     if (apps.length === 0) return;
 
-    var sorted = apps.slice().sort(function(a,b){ return b.rating - a.rating; });
+    var sorted = apps.slice().sort(function(a,b){
+      if (a.spotlight !== b.spotlight) return b.spotlight - a.spotlight;
+      return b.rating - a.rating;
+    });
     var spotlightApps = sorted.slice(0, 1);
     var delay = 0;
     var step = 60;

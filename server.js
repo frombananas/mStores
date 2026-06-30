@@ -104,6 +104,15 @@ app.delete('/api/apps/:id', adminAuth, (req, res) => {
   res.json({ success: true });
 });
 
+app.post('/api/apps/:id/spotlight', adminAuth, (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!db.getApp(id)) return res.status(404).json({ error: 'App not found' });
+  db.toggleSpotlight(id);
+  const app = db.getApp(id);
+  log('SPOTLIGHT app#' + id + ' -> ' + (app.spotlight ? 'ON' : 'OFF'));
+  res.json({ success: true, app });
+});
+
 // ─── File uploads ────────────────────────────────────────────────────────
 
 app.post('/api/apps/:id/icon', adminAuth, ul.single('icon'), (req, res) => {

@@ -83,17 +83,21 @@ db.exec(`
   );
 `);
 
+// Migration: add spotlight column if missing
+try { db.exec(`ALTER TABLE apps ADD COLUMN spotlight INTEGER DEFAULT 0`); } catch(e) {}
+
 // ─── Prepared Statements ────────────────────────────────────────────────
 
 // Apps
 const stmtInsertApp = db.prepare(`INSERT INTO apps (name,developer,price,rating,color_theme,icon_url,file_url,platform,category,description) VALUES (@name,@developer,@price,@rating,@color_theme,@icon_url,@file_url,@platform,@category,@description)`);
 const stmtUpdateApp = db.prepare(`UPDATE apps SET name=@name,developer=@developer,price=@price,rating=@rating,color_theme=@color_theme,platform=@platform,category=@category,description=@description WHERE id=@id`);
 const stmtGetApp = db.prepare(`SELECT * FROM apps WHERE id = ?`);
-const stmtAllApps = db.prepare(`SELECT * FROM apps ORDER BY id`);
+const stmtAllApps = db.prepare(`SELECT * FROM apps ORDER BY spotlight DESC, id`);
 const stmtDeleteApp = db.prepare(`DELETE FROM apps WHERE id = ?`);
 const stmtSetIcon = db.prepare(`UPDATE apps SET icon_url = ? WHERE id = ?`);
 const stmtSetFile = db.prepare(`UPDATE apps SET file_url = ? WHERE id = ?`);
-const stmtSearchApps = db.prepare(`SELECT * FROM apps WHERE name LIKE @q OR developer LIKE @q OR description LIKE @q ORDER BY id`);
+const stmtSearchApps = db.prepare(`SELECT * FROM apps WHERE name LIKE @q OR developer LIKE @q OR description LIKE @q ORDER BY spotlight DESC, id`);
+const stmtSetSpotlight = db.prepare(`UPDATE apps SET spotlight = CASE WHEN spotlight=1 THEN 0 ELSE 1 END WHERE id = ?`);
 
 // Screenshots
 const stmtAddSS = db.prepare(`INSERT INTO screenshots (app_id, url) VALUES (?, ?)`);
@@ -163,6 +167,7 @@ module.exports = {
   },
   setAppIcon(id, url) { stmtSetIcon.run(url, id); },
   setAppFile(id, url) { stmtSetFile.run(url, id); },
+  toggleSpotlight(id) { return stmtSetSpotlight.run(id); },
 
   // Screenshots
   addScreenshot(appId, url) { stmtAddSS.run(appId, url); },

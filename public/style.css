@@ -755,6 +755,10 @@ html, body {
   min-height: 18px;
 }
 
+.submit-app-link-header:last-child {
+  margin-right: 0;
+}
+
 .account-dropdown {
   position: relative;
   display: flex;
@@ -771,6 +775,7 @@ html, body {
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer;
   padding: 0;
+  margin-right: 24px;
 }
 
 .submit-app-link-header:hover { opacity: 0.8; }

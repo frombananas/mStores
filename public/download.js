@@ -4,11 +4,11 @@
     document.getElementById('errTitle').textContent = title;
     document.getElementById('errDesc').textContent = desc || '';
     var ov = document.getElementById('errOverlay');
-    ov.classList.add('show');
     ov.style.display = 'flex';
+    setTimeout(function(){ ov.classList.add('show'); }, 10);
     document.getElementById('errBtn').addEventListener('click', function(){
       ov.classList.remove('show');
-      setTimeout(function(){ ov.style.display = 'none'; }, 150);
+      setTimeout(function(){ ov.style.display = 'none'; }, 200);
     }, { once: true });
   }
 

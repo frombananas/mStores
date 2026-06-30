@@ -184,7 +184,8 @@ app.post('/api/apps/:id/reviews', (req, res) => {
   if (!rating || !comment) return res.status(400).json({ error: 'Rating and comment required' });
   db.addReview(appId, user.id, user.display_name, user.avatar_url || '', rating, comment);
   const newRating = db.getRating(appId);
-  db.updateApp(appId, { rating: newRating });
+  db.setRating(appId, newRating);
+  log('REVIEW app#' + appId + ' by ' + user.display_name + ' ' + rating + '★');
   res.json({ success: true });
 });
 

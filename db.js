@@ -98,6 +98,7 @@ const stmtSetIcon = db.prepare(`UPDATE apps SET icon_url = ? WHERE id = ?`);
 const stmtSetFile = db.prepare(`UPDATE apps SET file_url = ? WHERE id = ?`);
 const stmtSearchApps = db.prepare(`SELECT * FROM apps WHERE name LIKE @q OR developer LIKE @q OR description LIKE @q ORDER BY spotlight DESC, id`);
 const stmtSetSpotlight = db.prepare(`UPDATE apps SET spotlight = CASE WHEN spotlight=1 THEN 0 ELSE 1 END WHERE id = ?`);
+const stmtUpdateRating = db.prepare(`UPDATE apps SET rating = ? WHERE id = ?`);
 
 // Screenshots
 const stmtAddSS = db.prepare(`INSERT INTO screenshots (app_id, url) VALUES (?, ?)`);
@@ -168,6 +169,7 @@ module.exports = {
   setAppIcon(id, url) { stmtSetIcon.run(url, id); },
   setAppFile(id, url) { stmtSetFile.run(url, id); },
   toggleSpotlight(id) { return stmtSetSpotlight.run(id); },
+  setRating(id, rating) { return stmtUpdateRating.run(rating, id); },
 
   // Screenshots
   addScreenshot(appId, url) { stmtAddSS.run(appId, url); },

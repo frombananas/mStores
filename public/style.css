@@ -345,6 +345,13 @@ html, body {
 .star.half { color: #888; opacity: 0.6; }
 .star.empty { color: #cccccc; }
 
+.review-count {
+  font-size: 12px;
+  font-weight: 300;
+  color: #888;
+  margin-left: 4px;
+}
+
 .featured-grid {
   display: grid;
   grid-template-columns: repeat(3, 150px);

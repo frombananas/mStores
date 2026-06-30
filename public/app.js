@@ -48,7 +48,7 @@
         '<div class="spotlight-text">' +
           '<span class="spotlight-name">' + app.name + '</span>' +
           '<span class="spotlight-dev">' + app.developer + '</span>' +
-          '<div class="spotlight-stars">' + renderStars(app.rating) + '</div>' +
+          '<div class="spotlight-stars">' + renderStars(app.rating) + '<span class="review-count">(' + (app.reviewCount || 0) + ')</span></div>' +
           '<span class="spotlight-desc">' + (app.description || '') + '</span>' +
         '</div>' +
       '</div>';
@@ -67,7 +67,7 @@
       '<div class="surface-info">' +
         '<span class="surface-name">' + app.name + '</span>' +
         '<span class="surface-price">' + app.price + (app.installed ? ' &bull; Установлено' : '') + '</span>' +
-        '<div class="surface-rating">' + renderStars(app.rating) + '</div>' +
+        '<div class="surface-rating">' + renderStars(app.rating) + '<span class="review-count"> (' + (app.reviewCount || 0) + ')</span></div>' +
       '</div>';
     return div;
   }

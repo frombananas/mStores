@@ -238,3 +238,61 @@ body { overflow-y: auto; }
   .page { padding: 28px 20px 40px; }
   .review-form { padding: 14px; }
 }
+
+.err-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 200px;
+}
+
+.err-bar {
+  background: #fff;
+  width: 640px;
+  max-width: 90vw;
+  padding: 24px 28px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.err-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.err-title {
+  font-size: 18px;
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
+  color: #000;
+  margin-bottom: 6px;
+}
+
+.err-desc {
+  font-size: 14px;
+  font-weight: 300;
+  font-family: 'Segoe UI', sans-serif;
+  color: #555;
+  line-height: 1.4;
+}
+
+.err-btn {
+  background: #008A00;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+.err-btn:hover { opacity: 0.9; }

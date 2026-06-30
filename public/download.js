@@ -1,5 +1,14 @@
 (function(){
 
+  function showError(title, desc) {
+    document.getElementById('errTitle').textContent = title;
+    document.getElementById('errDesc').textContent = desc || '';
+    document.getElementById('errOverlay').style.display = 'flex';
+    document.getElementById('errBtn').addEventListener('click', function(){
+      document.getElementById('errOverlay').style.display = 'none';
+    }, { once: true });
+  }
+
   function getQueryParam(name) {
     return new URLSearchParams(window.location.search).get(name);
   }
@@ -34,7 +43,10 @@
     fetch('/api/apps/' + id)
       .then(function(r){ return r.json(); })
       .then(function(app){
-        if (!app) return;
+        if (!app || app.error) {
+          showError('Приложение не найдено', 'Приложение с таким ID не существует или было удалено.');
+          return;
+        }
 
         document.title = app.name + ' — подробнее';
         document.getElementById('appTitle').textContent = app.name;
@@ -63,6 +75,7 @@
       })
       .catch(function(){
         document.getElementById('appDescription').textContent = 'Не удалось загрузить информацию о приложении.';
+        showError('Ошибка загрузки', 'Не удалось загрузить информацию о приложении. Проверьте соединение с интернетом.');
       });
   }
 
@@ -232,8 +245,7 @@
     if (btn.classList.contains('done')) return;
 
     if (!currentAppFileUrl) {
-      btn.textContent = 'Файл недоступен';
-      btn.classList.add('done');
+      showError('Файл недоступен', 'У этого приложения нет загруженного файла. Свяжитесь с разработчиком.');
       return;
     }
 

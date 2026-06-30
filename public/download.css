@@ -238,3 +238,59 @@ body { overflow-y: auto; }
   .review-form { padding: 14px; }
 }
 
+.err-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.err-bar {
+  background: #fff;
+  width: 100%;
+  padding: 32px 48px;
+}
+
+.err-body {
+  max-width: 600px;
+}
+
+.err-title {
+  font-size: 20px;
+  font-weight: 300;
+  font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+  color: #000;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.err-desc {
+  font-size: 15px;
+  font-weight: 300;
+  font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+  color: #555;
+  line-height: 1.5;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.err-btn {
+  display: block;
+  margin-left: auto;
+  background: transparent;
+  color: #000;
+  border: 2px solid #000;
+  padding: 8px 32px;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
+}
+
+.err-btn:hover {
+  background: #000;
+  color: #fff;
+}
+

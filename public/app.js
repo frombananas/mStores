@@ -45,7 +45,7 @@
       '<div class="spotlight-info">' +
         '<div class="spotlight-icon-frame">' + iconHtml + '</div>' +
         '<div class="spotlight-text">' +
-          '<span class="spotlight-name" style="color:' + app.color_theme + '">' + app.name + '</span>' +
+          '<span class="spotlight-name">' + app.name + '</span>' +
           '<span class="spotlight-dev">' + app.developer + '</span>' +
           '<div class="spotlight-stars">' + renderStars(app.rating) + '</div>' +
           '<span class="spotlight-desc">' + (app.description || '') + '</span>' +
@@ -525,7 +525,7 @@
         body: fd
       }).then(function(r){ return r.json(); }).then(function(d){
         if (d.success) {
-          msg.style.color = '#1da84c';
+          msg.style.color = '#008A00';
           msg.textContent = 'Заявка отправлена! После модерации приложение появится в магазине.';
           document.getElementById('subName').value = '';
           document.getElementById('subDeveloper').value = '';

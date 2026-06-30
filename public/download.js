@@ -72,7 +72,7 @@
     thumbs.innerHTML = '';
 
     if (!screenshots.length) {
-      var bg = color || '#1da84c';
+      var bg = color || '#008A00';
       var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="' + bg + '"/><text x="200" y="155" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="Segoe UI,sans-serif" font-size="18" font-weight="200">Нет скриншотов</text></svg>';
       mainImg.src = 'data:image/svg+xml,' + encodeURIComponent(svg);
       return;

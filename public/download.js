@@ -63,7 +63,12 @@
         document.getElementById('appCategory').textContent = catMap[app.category] || app.category;
         document.getElementById('appPrice').textContent = app.price;
         document.getElementById('appRating').textContent = app.rating + ' ' + renderStars(app.rating);
-        document.getElementById('fileSize').textContent = (12 + (app.id % 20)) + '.' + (app.id * 3 % 10) + ' MB';
+        var sz = app.file_size || 0;
+        if (sz > 0) {
+          document.getElementById('fileSize').textContent = sz >= 1048576 ? (sz / 1048576).toFixed(1) + ' MB' : sz >= 1024 ? (sz / 1024).toFixed(1) + ' KB' : sz + ' B';
+        } else {
+          document.getElementById('fileSize').textContent = '—';
+        }
 
         var iconEl = document.getElementById('appIconHeader');
         if (app.icon_url) {

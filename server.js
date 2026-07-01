@@ -73,6 +73,10 @@ app.get('/api/apps', (req, res) => {
 app.get('/api/apps/:id', (req, res) => {
   const app = db.getApp(parseInt(req.params.id));
   if (!app) return res.status(404).json({ error: 'App not found' });
+  if (app.file_url) {
+    const fpath = path.join(PUBLIC_DIR, app.file_url.replace(/^\//, ''));
+    try { app.file_size = fs.statSync(fpath).size; } catch(e) { app.file_size = 0; }
+  }
   res.json(app);
 });
 

@@ -124,6 +124,7 @@ const stmtInsertSub = db.prepare(`INSERT INTO submissions (user_id,author_name,n
 const stmtGetSub = db.prepare(`SELECT * FROM submissions WHERE id = ?`);
 const stmtAllSubs = db.prepare(`SELECT * FROM submissions ORDER BY id DESC`);
 const stmtUpdateSubStatus = db.prepare(`UPDATE submissions SET status = ?, approved_at = ? WHERE id = ?`);
+const stmtDeleteSub = db.prepare(`DELETE FROM submissions WHERE id = ?`);
 
 // ─── Helpers ─────────────────────────────────────────────────────────────
 
@@ -228,5 +229,6 @@ module.exports = {
   updateSubmissionStatus(id, status) {
     const approvedAt = status === 'approved' ? new Date().toISOString() : null;
     stmtUpdateSubStatus.run(status, approvedAt, id);
-  }
+  },
+  deleteSubmission(id) { stmtDeleteSub.run(id); }
 };

@@ -357,8 +357,20 @@ app.put('/api/submissions/:id', adminAuth, (req, res) => {
     log('APPROVE #' + id + ' → app#' + app.id + ' ' + found.name);
     res.json({ success: true, app: db.getApp(app.id) });
   } else if (action === 'reject') {
-    db.updateSubmissionStatus(id, 'rejected');
-    log('REJECT #' + id + ' ' + found.name);
+    // Delete submission completely
+    if (found.icon_data) {
+      try { const p = path.join(uploadsDir, found.icon_data); if (fs.existsSync(p)) fs.unlinkSync(p); } catch(e) {}
+    }
+    if (found.file_data) {
+      try { const p = path.join(uploadsDir, found.file_data); if (fs.existsSync(p)) fs.unlinkSync(p); } catch(e) {}
+    }
+    if (found.screenshots_data && found.screenshots_data.length) {
+      found.screenshots_data.forEach(function(name) {
+        try { const p = path.join(uploadsDir, name); if (fs.existsSync(p)) fs.unlinkSync(p); } catch(e) {}
+      });
+    }
+    db.deleteSubmission(id);
+    log('DELETE submission #' + id + ' ' + found.name);
     res.json({ success: true });
   } else {
     res.status(400).json({ error: 'Некорректное действие' });

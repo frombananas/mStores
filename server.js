@@ -389,9 +389,15 @@ app.get('/api/apps/:id/download', (req, res) => {
   if (!found.file_url) return res.status(404).json({ error: 'No file uploaded' });
   const fpath = path.join(PUBLIC_DIR, found.file_url.replace(/^\//, ''));
   if (!fs.existsSync(fpath)) return res.status(404).json({ error: 'File not found' });
+  db.incrementDownload(parseInt(req.params.id));
+  log('DOWNLOAD app#' + req.params.id + ' ' + found.name);
   res.setHeader('Content-Disposition', 'attachment; filename="' + path.basename(found.file_url) + '"');
   res.setHeader('Content-Type', 'application/octet-stream');
   fs.createReadStream(fpath).pipe(res);
+});
+
+app.get('/api/stats', (req, res) => {
+  res.json({ totalDownloads: db.totalDownloads() });
 });
 
 // ─── Categories ──────────────────────────────────────────────────────────

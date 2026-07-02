@@ -524,6 +524,12 @@
     document.querySelector('.auth-tab[data-tab="register"]').classList.remove('active');
   }
 
+  function loadStats() {
+    fetch('/api/stats').then(function(r){ return r.json(); }).then(function(s){
+      document.getElementById('statsTotal').textContent = s.totalDownloads || 0;
+    }).catch(function(){});
+  }
+
   function init() {
     initAuth();
 
@@ -531,6 +537,9 @@
       allApps = apps;
       renderHome(apps);
     });
+
+    loadStats();
+    setInterval(loadStats, 5000);
 
     var panorama = document.getElementById('panorama');
     panorama.addEventListener('wheel', function(e) {

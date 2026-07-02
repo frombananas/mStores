@@ -48,8 +48,15 @@ public class MainActivity extends AppCompatActivity {
         s.setTextZoom(100);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+        });
         webView.setWebChromeClient(new WebChromeClient());
+        webView.clearCache(true);
+        webView.clearHistory();
 
         webView.setDownloadListener(new DownloadListener() {
             @Override

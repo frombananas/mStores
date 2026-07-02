@@ -1,0 +1,10 @@
+C:\Users\принт\Downloads\mStores\win81\app\obj\x86\Release\mStore.csprojResolveAssemblyReference.cache
+C:\Users\принт\Downloads\mStores\win81\app\obj\x86\Release\MainWindow.baml
+C:\Users\принт\Downloads\mStores\win81\app\obj\x86\Release\MainWindow.g.cs
+C:\Users\принт\Downloads\mStores\win81\app\obj\x86\Release\App.g.cs
+C:\Users\принт\Downloads\mStores\win81\app\obj\x86\Release\mStore_MarkupCompile.cache
+C:\Users\принт\Downloads\mStores\win81\app\obj\x86\Release\mStore.g.resources
+C:\Users\принт\Downloads\mStores\win81\app\bin\Release\mStore.exe
+C:\Users\принт\Downloads\mStores\win81\app\bin\Release\mStore.pdb
+C:\Users\принт\Downloads\mStores\win81\app\obj\x86\Release\mStore.exe
+C:\Users\принт\Downloads\mStores\win81\app\obj\x86\Release\mStore.pdb

@@ -22,3 +22,7 @@ android/local.properties
 android/build/
 *.iml
 .idea/
+
+win81/app/bin/
+win81/app/obj/
+win81/mStore/mStore.appx

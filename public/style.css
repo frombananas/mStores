@@ -894,6 +894,32 @@ html, body {
   grid-template-columns: repeat(auto-fill, 150px);
 }
 
+@media (max-width: 1200px) {
+  .panorama {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .panorama-track {
+    display: flex;
+    flex-direction: column;
+    white-space: normal;
+    padding: 24px;
+    gap: 32px;
+  }
+  .panorama-section {
+    margin-right: 0;
+    min-width: auto;
+  }
+  .spotlight-tile {
+    width: 100%;
+    max-width: 640px;
+  }
+  .surface-list {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
 @media (max-width: 1024px) {
   .panorama {
     overflow-x: hidden;

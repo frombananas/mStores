@@ -40,7 +40,11 @@ public class MainActivity extends AppCompatActivity {
         s.setCacheMode(WebSettings.LOAD_DEFAULT);
         s.setUseWideViewPort(true);
         s.setLoadWithOverviewMode(true);
+        s.setSupportZoom(false);
+        s.setBuiltInZoomControls(false);
+        s.setDisplayZoomControls(false);
         s.setAllowFileAccess(true);
+        s.setMediaPlaybackRequiresUserGesture(false);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
         webView.setWebViewClient(new WebViewClient());

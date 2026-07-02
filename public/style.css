@@ -127,8 +127,7 @@ html, body {
 .panorama-section {
   flex-shrink: 0;
   white-space: normal;
-  width: 88vw;
-  max-width: 640px;
+  width: 640px;
 }
 
 .section-title {

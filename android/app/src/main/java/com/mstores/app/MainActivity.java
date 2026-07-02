@@ -18,9 +18,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,34 +32,19 @@ public class MainActivity extends AppCompatActivity {
         hideSystemUI();
         webView = new WebView(this);
         setContentView(webView);
+
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
-        s.setCacheMode(WebSettings.LOAD_DEFAULT);
-        s.setUseWideViewPort(true);
-        s.setLoadWithOverviewMode(true);
+        s.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        s.setAllowFileAccess(true);
         s.setSupportZoom(true);
         s.setBuiltInZoomControls(true);
         s.setDisplayZoomControls(false);
-        s.setAllowFileAccess(true);
-        s.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        webView.setInitialScale(1);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
-        webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                view.loadUrl("javascript:(function(){" +
-                    "var meta=document.querySelector('meta[name=viewport]');" +
-                    "if(!meta){meta=document.createElement('meta');meta.name='viewport';document.head.appendChild(meta);}" +
-                    "meta.content='width=device-width,initial-scale=1.0,maximum-scale=2.0,user-scalable=yes';" +
-                    "})()");
-            }
-        });
+        webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
-        webView.clearCache(true);
-        webView.clearHistory();
 
         webView.setDownloadListener(new DownloadListener() {
             @Override
@@ -71,20 +54,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
         registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_NOT_EXPORTED);
+        webView.clearCache(true);
+        webView.clearHistory();
         webView.loadUrl("https://mstores.45.38.143.196.nip.io");
     }
 
     private void downloadAndInstall(String url, String contentDisposition) {
         String fileName = URLUtil.guessFileName(url, contentDisposition, null);
         if (!fileName.endsWith(".apk")) fileName = "app.apk";
-
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle("mStore");
         request.setDescription("Загрузка " + fileName);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
         request.setMimeType("application/vnd.android.package-archive");
-
         DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         downloadId = dm.enqueue(request);
     }

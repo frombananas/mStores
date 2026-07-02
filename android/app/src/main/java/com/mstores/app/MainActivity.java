@@ -38,13 +38,14 @@ public class MainActivity extends AppCompatActivity {
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
         s.setCacheMode(WebSettings.LOAD_DEFAULT);
-        s.setUseWideViewPort(false);
-        s.setLoadWithOverviewMode(false);
+        s.setUseWideViewPort(true);
+        s.setLoadWithOverviewMode(true);
         s.setSupportZoom(false);
         s.setBuiltInZoomControls(false);
         s.setDisplayZoomControls(false);
         s.setAllowFileAccess(true);
         s.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+        s.setTextZoom(100);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
         webView.setWebViewClient(new WebViewClient());

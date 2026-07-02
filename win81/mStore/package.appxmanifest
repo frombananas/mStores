@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest"
+         xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
+
+  <Identity Name="mStoreInc.mStoreCP" Publisher="CN=mStore" Version="1.0.0.0" />
+  <Properties>
+    <DisplayName>mStore</DisplayName>
+    <PublisherDisplayName>mStore Inc.</PublisherDisplayName>
+    <Logo>images\StoreLogo.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.3.0</OSMinVersion>
+    <OSMaxVersionTested>6.3.0</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="ru" />
+  </Resources>
+  <Applications>
+    <Application Id="App" StartPage="default.html">
+      <m2:VisualElements
+        DisplayName="mStore"
+        Square150x150Logo="images\Square150x150Logo.png"
+        Square30x30Logo="images\Square30x30Logo.png"
+        Description="mStore - Магазин приложений"
+        ForegroundText="light"
+        BackgroundColor="#008A00">
+        <m2:DefaultTile Wide310x150Logo="images\Wide310x150Logo.png" Square71x71Logo="images\SmallLogo.png" />
+        <m2:SplashScreen Image="images\SplashScreen.png" />
+      </m2:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>

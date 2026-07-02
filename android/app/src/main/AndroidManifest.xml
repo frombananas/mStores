@@ -10,6 +10,7 @@
         android:theme="@style/Theme.mStore"
         android:supportsRtl="true">
         <activity android:name=".MainActivity"
+            android:exported="true"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="landscape">
             <intent-filter>

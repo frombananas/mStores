@@ -48,7 +48,11 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
-                view.loadUrl("javascript:document.body.style.zoom='70%'");
+                view.evaluateJavascript("(function(){" +
+                    "var m=document.querySelector('meta[name=viewport]');" +
+                    "if(!m){m=document.createElement('meta');m.name='viewport';document.head.appendChild(m);}" +
+                    "m.content='width=1280,initial-scale=0.7,user-scalable=yes';" +
+                    "})()", null);
             }
         });
         webView.setWebChromeClient(new WebChromeClient());

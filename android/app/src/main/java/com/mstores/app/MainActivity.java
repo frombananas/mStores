@@ -40,18 +40,23 @@ public class MainActivity extends AppCompatActivity {
         s.setCacheMode(WebSettings.LOAD_DEFAULT);
         s.setUseWideViewPort(true);
         s.setLoadWithOverviewMode(true);
-        s.setSupportZoom(false);
-        s.setBuiltInZoomControls(false);
+        s.setSupportZoom(true);
+        s.setBuiltInZoomControls(true);
         s.setDisplayZoomControls(false);
         s.setAllowFileAccess(true);
-        s.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
-        s.setTextZoom(100);
+        s.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webView.setInitialScale(1);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                view.loadUrl("javascript:(function(){" +
+                    "var meta=document.querySelector('meta[name=viewport]');" +
+                    "if(!meta){meta=document.createElement('meta');meta.name='viewport';document.head.appendChild(meta);}" +
+                    "meta.content='width=device-width,initial-scale=1.0,maximum-scale=2.0,user-scalable=yes';" +
+                    "})()");
             }
         });
         webView.setWebChromeClient(new WebChromeClient());

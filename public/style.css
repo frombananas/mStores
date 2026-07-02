@@ -894,6 +894,39 @@ html, body {
   grid-template-columns: repeat(auto-fill, 150px);
 }
 
+@media (max-width: 1024px) {
+  .panorama {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .panorama-track {
+    display: flex;
+    flex-direction: column;
+    white-space: normal;
+    padding: 24px;
+    gap: 32px;
+  }
+  .panorama-section {
+    margin-right: 0;
+    min-width: auto;
+  }
+  .spotlight-tile {
+    width: 100%;
+    max-width: 640px;
+  }
+  .surface-list {
+    min-width: auto;
+    width: 100%;
+  }
+  .featured-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .featured-tile {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .metro-header {
     padding: 0 12px;
@@ -930,6 +963,10 @@ html, body {
 }
 
 @media (max-width: 480px) {
+  .panorama-track {
+    padding: 16px 12px 24px;
+    gap: 20px;
+  }
   .header-link { padding: 16px 6px; font-size: 11px; }
   .header-logo svg { width: 16px; height: 16px; }
   #searchInput { width: 80px; font-size: 11px; }

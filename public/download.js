@@ -1,4 +1,7 @@
 (function(){
+  if (typeof NodeList !== 'undefined' && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+  }
 
   function showError(title, desc) {
     document.getElementById('errTitle').textContent = title;
@@ -6,10 +9,13 @@
     var ov = document.getElementById('errOverlay');
     ov.style.display = 'flex';
     setTimeout(function(){ ov.classList.add('show'); }, 10);
-    document.getElementById('errBtn').addEventListener('click', function(){
+    var btn = document.getElementById('errBtn');
+    var handler = function(){
       ov.classList.remove('show');
       setTimeout(function(){ ov.style.display = 'none'; }, 200);
-    }, { once: true });
+      btn.removeEventListener('click', handler);
+    };
+    btn.addEventListener('click', handler);
   }
 
   function getQueryParam(name) {
@@ -181,11 +187,17 @@
     stars.forEach(function(s){
       s.addEventListener('click', function(){
         selectedRating = parseInt(this.dataset.v);
-        stars.forEach(function(x){ x.classList.toggle('active', parseInt(x.dataset.v) <= selectedRating); });
+        stars.forEach(function(x){
+          if (parseInt(x.dataset.v) <= selectedRating) x.classList.add('active');
+          else x.classList.remove('active');
+        });
       });
       s.addEventListener('mouseenter', function(){
         var v = parseInt(this.dataset.v);
-        stars.forEach(function(x){ x.classList.toggle('hover', parseInt(x.dataset.v) <= v); });
+        stars.forEach(function(x){
+          if (parseInt(x.dataset.v) <= v) x.classList.add('hover');
+          else x.classList.remove('hover');
+        });
       });
       s.addEventListener('mouseleave', function(){
         stars.forEach(function(x){ x.classList.remove('hover'); });

@@ -1,4 +1,7 @@
 (function(){
+  if (typeof NodeList !== 'undefined' && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+  }
   var allApps = [];
   var currentUser = null;
 

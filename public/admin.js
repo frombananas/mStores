@@ -1,4 +1,7 @@
 (function(){
+  if (typeof NodeList !== 'undefined' && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+  }
   var TOKEN = '';
   var currentIconFile = null;
   var currentFileFile = null;

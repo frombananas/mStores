@@ -7,15 +7,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const isVercel = !!process.env.VERCEL;
 const DATA_DIR = process.env.DATA_DIR || (isVercel ? '/tmp/data' : path.join(__dirname, 'data'));
-const PUBLIC_DIR = process.env.PUBLIC_DIR || (isVercel ? '/tmp/public' : path.join(__dirname, 'mstoresfrontend'));
+const PUBLIC_DIR = process.env.PUBLIC_DIR || (isVercel ? '/tmp/public' : path.join(__dirname, 'public'));
 
 // Set DB_PATH before requiring db
 process.env.DB_PATH = path.join(DATA_DIR, 'store.db');
 const db = require('./db');
 
 app.use(express.json({ limit: '100mb' }));
-app.use(express.static(path.join(__dirname, 'mstoresfrontend')));
-if (PUBLIC_DIR !== path.join(__dirname, 'mstoresfrontend')) {
+app.use(express.static(path.join(__dirname, 'public')));
+if (PUBLIC_DIR !== path.join(__dirname, 'public')) {
   app.use(express.static(PUBLIC_DIR));
 }
 

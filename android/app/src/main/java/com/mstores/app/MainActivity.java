@@ -39,14 +39,18 @@ public class MainActivity extends AppCompatActivity {
         s.setCacheMode(WebSettings.LOAD_NO_CACHE);
         s.setAllowFileAccess(true);
         s.setUseWideViewPort(true);
-        s.setLoadWithOverviewMode(false);
+        s.setLoadWithOverviewMode(true);
         s.setSupportZoom(true);
-        s.setBuiltInZoomControls(true);
+        s.setBuiltInZoomControls(false);
         s.setDisplayZoomControls(false);
-        webView.setInitialScale(50);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                view.loadUrl("javascript:document.body.style.zoom='70%'");
+            }
+        });
         webView.setWebChromeClient(new WebChromeClient());
 
         webView.setDownloadListener(new DownloadListener() {

@@ -883,10 +883,9 @@ html, body {
   #searchInput { width: 120px; }
   #searchInput:focus { width: 160px; }
   .panorama-track { padding: 20px 16px 32px; }
-  .panorama-section { margin-right: 24px; }
-  .section-title { font-size: 1.4rem; }
-  .spotlight-tile { width: 640px; }
-  .spotlight-hero { height: 300px; }
+  .panorama-section { margin-right: 24px; min-width: auto; }
+  .spotlight-tile { width: 100%; max-width: 640px; }
+  .spotlight-hero { height: 250px; }
   .spotlight-info .spotlight-name { font-size: 20px; }
   .spotlight-info .spotlight-icon-frame { width: 90px; height: 90px; margin-top: -60px; }
   .spotlight-container { gap: 8px; }
@@ -912,8 +911,8 @@ html, body {
   .header-logo svg { width: 16px; height: 16px; }
   #searchInput { width: 80px; font-size: 11px; }
   #searchInput:focus { width: 120px; }
-  .spotlight-tile { width: 380px; }
-  .spotlight-hero { height: 200px; }
+  .spotlight-tile { width: 100%; max-width: 100vw; }
+  .spotlight-hero { height: 180px; }
   .spotlight-info { padding: 12px 14px; gap: 10px; }
   .spotlight-info .spotlight-name { font-size: 16px; }
   .spotlight-info .spotlight-icon-frame { width: 64px; height: 64px; margin-top: -42px; }
@@ -932,5 +931,7 @@ html, body {
   .panorama-track { padding: 16px 10px 24px; }
   .panorama-section { margin-right: 16px; }
   .section-title { font-size: 1.2rem; margin-bottom: 12px; }
+  .submit-panel { width: 100%; max-width: 100vw; padding: 16px; }
+  .auth-panel { width: 100%; max-width: 100vw; }
 }
 

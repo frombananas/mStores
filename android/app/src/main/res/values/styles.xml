@@ -4,4 +4,5 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+    <color name="ic_launcher_background">#008A00</color>
 </resources>

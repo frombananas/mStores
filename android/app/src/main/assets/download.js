@@ -263,24 +263,70 @@
 
   function handleDownload() {
     var btn = document.getElementById('downloadBtn');
-
     if (btn.classList.contains('done')) return;
-
     if (!currentAppFileUrl) {
       showError('Файл недоступен', 'У этого приложения нет загруженного файла. Свяжитесь с разработчиком.');
       return;
     }
 
-    var a = document.createElement('a');
-    a.href = API_BASE + '/api/apps/' + currentAppId + '/download';
-    a.download = '';
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function(){ document.body.removeChild(a); }, 200);
+    var progDiv = document.getElementById('dlProgress');
+    var progFill = document.getElementById('dlProgressFill');
+    var progText = document.getElementById('dlProgressText');
 
-    btn.textContent = 'Скачано';
-    btn.classList.add('done');
+    btn.style.display = 'none';
+    progDiv.style.display = '';
+    progFill.style.width = '0%';
+    progText.textContent = '0%';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', API_BASE + '/api/apps/' + currentAppId + '/download', true);
+    xhr.responseType = 'blob';
+
+    xhr.onprogress = function(e) {
+      if (e.lengthComputable) {
+        var pct = Math.round((e.loaded / e.total) * 100);
+        progFill.style.width = pct + '%';
+        progText.textContent = pct + '%';
+      }
+    };
+
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        progFill.style.width = '100%';
+        progText.textContent = '100%';
+        setTimeout(function(){
+          progText.textContent = 'Установка...';
+        }, 500);
+
+        var blob = xhr.response;
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = '';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function(){
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          btn.style.display = '';
+          btn.textContent = 'Скачано';
+          btn.classList.add('done');
+          progDiv.style.display = 'none';
+        }, 1000);
+      } else {
+        progText.textContent = 'Ошибка';
+        btn.style.display = '';
+      }
+    };
+
+    xhr.onerror = function() {
+      progText.textContent = 'Ошибка соединения';
+      btn.style.display = '';
+    };
+
+    xhr.send();
+  }
   }
 
   function init() {

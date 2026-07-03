@@ -77,6 +77,35 @@ body { overflow-y: auto; }
   background-color: #555; cursor: default; pointer-events: none;
 }
 
+.dl-progress {
+  margin: 12px 0 8px;
+  width: 100%;
+}
+
+.dl-progress-track {
+  width: 100%;
+  height: 6px;
+  background: #e0e0e0;
+  overflow: hidden;
+}
+
+.dl-progress-fill {
+  height: 100%;
+  background: #008A00;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.dl-progress-text {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
+  color: #666;
+  margin-top: 4px;
+  text-align: right;
+}
+
 .link-purple {
   color: #5c2d91; text-decoration: none; cursor: pointer;
 }

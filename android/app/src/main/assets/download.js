@@ -314,7 +314,28 @@
     }
   }
 
+  function checkPermission() {
+    if (typeof Android === 'undefined') return;
+    if (Android.checkInstallPermission()) return;
+    var ov = document.getElementById('errOverlay');
+    document.getElementById('errTitle').textContent = 'Требуется разрешение';
+    document.getElementById('errDesc').textContent = 'Для установки приложений из mStore необходимо разрешить установку из неизвестных источников. Без этого приложения могут не установиться.';
+    document.getElementById('errBtn').textContent = 'Открыть настройки';
+    ov.style.display = 'flex';
+    document.getElementById('errBtn').onclick = function(){
+      Android.requestInstallPermission();
+    };
+    function recheck() {
+      if (Android.checkInstallPermission()) {
+        ov.style.display = 'none';
+        document.removeEventListener('visibilitychange', recheck);
+      }
+    }
+    document.addEventListener('visibilitychange', recheck);
+  }
+
   function init() {
+    checkPermission();
     loadAppData();
 
     var id = getQueryParam('id');

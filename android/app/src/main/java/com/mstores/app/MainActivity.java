@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.Settings;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -112,6 +114,23 @@ public class MainActivity extends AppCompatActivity {
             return (int) ((bytesDownloaded * 100L) / totalBytes);
         } catch (Exception e) {
             return 0;
+        }
+    }
+
+    @JavascriptInterface
+    public boolean checkInstallPermission() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            return getPackageManager().canRequestPackageInstalls();
+        }
+        return true;
+    }
+
+    @JavascriptInterface
+    public void requestInstallPermission() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
         }
     }
 

@@ -99,6 +99,55 @@
     if (mainApp) showMain(mainApp);
   }
 
+  function renderCollections(apps) {
+    var grid = document.getElementById('collectionsGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    var categories = [
+      { key: 'games',  label: 'Игры', xbox: true },
+      { key: 'social', label: 'Социальные сети', xbox: false },
+      { key: 'music',  label: 'Музыка', xbox: false },
+      { key: 'other',  label: 'Другое', xbox: false }
+    ];
+
+    categories.forEach(function(cat){
+      var catApps = apps.filter(function(a){ return a.category === cat.key; }).slice(0, 4);
+      if (catApps.length === 0) return;
+
+      var category = document.createElement('div');
+      category.className = 'collection-category';
+
+      var tiles = document.createElement('div');
+      tiles.className = 'collection-tiles';
+
+      catApps.forEach(function(app){
+        var tile = document.createElement('div');
+        tile.className = 'collection-tile' + (cat.xbox ? ' xbox' : '');
+        tile.title = app.name;
+        if (app.icon_url) {
+          tile.innerHTML = '<img src="' + app.icon_url + '" alt="' + app.name + '">';
+        } else {
+          tile.style.background = app.color_theme;
+          var inits = app.name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
+          tile.innerHTML = '<span class="tile-initials">' + inits + '</span>';
+        }
+        tile.addEventListener('click', function(){
+          window.location.href = 'download.html?id=' + app.id;
+        });
+        tiles.appendChild(tile);
+      });
+
+      var name = document.createElement('div');
+      name.className = 'collection-name';
+      name.textContent = cat.label;
+
+      category.appendChild(tiles);
+      category.appendChild(name);
+      grid.appendChild(category);
+    });
+  }
+
   function createSurfaceItem(app, delay) {
     var div = document.createElement('div');
     div.className = 'surface-item tile';
@@ -226,7 +275,10 @@
     var sidebarApps = sorted.slice(0, 6);
     var mainApp = sorted[0];
     renderSpotlight(sidebarApps, mainApp);
+    renderCollections(apps);
 
+    var delay = 0;
+    var step = 60;
     var surfaceApps = apps.slice(1, 9);
     surfaceApps.forEach(function(app){
       var el = createSurfaceItem(app, delay);

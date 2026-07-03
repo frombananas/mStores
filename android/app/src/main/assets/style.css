@@ -244,6 +244,84 @@ html, body {
   font-weight: 300;
   color: #bbb;
 }
+
+.collections-header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+.collections-see-all {
+  font-size: 14px;
+  font-weight: 300;
+  color: #008A00;
+  margin-left: 16px;
+  cursor: pointer;
+}
+.collections-see-all:hover { color: #006800; }
+
+.collections-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 32px 40px;
+}
+
+.collection-category {
+  display: flex;
+  flex-direction: column;
+}
+
+.collection-tiles {
+  display: flex;
+  gap: 0;
+}
+
+.collection-tile {
+  width: 90px;
+  height: 90px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.collection-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.collection-tile .tile-initials {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 300;
+}
+
+.collection-tile.xbox {
+  position: relative;
+}
+.collection-tile.xbox::before {
+  content: 'Xbox';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 16px;
+  background: #107C10;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.collection-name {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 300;
+  color: #333;
+}
 .spotlight-main .spotlight-body .spotlight-meta-row {
   display: flex;
   align-items: center;

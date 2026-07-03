@@ -19,6 +19,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
@@ -35,14 +36,26 @@ public class MainActivity extends AppCompatActivity {
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
+        s.setCacheMode(WebSettings.LOAD_NO_CACHE);
         s.setAllowFileAccess(true);
+        s.setUseWideViewPort(true);
+        s.setLoadWithOverviewMode(true);
         s.setSupportZoom(true);
-        s.setBuiltInZoomControls(true);
+        s.setBuiltInZoomControls(false);
         s.setDisplayZoomControls(false);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                view.evaluateJavascript("(function(){" +
+                    "var m=document.querySelector('meta[name=viewport]');" +
+                    "if(!m){m=document.createElement('meta');m.name='viewport';document.head.appendChild(m);}" +
+                    "m.content='width=1280,initial-scale=0.7,user-scalable=yes';" +
+                    "})()", null);
+            }
+        });
         webView.setWebChromeClient(new WebChromeClient());
-        webView.setWebViewClient(new WebViewClient());
 
         webView.setDownloadListener(new DownloadListener() {
             @Override
@@ -52,15 +65,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_NOT_EXPORTED);
-
-        String wrapper = "<!DOCTYPE html><html><head>" +
-            "<meta charset='utf-8'>" +
-            "<meta name='viewport' content='width=1280,initial-scale=0.5,user-scalable=yes'>" +
-            "<style>body{margin:0;padding:0;overflow:hidden}iframe{border:none;width:2560px;height:100vh;position:fixed;top:0;left:0}</style>" +
-            "</head><body>" +
-            "<iframe src='https://mstores.45.38.143.196.nip.io'></iframe>" +
-            "</body></html>";
-        webView.loadDataWithBaseURL("https://mstores.45.38.143.196.nip.io", wrapper, "text/html", "UTF-8", null);
+        webView.clearCache(true);
+        webView.clearHistory();
+        webView.loadUrl("https://mstores.45.38.143.196.nip.io");
     }
 
     private void downloadAndInstall(String url, String contentDisposition) {

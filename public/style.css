@@ -229,10 +229,20 @@ html, body {
   color: #888;
   margin-bottom: 4px;
 }
-.spotlight-main .spotlight-body .spotlight-meta {
+.spotlight-main .spotlight-body .spotlight-price {
   font-size: 14px;
   font-weight: 300;
   color: #999;
+}
+.spotlight-main .spotlight-body .spotlight-stars-row {
+  display: flex;
+  gap: 2px;
+  margin: 4px 0;
+}
+.spotlight-main .spotlight-body .spotlight-review-count {
+  font-size: 14px;
+  font-weight: 300;
+  color: #bbb;
 }
 
 .surface-list {

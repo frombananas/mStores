@@ -450,7 +450,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, password: password })
-      }).then(function(r){ return r.json(); }).then(function(res){
+      }).then(function(res){
         if (res.success) {
           saveToken(res.token);
           setLoggedIn(res.user);
@@ -471,7 +471,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, displayName: displayName, password: password })
-      }).then(function(r){ return r.json(); }).then(function(res){
+      }).then(function(res){
         if (res.success) {
           saveToken(res.token);
           setLoggedIn(res.user);
@@ -501,7 +501,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-auth-token': getToken() },
         body: JSON.stringify({ oldPassword: oldPw, newPassword: newPw })
-      }).then(function(r){ return r.json(); }).then(function(res){
+      }).then(function(res){
         if (res.success) {
           msg.style.color = '#008A00';
           msg.textContent = 'Пароль изменён';
@@ -523,7 +523,7 @@
   }
 
   function loadStats() {
-    apiFetch('/api/stats').then(function(r){ return r.json(); }).then(function(s){
+    apiFetch('/api/stats').then(function(s){
       document.getElementById('statsTotal').textContent = s.totalDownloads || 0;
     }).catch(function(){});
   }

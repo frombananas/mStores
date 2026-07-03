@@ -60,7 +60,6 @@
     currentAppId = id;
 
     apiFetch('/api/apps/' + id)
-      .then(function(r){ return r.json(); })
       .then(function(app){
         if (!app || app.error) {
           showError('Приложение не найдено', 'Приложение с таким ID не существует или было удалено.');
@@ -138,7 +137,6 @@
     if (!id) return;
     currentAppId = id;
     apiFetch('/api/apps/' + id + '/reviews')
-      .then(function(r){ return r.json(); })
       .then(function(list){
         var el = document.getElementById('reviewsList');
         if (!el) return;
@@ -187,7 +185,6 @@
     var token = getToken();
     if (!token) { cb(null); return; }
     apiFetch('/api/me', { headers: { 'x-auth-token': token } })
-      .then(function(r){ return r.json(); })
       .then(function(u){ cb(u); })
       .catch(function(){ cb(null); });
   }
@@ -239,7 +236,7 @@
       method: 'POST',
       headers: headers,
       body: JSON.stringify({ rating: selectedRating, comment: comment })
-    }).then(function(r){ return r.json(); }).then(function(res){
+    }).then(function(res){
       if (res.success) {
         msg.textContent = 'Отзыв отправлен!';
         document.getElementById('reviewComment').value = '';

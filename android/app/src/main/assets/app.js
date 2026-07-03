@@ -45,32 +45,15 @@
     sidebar.innerHTML = '';
     main.innerHTML = '';
 
-    sidebarApps.forEach(function(app, i){
-      var tile = document.createElement('div');
-      tile.className = 'spotlight-sidebar-tile';
-      tile.dataset.id = app.id;
-      if (i === 1) tile.classList.add('active');
-      if (app.icon_url) {
-        tile.innerHTML = '<img src="' + app.icon_url + '" alt="' + app.name + '">';
-      } else {
-        var inits = app.name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
-        tile.style.background = app.color_theme;
-        tile.innerHTML = '<span style="color:#fff;font-size:20px;font-weight:300">' + inits + '</span>';
-      }
-      tile.addEventListener('click', function(){
-        window.location.href = 'download.html?id=' + app.id;
-      });
-      sidebar.appendChild(tile);
-    });
-
-    if (mainApp) {
+    function showMain(app) {
+      main.innerHTML = '';
       var hero = document.createElement('div');
       hero.className = 'spotlight-hero';
-      if (mainApp.screenshots && mainApp.screenshots.length) {
-        hero.innerHTML = '<img src="' + mainApp.screenshots[0] + '" alt="">';
+      if (app.screenshots && app.screenshots.length) {
+        hero.innerHTML = '<img src="' + app.screenshots[0] + '" alt="">';
       } else {
-        hero.style.background = mainApp.color_theme;
-        var iconUrl = mainApp.icon_url || makeIcon(mainApp.name, mainApp.color_theme, 180);
+        hero.style.background = app.color_theme;
+        var iconUrl = app.icon_url || makeIcon(app.name, app.color_theme, 180);
         hero.innerHTML = '<img class="spotlight-hero-icon" src="' + iconUrl + '" alt="">';
       }
       main.appendChild(hero);
@@ -78,16 +61,38 @@
       var body = document.createElement('div');
       body.className = 'spotlight-body';
       body.innerHTML =
-        '<div class="spotlight-name">' + mainApp.name + '</div>' +
-        '<div class="spotlight-dev">' + mainApp.developer + '</div>' +
-        '<div class="spotlight-meta">' + renderStars(mainApp.rating) + ' &bull; ' + mainApp.price + ' &bull; ' + (mainApp.reviewCount || 0) + ' отзывов</div>';
+        '<div class="spotlight-name">' + app.name + '</div>' +
+        '<div class="spotlight-dev">' + app.developer + '</div>' +
+        '<div class="spotlight-meta">' + renderStars(app.rating) + ' &bull; ' + app.price + ' &bull; ' + (app.reviewCount || 0) + ' отзывов</div>';
       main.appendChild(body);
 
       main.style.cursor = 'pointer';
-      main.addEventListener('click', function(){
-        window.location.href = 'download.html?id=' + mainApp.id;
-      });
+      main.onclick = function(){
+        window.location.href = 'download.html?id=' + app.id;
+      };
     }
+
+    sidebarApps.forEach(function(app, i){
+      var tile = document.createElement('div');
+      tile.className = 'spotlight-sidebar-tile';
+      if (i === 0) tile.classList.add('active');
+      if (app.icon_url) {
+        tile.innerHTML = '<img src="' + app.icon_url + '" alt="' + app.name + '">';
+      } else {
+        var inits = app.name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
+        tile.style.background = app.color_theme;
+        tile.innerHTML = '<span style="color:#fff;font-size:18px;font-weight:300">' + inits + '</span>';
+      }
+      tile.addEventListener('click', function(){
+        var tiles = sidebar.querySelectorAll('.spotlight-sidebar-tile');
+        for (var j = 0; j < tiles.length; j++) tiles[j].classList.remove('active');
+        tile.classList.add('active');
+        showMain(app);
+      });
+      sidebar.appendChild(tile);
+    });
+
+    if (mainApp) showMain(mainApp);
   }
 
   function createSurfaceItem(app, delay) {

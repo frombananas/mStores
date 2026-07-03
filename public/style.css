@@ -161,13 +161,13 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  width: 86px;
+  width: 72px;
   flex-shrink: 0;
 }
 
 .spotlight-sidebar-tile {
-  width: 86px;
-  height: 86px;
+  width: 72px;
+  height: 72px;
   cursor: pointer;
   background: #0078D7;
   display: flex;
@@ -181,7 +181,7 @@ html, body {
   object-fit: cover;
 }
 .spotlight-sidebar-tile.active {
-  outline: 3px solid #fff;
+  outline: 3px solid #008A00;
   outline-offset: -3px;
 }
 .spotlight-sidebar-tile:hover { opacity: 0.85; }
@@ -212,15 +212,14 @@ html, body {
   max-height: 180px;
 }
 .spotlight-main .spotlight-body {
-  padding: 16px 24px 20px;
-  flex: 1;
+  padding: 8px 0 0 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 .spotlight-main .spotlight-body .spotlight-name {
   font-size: 22px;
-  font-weight: 400;
+  font-weight: 200;
+  font-family: "Segoe UI Light", "Segoe UI", sans-serif;
   color: #008A00;
   margin-bottom: 2px;
 }
@@ -228,7 +227,7 @@ html, body {
   font-size: 14px;
   font-weight: 300;
   color: #888;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .spotlight-main .spotlight-body .spotlight-meta {
   font-size: 14px;
@@ -896,9 +895,10 @@ html, body {
     width: 100%;
   }
   .panorama-group .panorama-section { width: 100%; }
+  #sectionSpotlight { width: 100%; }
   .spotlight-layout { flex-direction: column; height: auto; }
   .spotlight-sidebar { flex-direction: row; width: 100%; overflow-x: auto; }
-  .spotlight-sidebar-tile { width: 56px; height: 56px; flex-shrink: 0; }
+  .spotlight-sidebar-tile { width: 48px; height: 48px; flex-shrink: 0; }
   .spotlight-main .spotlight-hero { height: 180px; }
   .spotlight-main .spotlight-body .spotlight-name { font-size: 18px; }
   .spotlight-main .spotlight-body .spotlight-dev { font-size: 13px; }
@@ -934,7 +934,7 @@ html, body {
   .panorama-section { margin-right: 24px; min-width: auto; }
   .spotlight-layout { flex-direction: column; height: auto; }
   .spotlight-sidebar { flex-direction: row; width: 100%; overflow-x: auto; gap: 4px; }
-  .spotlight-sidebar-tile { width: 64px; height: 64px; flex-shrink: 0; }
+  .spotlight-sidebar-tile { width: 56px; height: 56px; flex-shrink: 0; }
   .spotlight-main .spotlight-hero { height: 250px; }
   .spotlight-main .spotlight-body .spotlight-name { font-size: 20px; }
   .surface-list { min-width: 240px; }
@@ -1016,7 +1016,7 @@ html, body {
   #searchInput:focus { width: 120px; }
   .spotlight-layout { flex-direction: column; height: auto; }
   .spotlight-sidebar { flex-direction: row; width: 100%; overflow-x: auto; gap: 4px; }
-  .spotlight-sidebar-tile { width: 50px; height: 50px; flex-shrink: 0; }
+  .spotlight-sidebar-tile { width: 44px; height: 44px; flex-shrink: 0; }
   .spotlight-main .spotlight-hero { height: 180px; }
   .spotlight-main .spotlight-body .spotlight-name { font-size: 16px; }
   .spotlight-main .spotlight-body .spotlight-dev { font-size: 12px; }

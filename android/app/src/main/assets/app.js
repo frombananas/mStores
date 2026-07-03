@@ -535,6 +535,8 @@
   function checkPermission() {
     if (typeof Android === 'undefined') return;
     if (localStorage.getItem('perm_shown')) return;
+    var granted = Android.checkInstallPermission();
+    if (granted) { localStorage.setItem('perm_shown', '1'); return; }
     localStorage.setItem('perm_shown', '1');
     var ov = document.getElementById('errOverlay');
     document.getElementById('errTitle').textContent = 'Требуется разрешение';
@@ -543,6 +545,9 @@
     ov.style.display = 'flex';
     document.getElementById('errBtn').onclick = function(){
       Android.requestInstallPermission();
+    };
+    document.getElementById('errDismiss').onclick = function(){
+      ov.style.display = 'none';
     };
     function recheck() {
       if (typeof Android !== 'undefined' && Android.checkInstallPermission()) {

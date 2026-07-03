@@ -1021,6 +1021,8 @@ html, body {
   cursor: pointer;
 }
 .err-btn:hover { background: #000; color: #fff; }
+.err-btn-secondary { margin-left: 12px; background: transparent; color: #000; border-color: transparent; }
+.err-btn-secondary:hover { background: transparent; color: #555; }
 
 @media (max-width: 480px) {
   .panorama-track {

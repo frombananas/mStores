@@ -70,7 +70,7 @@
       '<div class="surface-icon"><img src="' + icon + '" width="80" height="80" alt=""></div>' +
       '<div class="surface-info">' +
         '<span class="surface-name">' + app.name + '</span>' +
-        '<span class="surface-price">' + app.price + (app.installed ? ' &bull; Установлено' : '') + '</span>' +
+        '<span class="surface-price">' + app.price + '</span>' +
         '<div class="surface-rating">' + renderStars(app.rating) + '<span class="review-count"> (' + (app.reviewCount || 0) + ')</span></div>' +
       '</div>';
     return div;
@@ -114,10 +114,6 @@
     return apiFetch('/api/apps/' + id).then(function(r){ return r.json(); });
   }
 
-  function installApp(id) {
-    return apiFetch('/api/apps/' + id + '/install', { method: 'POST' }).then(function(r){ return r.json(); });
-  }
-
   var currentModalApp = null;
 
   function openModal(id) {
@@ -138,41 +134,16 @@
       document.getElementById('modalPrice').textContent = app.price;
       document.getElementById('modalRatingVal').textContent = app.rating + ' / 5';
       document.getElementById('moreInfoLink').href = 'download.html?id=' + app.id;
-      updateInstallBtn(app);
+      document.getElementById('installBtn').textContent = 'Скачать';
+      document.getElementById('installBtn').className = 'install-btn';
+      document.getElementById('installBtn').onclick = function(){ window.location.href = 'download.html?id=' + app.id; };
       overlay.classList.add('active');
     });
-  }
-
-  function updateInstallBtn(app) {
-    var btn = document.getElementById('installBtn');
-    if (app.installed) {
-      btn.textContent = 'Установлено';
-      btn.className = 'install-btn installed';
-    } else {
-      btn.textContent = 'Установить';
-      btn.className = 'install-btn';
-    }
   }
 
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('active');
     currentModalApp = null;
-  }
-
-  function handleInstall() {
-    if (!currentModalApp) return;
-    installApp(currentModalApp.id).then(function(result){
-      if (result.success) {
-        currentModalApp.installed = result.installed;
-        updateInstallBtn(currentModalApp);
-        for (var i = 0; i < allApps.length; i++) {
-          if (allApps[i].id === currentModalApp.id) {
-            allApps[i].installed = result.installed;
-            break;
-          }
-        }
-      }
-    });
   }
 
   function renderHome(apps) {
@@ -566,8 +537,6 @@
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape') closeModal();
     });
-    document.getElementById('installBtn').addEventListener('click', handleInstall);
-
     document.querySelector('.header-logo').addEventListener('click', function(e){
       e.preventDefault();
       document.getElementById('searchInput').value = '';

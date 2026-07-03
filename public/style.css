@@ -235,14 +235,19 @@ html, body {
   color: #999;
 }
 .spotlight-main .spotlight-body .spotlight-stars-row {
-  display: flex;
+  display: inline-flex;
   gap: 2px;
-  margin: 4px 0;
+  margin: 0 8px;
 }
 .spotlight-main .spotlight-body .spotlight-review-count {
   font-size: 14px;
   font-weight: 300;
   color: #bbb;
+}
+.spotlight-main .spotlight-body .spotlight-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .surface-list {

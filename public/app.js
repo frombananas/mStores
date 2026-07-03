@@ -63,9 +63,11 @@
       body.innerHTML =
         '<div class="spotlight-name">' + app.name + '</div>' +
         '<div class="spotlight-dev">' + app.developer + '</div>' +
-        '<div class="spotlight-price">' + app.price + '</div>' +
-        '<div class="spotlight-stars-row">' + renderStars(app.rating) + '</div>' +
-        '<div class="spotlight-review-count">' + (app.reviewCount || 0) + ' отзывов</div>';
+        '<div class="spotlight-meta-row">' +
+          '<div class="spotlight-price">' + app.price + '</div>' +
+          '<div class="spotlight-stars-row">' + renderStars(app.rating) + '</div>' +
+          '<div class="spotlight-review-count">' + (app.reviewCount || 0) + ' отзывов</div>' +
+        '</div>';
       main.appendChild(body);
 
       main.style.cursor = 'pointer';

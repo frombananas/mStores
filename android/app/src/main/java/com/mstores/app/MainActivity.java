@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 view.evaluateJavascript("(function(){" +
                     "var m=document.querySelector('meta[name=viewport]');" +
                     "if(!m){m=document.createElement('meta');m.name='viewport';document.head.appendChild(m);}" +
-                    "m.content='width=1280,initial-scale=0.7,user-scalable=yes';" +
+                    "m.content='width=1440,initial-scale=0.35,user-scalable=yes';" +
                     "})()", null);
             }
         });

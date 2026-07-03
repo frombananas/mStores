@@ -992,6 +992,7 @@ html, body {
   }
   .panorama-group .panorama-section { width: 100%; }
   #sectionSpotlight { width: 100%; }
+  #sectionCollections { width: 100%; }
   .spotlight-layout { flex-direction: column; height: auto; }
   .spotlight-sidebar { flex-direction: row; width: 100%; overflow-x: auto; }
   .spotlight-sidebar-tile { width: 48px; height: 48px; flex-shrink: 0; }

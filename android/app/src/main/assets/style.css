@@ -995,6 +995,8 @@ html, body {
   .spotlight-main .spotlight-hero { height: 180px; }
   .spotlight-main .spotlight-body .spotlight-name { font-size: 18px; }
   .spotlight-main .spotlight-body .spotlight-dev { font-size: 13px; }
+  .collections-grid { grid-template-columns: 1fr; gap: 20px; }
+  .collection-tile { width: 64px; height: 64px; }
   .surface-list {
     min-width: auto;
     width: 100%;
@@ -1030,6 +1032,8 @@ html, body {
   .spotlight-sidebar-tile { width: 56px; height: 56px; flex-shrink: 0; }
   .spotlight-main .spotlight-hero { height: 250px; }
   .spotlight-main .spotlight-body .spotlight-name { font-size: 20px; }
+  .collections-grid { grid-template-columns: 1fr 1fr; gap: 24px 24px; }
+  .collection-tile { width: 70px; height: 70px; }
   .surface-list { min-width: 240px; }
   .surface-item .surface-icon { width: 52px; height: 52px; }
   .surface-item .surface-icon img { width: 100%; height: 100%; object-fit: cover; }
@@ -1113,7 +1117,9 @@ html, body {
   .spotlight-main .spotlight-hero { height: 180px; }
   .spotlight-main .spotlight-body .spotlight-name { font-size: 16px; }
   .spotlight-main .spotlight-body .spotlight-dev { font-size: 12px; }
-  .spotlight-main .spotlight-body .spotlight-meta { font-size: 12px; }
+  .spotlight-main .spotlight-body .spotlight-price { font-size: 12px; }
+  .collections-grid { grid-template-columns: 1fr; gap: 16px; }
+  .collection-tile { width: 56px; height: 56px; }
   .featured-grid { grid-template-columns: repeat(3, 100px); gap: 4px; }
   .featured-tile { width: 100px; padding: 10px 6px 8px; }
   .featured-tile .featured-icon { width: 58px; height: 58px; }

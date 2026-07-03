@@ -120,7 +120,7 @@ html, body {
   flex-wrap: nowrap;
   padding: 32px 40px 40px;
   min-height: 100%;
-  gap: 32px;
+  gap: 0;
   width: max-content;
 }
 
@@ -128,7 +128,10 @@ html, body {
   flex-shrink: 0;
   white-space: normal;
   width: 860px;
+  margin-right: 32px;
 }
+.panorama-section:last-child { margin-right: 0; }
+#sectionSurface { margin-right: 0; }
 
 .section-title {
   font-size: 1.6rem;

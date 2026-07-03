@@ -99,46 +99,9 @@ html, body {
   color: #999;
 }
 
-.platform-filter {
-  position: fixed;
-  top: 60px;
-  left: 0;
-  right: 0;
-  z-index: 99;
-  height: 40px;
-  background: #f4f4f4;
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-  gap: 2px;
-  border-bottom: 1px solid #ddd;
-}
-
-.filter-btn {
-  background: none;
-  border: none;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 300;
-  font-family: 'Segoe UI', sans-serif;
-  color: #555;
-  cursor: pointer;
-  letter-spacing: 0.2px;
-}
-
-.filter-btn:hover {
-  background: #e8e8e8;
-}
-
-.filter-btn.active {
-  background: #008A00;
-  color: #fff;
-  font-weight: 400;
-}
-
 .panorama {
   position: fixed;
-  top: 100px;
+  top: 60px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -1011,8 +974,7 @@ html, body {
   .modal-content { padding: 20px; }
   .modal-hero-title { font-size: 22px; }
   .modal-meta { flex-wrap: wrap; gap: 16px; }
-  .panorama { top: 87px; }
-  .platform-filter { top: 50px; height: 36px; padding: 0 12px; }
+  .panorama { top: 50px; }
   .preview-grid { grid-template-columns: repeat(2, 1fr); }
 }
 

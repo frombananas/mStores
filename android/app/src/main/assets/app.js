@@ -4,7 +4,7 @@
   }
   var allApps = [];
   var currentUser = null;
-  var currentPlatform = '';
+  var currentPlatform = 'android';
 
   function makeIcon(name, color, size) {
     var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
@@ -532,23 +532,7 @@
     }).catch(function(){});
   }
 
-  function setupPlatformFilter() {
-    document.querySelectorAll('.filter-btn').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
-        btn.classList.add('active');
-        currentPlatform = btn.dataset.platform;
-        if (document.querySelector('.search-section')) {
-          document.getElementById('searchInput').value = '';
-          showHome();
-        }
-        renderHome(allApps);
-      });
-    });
-  }
-
   function init() {
-    setupPlatformFilter();
     initAuth();
 
     fetchApps().then(function(apps){

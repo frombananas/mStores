@@ -37,41 +37,57 @@
     return html;
   }
 
-  function createSpotlightTile(app, delay) {
-    var div = document.createElement('div');
-    div.className = 'spotlight-tile tile';
-    div.style.animationDelay = delay + 'ms';
-    div.classList.add('slide-in');
-    div.dataset.id = app.id;
+  function renderSpotlight(sidebarApps, mainApp) {
+    var sidebar = document.getElementById('spotlightSidebar');
+    var main = document.getElementById('spotlightMain');
+    if (!sidebar || !main) return;
 
-    var hero = '';
-    if (app.screenshots && app.screenshots.length) {
-      hero = '<div class="spotlight-hero"><img src="' + app.screenshots[0] + '" alt=""></div>';
-    } else {
-      hero = '<div class="spotlight-hero" style="background:' + app.color_theme + ';"><div class="spotlight-hero-placeholder"><span style="color:rgba(255,255,255,0.3);font-size:48px;font-weight:200;">' + app.name + '</span></div></div>';
+    sidebar.innerHTML = '';
+    main.innerHTML = '';
+
+    sidebarApps.forEach(function(app, i){
+      var tile = document.createElement('div');
+      tile.className = 'spotlight-sidebar-tile';
+      tile.dataset.id = app.id;
+      if (i === 1) tile.classList.add('active');
+      if (app.icon_url) {
+        tile.innerHTML = '<img src="' + app.icon_url + '" alt="' + app.name + '">';
+      } else {
+        var inits = app.name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
+        tile.style.background = app.color_theme;
+        tile.innerHTML = '<span style="color:#fff;font-size:20px;font-weight:300">' + inits + '</span>';
+      }
+      tile.addEventListener('click', function(){
+        window.location.href = 'download.html?id=' + app.id;
+      });
+      sidebar.appendChild(tile);
+    });
+
+    if (mainApp) {
+      var hero = document.createElement('div');
+      hero.className = 'spotlight-hero';
+      if (mainApp.screenshots && mainApp.screenshots.length) {
+        hero.innerHTML = '<img src="' + mainApp.screenshots[0] + '" alt="">';
+      } else {
+        hero.style.background = mainApp.color_theme;
+        var iconUrl = mainApp.icon_url || makeIcon(mainApp.name, mainApp.color_theme, 180);
+        hero.innerHTML = '<img class="spotlight-hero-icon" src="' + iconUrl + '" alt="">';
+      }
+      main.appendChild(hero);
+
+      var body = document.createElement('div');
+      body.className = 'spotlight-body';
+      body.innerHTML =
+        '<div class="spotlight-name">' + mainApp.name + '</div>' +
+        '<div class="spotlight-dev">' + mainApp.developer + '</div>' +
+        '<div class="spotlight-meta">' + renderStars(mainApp.rating) + ' &bull; ' + mainApp.price + ' &bull; ' + (mainApp.reviewCount || 0) + ' отзывов</div>';
+      main.appendChild(body);
+
+      main.style.cursor = 'pointer';
+      main.addEventListener('click', function(){
+        window.location.href = 'download.html?id=' + mainApp.id;
+      });
     }
-
-    var iconHtml = '';
-    if (app.icon_url) {
-      iconHtml = '<img src="' + app.icon_url + '" alt="">';
-    } else {
-      var initials = app.name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
-      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" fill="' + app.color_theme + '"/><text x="80" y="98" text-anchor="middle" fill="white" font-family="Segoe UI,sans-serif" font-size="60" font-weight="300">' + initials + '</text></svg>';
-      iconHtml = '<img src="data:image/svg+xml,' + encodeURIComponent(svg) + '" alt="">';
-    }
-
-    div.innerHTML =
-      hero +
-      '<div class="spotlight-info">' +
-        '<div class="spotlight-icon-frame">' + iconHtml + '</div>' +
-        '<div class="spotlight-text">' +
-          '<span class="spotlight-name">' + app.name + '</span>' +
-          '<span class="spotlight-dev">' + app.developer + '</span>' +
-          '<div class="spotlight-stars">' + renderStars(app.rating) + '<span class="review-count">(' + (app.reviewCount || 0) + ')</span></div>' +
-          '<span class="spotlight-desc">' + (app.description || '') + '</span>' +
-        '</div>' +
-      '</div>';
-    return div;
   }
 
   function createSurfaceItem(app, delay) {
@@ -183,12 +199,10 @@
 
   function renderHome(apps) {
     if (currentPlatform) apps = apps.filter(function(a){ return a.platform === currentPlatform; });
-    var spotlightEl = document.getElementById('spotlightContainer');
     var surfaceEl = document.getElementById('surfaceList');
     var featuredEl = document.getElementById('featuredGrid');
     var topFreeEl = document.getElementById('topFreeList');
 
-    spotlightEl.innerHTML = '';
     surfaceEl.innerHTML = '';
     featuredEl.innerHTML = '';
     topFreeEl.innerHTML = '';
@@ -199,14 +213,10 @@
       if (a.spotlight !== b.spotlight) return b.spotlight - a.spotlight;
       return b.rating - a.rating;
     });
-    var spotlightApps = sorted.slice(0, 1);
-    var delay = 0;
-    var step = 60;
-    spotlightApps.forEach(function(app){
-      var el = createSpotlightTile(app, delay);
-      spotlightEl.appendChild(el);
-      delay += step;
-    });
+
+    var sidebarApps = sorted.slice(0, 6);
+    var mainApp = sorted[0];
+    renderSpotlight(sidebarApps, mainApp);
 
     var surfaceApps = apps.slice(1, 9);
     surfaceApps.forEach(function(app){

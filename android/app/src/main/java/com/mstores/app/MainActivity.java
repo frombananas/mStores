@@ -122,6 +122,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @JavascriptInterface
+    public void installDownloadedApk() {
+        if (downloadId < 0) return;
+        try {
+            DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+            Uri uri = dm.getUriForDownloadedFile(downloadId);
+            if (uri != null) {
+                Intent install = new Intent(Intent.ACTION_VIEW);
+                install.setDataAndType(uri, "application/vnd.android.package-archive");
+                install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(install);
+            }
+        } catch (Exception e) {}
+    }
+
+    @JavascriptInterface
     public boolean checkInstallPermission() {
         try {
             if (Build.VERSION.SDK_INT >= 26) {

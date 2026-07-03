@@ -300,12 +300,13 @@
         if (pct >= 100) {
           clearInterval(pollTimer);
           progText.textContent = 'Установка...';
+          Android.installDownloadedApk();
           setTimeout(function(){
             btn.style.display = '';
             btn.textContent = 'Скачано';
             btn.classList.add('done');
             progDiv.style.display = 'none';
-          }, 2000);
+          }, 3000);
         }
       }, 500);
     } else {

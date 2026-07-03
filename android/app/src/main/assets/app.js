@@ -6,6 +6,21 @@
   var currentUser = null;
   var currentPlatform = 'android';
 
+  function getInstalledApps() {
+    try { return JSON.parse(localStorage.getItem('installed') || '[]'); }
+    catch(e) { return []; }
+  }
+  function isInstalled(id) {
+    return getInstalledApps().indexOf(id) !== -1;
+  }
+  function markInstalled(id) {
+    var list = getInstalledApps();
+    if (list.indexOf(id) === -1) {
+      list.push(id);
+      localStorage.setItem('installed', JSON.stringify(list));
+    }
+  }
+
   function makeIcon(name, color, size) {
     var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '"><rect width="' + size + '" height="' + size + '" fill="' + color + '"/><text x="' + (size/2) + '" y="' + (size/2 + 6) + '" text-anchor="middle" fill="white" font-family="Segoe UI,sans-serif" font-size="' + Math.floor(size/3) + '" font-weight="300">' + initials + '</text></svg>';
@@ -70,7 +85,7 @@
       '<div class="surface-icon"><img src="' + icon + '" width="80" height="80" alt=""></div>' +
       '<div class="surface-info">' +
         '<span class="surface-name">' + app.name + '</span>' +
-        '<span class="surface-price">' + app.price + (app.installed ? ' &bull; Установлено' : '') + '</span>' +
+        '<span class="surface-price">' + app.price + (isInstalled(app.id) ? ' &bull; Установлено' : '') + '</span>' +
         '<div class="surface-rating">' + renderStars(app.rating) + '<span class="review-count"> (' + (app.reviewCount || 0) + ')</span></div>' +
       '</div>';
     return div;
@@ -145,7 +160,7 @@
 
   function updateInstallBtn(app) {
     var btn = document.getElementById('installBtn');
-    if (app.installed) {
+    if (isInstalled(app.id)) {
       btn.textContent = 'Установлено';
       btn.className = 'install-btn installed';
     } else {
@@ -161,18 +176,9 @@
 
   function handleInstall() {
     if (!currentModalApp) return;
-    installApp(currentModalApp.id).then(function(result){
-      if (result.success) {
-        currentModalApp.installed = result.installed;
-        updateInstallBtn(currentModalApp);
-        for (var i = 0; i < allApps.length; i++) {
-          if (allApps[i].id === currentModalApp.id) {
-            allApps[i].installed = result.installed;
-            break;
-          }
-        }
-      }
-    });
+    markInstalled(currentModalApp.id);
+    updateInstallBtn(currentModalApp);
+    installApp(currentModalApp.id).then(function(result){});
   }
 
   function renderHome(apps) {
@@ -180,13 +186,11 @@
     var spotlightEl = document.getElementById('spotlightContainer');
     var surfaceEl = document.getElementById('surfaceList');
     var featuredEl = document.getElementById('featuredGrid');
-    var newEl = document.getElementById('newGrid');
     var topFreeEl = document.getElementById('topFreeList');
 
     spotlightEl.innerHTML = '';
     surfaceEl.innerHTML = '';
     featuredEl.innerHTML = '';
-    newEl.innerHTML = '';
     topFreeEl.innerHTML = '';
 
     if (apps.length === 0) return;
@@ -215,13 +219,6 @@
     featuredApps.forEach(function(app){
       var el = createFeaturedTile(app, delay);
       featuredEl.appendChild(el);
-      delay += step;
-    });
-
-    var newApps = apps.slice(7, 16);
-    newApps.forEach(function(app){
-      var el = createFeaturedTile(app, delay);
-      newEl.appendChild(el);
       delay += step;
     });
 

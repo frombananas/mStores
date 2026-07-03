@@ -18,6 +18,16 @@
     btn.addEventListener('click', handler);
   }
 
+  function markInstalled(id) {
+    try {
+      var list = JSON.parse(localStorage.getItem('installed') || '[]');
+      if (list.indexOf(id) === -1) {
+        list.push(id);
+        localStorage.setItem('installed', JSON.stringify(list));
+      }
+    } catch(e) {}
+  }
+
   function getQueryParam(name) {
     return new URLSearchParams(window.location.search).get(name);
   }
@@ -299,6 +309,7 @@
         }
         if (pct >= 100) {
           clearInterval(pollTimer);
+          markInstalled(parseInt(currentAppId));
           progText.textContent = 'Установка...';
           Android.installDownloadedApk();
           setTimeout(function(){
@@ -319,6 +330,7 @@
       document.body.removeChild(a);
       progFill.style.width = '100%';
       progText.textContent = 'Загрузка...';
+      markInstalled(parseInt(currentAppId));
       setTimeout(function(){
         btn.style.display = '';
         btn.textContent = 'Скачано';

@@ -18,6 +18,16 @@
     btn.addEventListener('click', handler);
   }
 
+  function markInstalled(id) {
+    try {
+      var list = JSON.parse(localStorage.getItem('installed') || '[]');
+      if (list.indexOf(id) === -1) {
+        list.push(id);
+        localStorage.setItem('installed', JSON.stringify(list));
+      }
+    } catch(e) {}
+  }
+
   function getQueryParam(name) {
     return new URLSearchParams(window.location.search).get(name);
   }
@@ -49,7 +59,7 @@
 
     currentAppId = id;
 
-    fetch('/api/apps/' + id)
+    apiFetch('/api/apps/' + id)
       .then(function(r){ return r.json(); })
       .then(function(app){
         if (!app || app.error) {
@@ -127,7 +137,7 @@
     var id = getQueryParam('id');
     if (!id) return;
     currentAppId = id;
-    fetch('/api/apps/' + id + '/reviews')
+    apiFetch('/api/apps/' + id + '/reviews')
       .then(function(r){ return r.json(); })
       .then(function(list){
         var el = document.getElementById('reviewsList');
@@ -176,7 +186,7 @@
   function fetchCurrentUser(cb) {
     var token = getToken();
     if (!token) { cb(null); return; }
-    fetch('/api/me', { headers: { 'x-auth-token': token } })
+    apiFetch('/api/me', { headers: { 'x-auth-token': token } })
       .then(function(r){ return r.json(); })
       .then(function(u){ cb(u); })
       .catch(function(){ cb(null); });
@@ -225,7 +235,7 @@
     var headers = { 'Content-Type': 'application/json' };
     if (token) headers['x-auth-token'] = token;
 
-    fetch('/api/apps/' + currentAppId + '/reviews', {
+    apiFetch('/api/apps/' + currentAppId + '/reviews', {
       method: 'POST',
       headers: headers,
       body: JSON.stringify({ rating: selectedRating, comment: comment })
@@ -256,31 +266,78 @@
       if (window.history.length > 1) {
         window.history.back();
       } else {
-        window.location.href = '/';
+        window.location.href = 'index.html';
       }
     }, 250);
   }
 
   function handleDownload() {
     var btn = document.getElementById('downloadBtn');
-
     if (btn.classList.contains('done')) return;
-
     if (!currentAppFileUrl) {
       showError('Файл недоступен', 'У этого приложения нет загруженного файла. Свяжитесь с разработчиком.');
       return;
     }
 
-    var a = document.createElement('a');
-    a.href = '/api/apps/' + currentAppId + '/download';
-    a.download = '';
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function(){ document.body.removeChild(a); }, 200);
+    var progDiv = document.getElementById('dlProgress');
+    var progFill = document.getElementById('dlProgressFill');
+    var progText = document.getElementById('dlProgressText');
 
-    btn.textContent = 'Скачано';
-    btn.classList.add('done');
+    btn.style.display = 'none';
+    progDiv.style.display = '';
+    progFill.style.width = '0%';
+    progText.textContent = '0%';
+
+    if (typeof Android !== 'undefined') {
+      Android.startDownload(API_BASE + '/api/apps/' + currentAppId + '/download');
+      var pollTimer = setInterval(function(){
+        var pct = Android.getDownloadProgress();
+        if (pct === -2) {
+          clearInterval(pollTimer);
+          progText.textContent = 'Ошибка загрузки';
+          progFill.style.width = '0%';
+          progFill.className = 'dl-progress-fill';
+          btn.style.display = '';
+        } else if (pct < 0) {
+          progFill.style.width = '100%';
+          progFill.className = 'dl-progress-fill indeterminate';
+          progText.textContent = 'Загрузка...';
+        } else {
+          progFill.className = 'dl-progress-fill';
+          progFill.style.width = pct + '%';
+          progText.textContent = pct + '%';
+        }
+        if (pct >= 100) {
+          clearInterval(pollTimer);
+          markInstalled(parseInt(currentAppId));
+          progText.textContent = 'Установка...';
+          Android.installDownloadedApk();
+          setTimeout(function(){
+            btn.style.display = '';
+            btn.textContent = 'Скачано';
+            btn.classList.add('done');
+            progDiv.style.display = 'none';
+          }, 3000);
+        }
+      }, 500);
+    } else {
+      var a = document.createElement('a');
+      a.href = API_BASE + '/api/apps/' + currentAppId + '/download';
+      a.download = '';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      progFill.style.width = '100%';
+      progText.textContent = 'Загрузка...';
+      markInstalled(parseInt(currentAppId));
+      setTimeout(function(){
+        btn.style.display = '';
+        btn.textContent = 'Скачано';
+        btn.classList.add('done');
+        progDiv.style.display = 'none';
+      }, 2000);
+    }
   }
 
   function init() {

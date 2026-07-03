@@ -248,7 +248,7 @@ html, body {
 .collections-header {
   display: flex;
   align-items: baseline;
-  margin: 0 0 8px;
+  margin: 8px 0 8px;
 }
 .collections-title {
   font-size: 1.3rem;

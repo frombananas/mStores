@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         s.setDomStorageEnabled(true);
         s.setCacheMode(WebSettings.LOAD_DEFAULT);
         s.setAllowFileAccess(true);
+        s.setAllowFileAccessFromFileURLs(true);
+        s.setAllowUniversalAccessFromFileURLs(true);
         s.setUseWideViewPort(true);
         s.setLoadWithOverviewMode(true);
         s.setSupportZoom(false);
@@ -45,16 +47,7 @@ public class MainActivity extends AppCompatActivity {
         s.setDisplayZoomControls(false);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
-        webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                view.evaluateJavascript("(function(){" +
-                    "var m=document.querySelector('meta[name=viewport]');" +
-                    "if(!m){m=document.createElement('meta');m.name='viewport';document.head.appendChild(m);}" +
-                    "m.content='width=1440,initial-scale=0.45,user-scalable=yes';" +
-                    "})()", null);
-            }
-        });
+        webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
 
         webView.setDownloadListener(new DownloadListener() {
@@ -67,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_NOT_EXPORTED);
         webView.clearCache(true);
         webView.clearHistory();
-        webView.loadUrl("https://mstores.45.38.143.196.nip.io");
+        webView.loadUrl("file:///android_asset/index.html");
     }
 
     private void downloadAndInstall(String url, String contentDisposition) {

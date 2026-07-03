@@ -1,0 +1,305 @@
+*, *::before, *::after {
+  margin: 0; padding: 0; box-sizing: border-box;
+  border-radius: 0 !important; box-shadow: none !important;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+  color: #000;
+}
+
+body { overflow-y: auto; }
+
+.page {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 48px 40px 64px;
+  opacity: 0;
+  animation: pageSlideIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes pageSlideIn {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.page.slide-out {
+  animation: pageSlideOut 0.25s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes pageSlideOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(60px); }
+}
+
+.top-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.back-btn {
+  background: none; border: none; cursor: pointer;
+  padding: 0; line-height: 0; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-right: 4px;
+}
+
+.back-btn:hover { opacity: 0.6; }
+
+.app-icon-header { object-fit: cover; }
+
+.title {
+  font-size: 42px; font-weight: 200; color: #000;
+  margin-left: 20px; letter-spacing: 0.2px;
+}
+
+.content-grid {
+  display: flex; gap: 40px; align-items: flex-start;
+}
+
+.col-left { width: 30%; min-width: 280px; }
+
+.col-right { flex: 1; min-width: 0; }
+
+.download-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #5c2d91; color: #fff;
+  border: none; font-size: 14px; font-weight: 600;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer; letter-spacing: 0.3px;
+}
+
+.download-btn.done {
+  background-color: #555; cursor: default; pointer-events: none;
+}
+
+.link-purple {
+  color: #5c2d91; text-decoration: none; cursor: pointer;
+}
+
+.link-purple:hover { text-decoration: underline; }
+
+.desc {
+  font-size: 20px; font-weight: 300; color: #555;
+  line-height: 1.4; margin-bottom: 28px;
+}
+
+.desc-title {
+  font-size: 16px; font-weight: 400; color: #333;
+  margin-bottom: 8px; margin-top: 16px;
+}
+
+.meta { display: flex; flex-direction: column; gap: 4px; }
+
+.meta-row {
+  font-size: 12px; color: #888;
+  line-height: 1.6; display: flex; gap: 6px;
+}
+
+.meta-label { min-width: 96px; flex-shrink: 0; }
+
+.hero-img {
+  width: 100%; height: auto; display: block;
+  object-fit: contain; border: none;
+}
+
+.notes-title {
+  font-size: 22px; font-weight: 300; color: #333;
+  margin-bottom: 16px;
+}
+
+.reviews {
+  margin-top: 40px; border-top: 1px solid #e5e5e5;
+  padding-top: 32px;
+}
+
+.reviews-list { margin-bottom: 24px; }
+
+.review-card {
+  padding: 14px 0; border-bottom: 1px solid #eee;
+  display: flex; gap: 12px;
+}
+
+.review-card:last-child { border-bottom: none; }
+
+.review-avatar-wrap { flex-shrink: 0; }
+
+.review-avatar {
+  width: 40px; height: 40px;
+  object-fit: cover;
+}
+
+.review-body { flex: 1; min-width: 0; }
+
+.review-author {
+  font-size: 13px; font-weight: 600; color: #333;
+  margin-bottom: 2px;
+}
+
+.review-date {
+  font-size: 11px; font-weight: 300; color: #aaa;
+  margin-left: 8px;
+}
+
+.review-comment {
+  font-size: 13px; font-weight: 300; color: #555;
+  line-height: 1.5; margin-top: 4px;
+}
+
+.review-stars-display { display: flex; gap: 1px; margin-top: 2px; }
+
+.review-stars-display .rstar { font-size: 13px; color: #ccc; }
+
+.review-stars-display .rstar.active { color: #e8a200; }
+
+.review-form {
+  background: #fafafa; padding: 20px; margin-top: 12px;
+}
+
+.review-form-title {
+  font-size: 14px; font-weight: 400; color: #333;
+  margin-bottom: 12px;
+}
+
+.review-input {
+  display: block; width: 100%; padding: 8px 10px;
+  border: 1px solid #ddd; background: #fff;
+  font-size: 13px; font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 10px; outline: none;
+}
+
+.review-input:focus { border-color: #5c2d91; }
+
+.review-textarea { resize: vertical; min-height: 60px; }
+
+.review-stars {
+  display: flex; gap: 4px; margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.review-stars .rstar {
+  cursor: pointer; color: #ccc;
+  transition: color 0.1s;
+}
+
+.review-stars .rstar:hover,
+.review-stars .rstar.hover,
+.review-stars .rstar.active { color: #e8a200; }
+
+.submit-btn {
+  display: block; width: 100%; padding: 10px;
+  background-color: #5c2d91; color: #fff; border: none;
+  font-size: 14px; font-weight: 400;
+  font-family: 'Segoe UI', sans-serif; cursor: pointer;
+}
+
+.submit-btn:hover { background-color: #4a2373; }
+.submit-btn:active { transform: scale(0.97); }
+
+.review-msg {
+  font-size: 12px; color: #5c2d91; margin-top: 6px;
+}
+
+.screenshots-gallery {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.screenshots-gallery .hero-img {
+  width: 100%; height: auto; display: block;
+  object-fit: contain; border: 1px solid #e5e5e5;
+  background: #fafafa;
+}
+
+.screenshot-thumbs {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+
+.ss-thumb {
+  width: 72px; height: 50px;
+  object-fit: cover; cursor: pointer;
+  border: 2px solid transparent;
+  opacity: 0.7;
+  transition: opacity 0.1s, border-color 0.1s;
+}
+
+.ss-thumb:hover { opacity: 1; }
+
+.ss-thumb.active { border-color: #5c2d91; opacity: 1; }
+
+@media (max-width: 800px) {
+  .content-grid { flex-direction: column; }
+  .col-left, .col-right { width: 100%; }
+  .title { font-size: 28px; margin-left: 14px; }
+  .page { padding: 28px 20px 40px; }
+  .review-form { padding: 14px; }
+}
+
+.err-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.err-overlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+.err-bar {
+  background: #fff;
+  width: 100%;
+  padding: 24px 48px;
+}
+
+.err-body {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.err-title {
+  font-size: 24px;
+  font-weight: 300;
+  font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+  color: #000;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.err-desc {
+  font-size: 16px;
+  font-weight: 300;
+  font-family: 'Segoe UI Light', 'Segoe UI', sans-serif;
+  color: #555;
+  line-height: 1.5;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.err-btn {
+  display: block;
+  margin-left: auto;
+  background: transparent;
+  color: #000;
+  border: 2px solid #000;
+  padding: 8px 32px;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.err-btn:hover {
+  background: #000;
+  color: #fff;
+}
+

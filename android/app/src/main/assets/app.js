@@ -105,10 +105,10 @@
     grid.innerHTML = '';
 
     var categories = [
-      { key: 'games',  label: 'Игры', xbox: true },
-      { key: 'social', label: 'Социальные сети', xbox: false },
-      { key: 'music',  label: 'Музыка', xbox: false },
-      { key: 'other',  label: 'Другое', xbox: false }
+      { key: 'games',  label: 'Игры' },
+      { key: 'social', label: 'Социальные сети' },
+      { key: 'music',  label: 'Музыка' },
+      { key: 'other',  label: 'Другое' }
     ];
 
     categories.forEach(function(cat){
@@ -123,7 +123,7 @@
 
       catApps.forEach(function(app){
         var tile = document.createElement('div');
-        tile.className = 'collection-tile' + (cat.xbox ? ' xbox' : '');
+        tile.className = 'collection-tile';
         tile.title = app.name;
         if (app.icon_url) {
           tile.innerHTML = '<img src="' + app.icon_url + '" alt="' + app.name + '">';

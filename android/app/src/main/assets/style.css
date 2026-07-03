@@ -248,7 +248,7 @@ html, body {
 .collections-header {
   display: flex;
   align-items: baseline;
-  margin: 4px 0 10px;
+  margin: 0 0 8px;
 }
 .collections-title {
   font-size: 1.3rem;
@@ -300,25 +300,6 @@ html, body {
   color: #fff;
   font-size: 18px;
   font-weight: 300;
-}
-
-.collection-tile.xbox {
-  position: relative;
-}
-.collection-tile.xbox::before {
-  content: 'Xbox';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 14px;
-  background: #107C10;
-  color: #fff;
-  font-size: 8px;
-  font-weight: 400;
-  font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
 }
 
 .collection-name {

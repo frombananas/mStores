@@ -127,7 +127,7 @@ html, body {
 .panorama-section {
   flex-shrink: 0;
   white-space: normal;
-  width: 850px;
+  width: 960px;
 }
 
 .section-title {
@@ -162,7 +162,7 @@ html, body {
 
 .spotlight-hero {
   width: 100%;
-  height: 600px;
+  height: 450px;
   overflow: hidden;
   position: relative;
   background: #ccc;

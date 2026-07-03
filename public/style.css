@@ -267,11 +267,11 @@ html, body {
 .collections-grid {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 .collections-row {
   display: flex;
-  gap: 4px;
+  gap: 16px;
 }
 
 .collection-category {

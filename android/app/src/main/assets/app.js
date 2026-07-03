@@ -85,7 +85,7 @@
       } else {
         var inits = app.name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
         tile.style.background = app.color_theme;
-        tile.innerHTML = '<span style="color:#fff;font-size:18px;font-weight:300">' + inits + '</span>';
+        tile.innerHTML = '<span style="color:#fff;font-size:16px;font-weight:300">' + inits + '</span>';
       }
       tile.addEventListener('click', function(){
         var tiles = sidebar.querySelectorAll('.spotlight-sidebar-tile');

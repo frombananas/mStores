@@ -130,7 +130,7 @@ html, body {
   width: 750px;
 }
 #sectionSpotlight {
-  width: 1280px;
+  width: 1100px;
 }
 
 .panorama-group {
@@ -160,14 +160,14 @@ html, body {
 .spotlight-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  width: 64px;
+  gap: 5px;
+  width: 56px;
   flex-shrink: 0;
 }
 
 .spotlight-sidebar-tile {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   cursor: pointer;
   background: #0078D7;
   display: flex;
@@ -194,7 +194,7 @@ html, body {
 }
 .spotlight-main .spotlight-hero {
   width: 75%;
-  height: 440px;
+  height: 360px;
   overflow: hidden;
   position: relative;
   background: #ccc;
@@ -217,20 +217,20 @@ html, body {
   flex-direction: column;
 }
 .spotlight-main .spotlight-body .spotlight-name {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 200;
   font-family: "Segoe UI Light", "Segoe UI", sans-serif;
   color: #008A00;
   margin-bottom: 2px;
 }
 .spotlight-main .spotlight-body .spotlight-dev {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 300;
   color: #888;
   margin-bottom: 4px;
 }
 .spotlight-main .spotlight-body .spotlight-price {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 300;
   color: #777;
 }
@@ -240,7 +240,7 @@ html, body {
   margin: 0 8px;
 }
 .spotlight-main .spotlight-body .spotlight-review-count {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 300;
   color: #bbb;
 }
@@ -251,7 +251,7 @@ html, body {
   margin: 28px 0 16px;
 }
 .collections-title {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-weight: 300;
   color: #333;
 }
@@ -282,8 +282,8 @@ html, body {
 }
 
 .collection-tile {
-  width: 90px;
-  height: 90px;
+  width: 76px;
+  height: 76px;
   cursor: pointer;
   overflow: hidden;
   display: flex;
@@ -298,7 +298,7 @@ html, body {
 }
 .collection-tile .tile-initials {
   color: #fff;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 300;
 }
 
@@ -309,10 +309,10 @@ html, body {
   content: 'Xbox';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 16px;
+  height: 14px;
   background: #107C10;
   color: #fff;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 400;
   font-family: 'Segoe UI', sans-serif;
   display: flex;
@@ -322,8 +322,8 @@ html, body {
 }
 
 .collection-name {
-  margin-top: 8px;
-  font-size: 15px;
+  margin-top: 6px;
+  font-size: 13px;
   font-weight: 300;
   color: #333;
 }
@@ -996,12 +996,12 @@ html, body {
   #sectionSpotlight { width: 100%; }
   .spotlight-layout { flex-direction: column; height: auto; }
   .spotlight-sidebar { flex-direction: row; width: 100%; overflow-x: auto; }
-  .spotlight-sidebar-tile { width: 48px; height: 48px; flex-shrink: 0; }
+  .spotlight-sidebar-tile { width: 40px; height: 40px; flex-shrink: 0; }
   .spotlight-main .spotlight-hero { height: 180px; }
-  .spotlight-main .spotlight-body .spotlight-name { font-size: 18px; }
+  .spotlight-main .spotlight-body .spotlight-name { font-size: 16px; }
   .spotlight-main .spotlight-body .spotlight-dev { font-size: 13px; }
   .collections-grid { grid-template-columns: 1fr; gap: 14px; }
-  .collection-tile { width: 64px; height: 64px; }
+  .collection-tile { width: 52px; height: 52px; }
   .surface-list {
     min-width: auto;
     width: 100%;
@@ -1034,11 +1034,11 @@ html, body {
   .panorama-section { margin-right: 24px; min-width: auto; }
   .spotlight-layout { flex-direction: column; height: auto; }
   .spotlight-sidebar { flex-direction: row; width: 100%; overflow-x: auto; gap: 4px; }
-  .spotlight-sidebar-tile { width: 56px; height: 56px; flex-shrink: 0; }
+  .spotlight-sidebar-tile { width: 48px; height: 48px; flex-shrink: 0; }
   .spotlight-main .spotlight-hero { height: 250px; }
-  .spotlight-main .spotlight-body .spotlight-name { font-size: 20px; }
+  .spotlight-main .spotlight-body .spotlight-name { font-size: 18px; }
   .collections-grid { grid-template-columns: 1fr 1fr; gap: 24px 24px; }
-  .collection-tile { width: 70px; height: 70px; }
+  .collection-tile { width: 60px; height: 60px; }
   .surface-list { min-width: 240px; }
   .surface-item .surface-icon { width: 52px; height: 52px; }
   .surface-item .surface-icon img { width: 100%; height: 100%; object-fit: cover; }
@@ -1118,13 +1118,13 @@ html, body {
   #searchInput:focus { width: 120px; }
   .spotlight-layout { flex-direction: column; height: auto; }
   .spotlight-sidebar { flex-direction: row; width: 100%; overflow-x: auto; gap: 4px; }
-  .spotlight-sidebar-tile { width: 44px; height: 44px; flex-shrink: 0; }
-  .spotlight-main .spotlight-hero { height: 180px; }
-  .spotlight-main .spotlight-body .spotlight-name { font-size: 16px; }
+  .spotlight-sidebar-tile { width: 38px; height: 38px; flex-shrink: 0; }
+  .spotlight-main .spotlight-hero { height: 160px; }
+  .spotlight-main .spotlight-body .spotlight-name { font-size: 15px; }
   .spotlight-main .spotlight-body .spotlight-dev { font-size: 12px; }
   .spotlight-main .spotlight-body .spotlight-price { font-size: 12px; }
-  .collections-grid { grid-template-columns: 1fr; gap: 16px; }
-  .collection-tile { width: 56px; height: 56px; }
+  .collections-grid { grid-template-columns: 1fr; gap: 12px; }
+  .collection-tile { width: 48px; height: 48px; }
   .featured-grid { grid-template-columns: repeat(3, 100px); gap: 4px; }
   .featured-tile { width: 100px; padding: 10px 6px 8px; }
   .featured-tile .featured-icon { width: 58px; height: 58px; }

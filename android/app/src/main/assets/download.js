@@ -256,7 +256,7 @@
       if (window.history.length > 1) {
         window.history.back();
       } else {
-        window.location.href = '/';
+        window.location.href = 'index.html';
       }
     }, 250);
   }
@@ -272,7 +272,7 @@
     }
 
     var a = document.createElement('a');
-    a.href = '/api/apps/' + currentAppId + '/download';
+    a.href = API_BASE + '/api/apps/' + currentAppId + '/download';
     a.download = '';
     a.style.display = 'none';
     document.body.appendChild(a);

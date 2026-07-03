@@ -136,7 +136,7 @@
       document.getElementById('modalCategory').textContent = catMap[app.category] || app.category;
       document.getElementById('modalPrice').textContent = app.price;
       document.getElementById('modalRatingVal').textContent = app.rating + ' / 5';
-      document.getElementById('moreInfoLink').href = '/download.html?id=' + app.id;
+      document.getElementById('moreInfoLink').href = 'download.html?id=' + app.id;
       updateInstallBtn(app);
       overlay.classList.add('active');
     });
@@ -238,7 +238,7 @@
   function tileClickHandler(e) {
     var el = e.currentTarget;
     var id = el.dataset.id;
-    if (id) window.location.href = '/download.html?id=' + id;
+    if (id) window.location.href = 'download.html?id=' + id;
   }
 
   function doSearch() {

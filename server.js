@@ -409,6 +409,8 @@ app.get('/api/apps/:id/download', (req, res) => {
   log('DOWNLOAD app#' + req.params.id + ' ' + found.name);
   res.setHeader('Content-Disposition', 'attachment; filename="' + path.basename(found.file_url) + '"');
   res.setHeader('Content-Type', 'application/octet-stream');
+  const stat = fs.statSync(fpath);
+  res.setHeader('Content-Length', stat.size);
   fs.createReadStream(fpath).pipe(res);
 });
 

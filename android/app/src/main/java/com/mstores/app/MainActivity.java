@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             int status = cursor.getInt(statusIdx);
             cursor.close();
             if (status == DownloadManager.STATUS_SUCCESSFUL) return 100;
-            if (totalBytes <= 0) return 0;
+            if (totalBytes <= 0) return -1;
             return (int) ((bytesDownloaded * 100L) / totalBytes);
         } catch (Exception e) {
             return 0;

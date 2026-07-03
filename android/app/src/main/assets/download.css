@@ -96,6 +96,16 @@ body { overflow-y: auto; }
   transition: width 0.3s ease;
 }
 
+.dl-progress-fill.indeterminate {
+  width: 30%;
+  animation: indeterminate 1.4s ease-in-out infinite;
+}
+
+@keyframes indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
 .dl-progress-text {
   display: block;
   font-size: 12px;

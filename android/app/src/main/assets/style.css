@@ -154,7 +154,7 @@ html, body {
 .spotlight-layout {
   display: flex;
   gap: 16px;
-  height: 540px;
+  align-items: flex-start;
 }
 
 .spotlight-sidebar {

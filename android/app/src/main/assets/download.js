@@ -327,7 +327,6 @@
 
     xhr.send();
   }
-  }
 
   function init() {
     loadAppData();

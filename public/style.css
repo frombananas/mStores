@@ -120,6 +120,7 @@ html, body {
   flex-wrap: nowrap;
   padding: 32px 40px 40px;
   min-height: 100%;
+  gap: 30px;
   width: max-content;
 }
 
@@ -128,8 +129,16 @@ html, body {
   white-space: normal;
   width: 830px;
 }
-.panorama-section + .panorama-section { margin-left: 30px; }
-#sectionSurface + #sectionFeatured { margin-left: 0; }
+
+.panorama-group {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0;
+}
+.panorama-group .panorama-section {
+  width: 415px;
+  margin-right: 0;
+}
 
 .section-title {
   font-size: 1.6rem;
@@ -907,6 +916,11 @@ html, body {
     max-width: 100%;
     width: 100%;
   }
+  .panorama-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .panorama-group .panorama-section { width: 100%; }
   .spotlight-tile {
     width: 100%;
   }

@@ -127,7 +127,7 @@ html, body {
 .panorama-section {
   flex-shrink: 0;
   white-space: normal;
-  width: 830px;
+  width: 750px;
 }
 
 .panorama-group {
@@ -136,7 +136,7 @@ html, body {
   gap: 0;
 }
 .panorama-group .panorama-section {
-  width: 415px;
+  width: 375px;
   margin-right: 0;
 }
 
@@ -991,6 +991,11 @@ html, body {
   .modal-meta { flex-wrap: wrap; gap: 16px; }
   .panorama { top: 50px; }
   .preview-grid { grid-template-columns: repeat(2, 1fr); }
+  .auth-panel { width: 380px; }
+  .auth-header { padding: 20px 24px; font-size: 18px; }
+  .auth-body { padding: 20px 24px; }
+  .auth-input { padding: 10px 12px; font-size: 14px; }
+  .auth-submit { padding: 10px; font-size: 14px; }
 }
 
 .err-overlay {
@@ -1069,6 +1074,12 @@ html, body {
   .panorama-section { margin-right: 16px; }
   .section-title { font-size: 1.2rem; margin-bottom: 12px; }
   .submit-panel { width: 100%; max-width: 100vw; padding: 16px; }
-  .auth-panel { width: 100%; max-width: 100vw; }
+  .auth-panel { width: calc(100% - 32px); max-width: calc(100vw - 32px); }
+  .auth-header { padding: 16px 18px; font-size: 16px; gap: 8px; }
+  .auth-body { padding: 16px 18px; }
+  .auth-input { padding: 10px 12px; font-size: 13px; }
+  .auth-submit { padding: 10px; font-size: 13px; }
+  .auth-tab { font-size: 12px; padding: 10px; }
+  .auth-close { top: 8px; right: 8px; }
 }
 

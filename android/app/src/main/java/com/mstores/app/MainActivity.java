@@ -31,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         hideSystemUI();
         webView = new WebView(this);
+        webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
         setContentView(webView);
 
         WebSettings s = webView.getSettings();
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
+        webView.setLongClickable(false);
+        webView.setOnLongClickListener(null);
 
         webView.setDownloadListener(new DownloadListener() {
             @Override

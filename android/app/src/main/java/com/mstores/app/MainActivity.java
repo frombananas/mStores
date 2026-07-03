@@ -119,8 +119,12 @@ public class MainActivity extends AppCompatActivity {
 
     @JavascriptInterface
     public boolean checkInstallPermission() {
-        if (Build.VERSION.SDK_INT >= 26) {
-            return getPackageManager().canRequestPackageInstalls();
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                return getPackageManager().canRequestPackageInstalls();
+            }
+        } catch (Exception e) {
+            return false;
         }
         return true;
     }
@@ -128,9 +132,16 @@ public class MainActivity extends AppCompatActivity {
     @JavascriptInterface
     public void requestInstallPermission() {
         if (Build.VERSION.SDK_INT >= 26) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-            intent.setData(Uri.parse("package:" + getPackageName()));
-            startActivity(intent);
+            try {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            } catch (Exception e) {
+                try {
+                    Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+                    startActivity(intent);
+                } catch (Exception ex) {}
+            }
         }
     }
 

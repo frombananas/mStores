@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
-        s.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        s.setCacheMode(WebSettings.LOAD_DEFAULT);
         s.setAllowFileAccess(true);
         s.setUseWideViewPort(true);
         s.setLoadWithOverviewMode(true);
-        s.setSupportZoom(true);
+        s.setSupportZoom(false);
         s.setBuiltInZoomControls(false);
         s.setDisplayZoomControls(false);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 view.evaluateJavascript("(function(){" +
                     "var m=document.querySelector('meta[name=viewport]');" +
                     "if(!m){m=document.createElement('meta');m.name='viewport';document.head.appendChild(m);}" +
-                    "m.content='width=1440,initial-scale=0.35,user-scalable=yes';" +
+                    "m.content='width=1440,initial-scale=0.55,user-scalable=yes';" +
                     "})()", null);
             }
         });

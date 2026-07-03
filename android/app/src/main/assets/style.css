@@ -988,12 +988,13 @@ html, body {
 }
 .err-bar {
   background: #fff;
-  width: auto;
-  min-width: 320px;
-  max-width: 480px;
-  padding: 32px 36px;
+  width: 100%;
+  padding: 24px 48px;
 }
-.err-body { width: 100%; }
+.err-body {
+  max-width: 600px;
+  margin: 0 auto;
+}
 .err-title {
   font-size: 24px;
   font-weight: 300;

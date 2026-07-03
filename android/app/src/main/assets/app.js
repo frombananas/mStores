@@ -535,8 +535,6 @@
   function checkPermission() {
     if (typeof Android === 'undefined') return;
     if (localStorage.getItem('perm_shown')) return;
-    var granted = Android.checkInstallPermission();
-    if (granted) return;
     localStorage.setItem('perm_shown', '1');
     var ov = document.getElementById('errOverlay');
     document.getElementById('errTitle').textContent = 'Требуется разрешение';
@@ -547,7 +545,7 @@
       Android.requestInstallPermission();
     };
     function recheck() {
-      if (Android.checkInstallPermission()) {
+      if (typeof Android !== 'undefined' && Android.checkInstallPermission()) {
         ov.style.display = 'none';
         document.removeEventListener('visibilitychange', recheck);
       }

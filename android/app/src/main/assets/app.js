@@ -534,7 +534,10 @@
 
   function checkPermission() {
     if (typeof Android === 'undefined') return;
-    if (Android.checkInstallPermission()) return;
+    if (localStorage.getItem('perm_shown')) return;
+    var granted = Android.checkInstallPermission();
+    if (granted) return;
+    localStorage.setItem('perm_shown', '1');
     var ov = document.getElementById('errOverlay');
     document.getElementById('errTitle').textContent = 'Требуется разрешение';
     document.getElementById('errDesc').textContent = 'Для установки приложений из mStore необходимо разрешить установку из неизвестных источников. Без этого приложения могут не установиться.';

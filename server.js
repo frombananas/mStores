@@ -65,9 +65,19 @@ function adminAuth(req, res, next) {
 
 // ─── Apps API ────────────────────────────────────────────────────────────
 
+const STORE_URL = process.env.STORE_URL || 'https://mstores.45.38.143.196.nip.io';
+
+function fixAssetUrls(app) {
+  if (app.icon_url && !app.icon_url.startsWith('http')) app.icon_url = STORE_URL + app.icon_url;
+  if (app.screenshots) app.screenshots = app.screenshots.map(function(url) {
+    return url && !url.startsWith('http') ? STORE_URL + url : url;
+  });
+  return app;
+}
+
 app.get('/api/apps', (req, res) => {
   const list = db.listApps(req.query.search || req.query.q || '');
-  res.json(list);
+  res.json(list.map(fixAssetUrls));
 });
 
 app.get('/api/apps/:id', (req, res) => {
@@ -77,7 +87,7 @@ app.get('/api/apps/:id', (req, res) => {
     const fpath = path.join(PUBLIC_DIR, app.file_url.replace(/^\//, ''));
     try { app.file_size = fs.statSync(fpath).size; } catch(e) { app.file_size = 0; }
   }
-  res.json(app);
+  res.json(fixAssetUrls(app));
 });
 
 app.post('/api/apps', adminAuth, (req, res) => {

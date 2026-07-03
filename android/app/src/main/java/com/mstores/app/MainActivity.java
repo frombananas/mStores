@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -123,7 +124,11 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= 26) {
                 return getPackageManager().canRequestPackageInstalls();
             }
-            return Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS, 1) == 1;
+            try {
+                return Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1;
+            } catch (Settings.SettingNotFoundException e) {
+                return false;
+            }
         } catch (Exception e) {
             return false;
         }

@@ -132,9 +132,6 @@ html, body {
 #sectionSpotlight {
   width: 1280px;
 }
-#sectionCollections {
-  width: 800px;
-}
 
 .panorama-group {
   display: flex;
@@ -251,7 +248,12 @@ html, body {
 .collections-header {
   display: flex;
   align-items: baseline;
-  margin-bottom: 16px;
+  margin: 28px 0 16px;
+}
+.collections-title {
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: #333;
 }
 .collections-see-all {
   font-size: 14px;
@@ -992,7 +994,6 @@ html, body {
   }
   .panorama-group .panorama-section { width: 100%; }
   #sectionSpotlight { width: 100%; }
-  #sectionCollections { width: 100%; }
   .spotlight-layout { flex-direction: column; height: auto; }
   .spotlight-sidebar { flex-direction: row; width: 100%; overflow-x: auto; }
   .spotlight-sidebar-tile { width: 48px; height: 48px; flex-shrink: 0; }

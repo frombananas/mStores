@@ -978,6 +978,49 @@ html, body {
   .preview-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+.err-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.err-bar {
+  background: #fff;
+  width: auto;
+  min-width: 320px;
+  max-width: 480px;
+  padding: 32px 36px;
+}
+.err-body { width: 100%; }
+.err-title {
+  font-size: 24px;
+  font-weight: 300;
+  color: #000;
+  margin-bottom: 10px;
+}
+.err-desc {
+  font-size: 16px;
+  font-weight: 300;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+.err-btn {
+  display: block;
+  margin-left: auto;
+  background: transparent;
+  color: #000;
+  border: 2px solid #000;
+  padding: 8px 32px;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
+}
+.err-btn:hover { background: #000; color: #fff; }
+
 @media (max-width: 480px) {
   .panorama-track {
     padding: 16px 12px 24px;

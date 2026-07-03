@@ -105,12 +105,15 @@ public class MainActivity extends AppCompatActivity {
             int bytesIdx = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
             int totalIdx = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES);
             int statusIdx = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
-            if (bytesIdx < 0 || totalIdx < 0 || statusIdx < 0) { cursor.close(); return 0; }
+            int reasonIdx = cursor.getColumnIndex(DownloadManager.COLUMN_REASON);
+            if (bytesIdx < 0 || totalIdx < 0 || statusIdx < 0 || reasonIdx < 0) { cursor.close(); return 0; }
             int bytesDownloaded = cursor.getInt(bytesIdx);
             int totalBytes = cursor.getInt(totalIdx);
             int status = cursor.getInt(statusIdx);
+            int reason = cursor.getInt(reasonIdx);
             cursor.close();
             if (status == DownloadManager.STATUS_SUCCESSFUL) return 100;
+            if (status == DownloadManager.STATUS_FAILED) return -2;
             if (totalBytes <= 0) return -1;
             return (int) ((bytesDownloaded * 100L) / totalBytes);
         } catch (Exception e) {

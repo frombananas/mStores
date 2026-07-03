@@ -282,7 +282,13 @@
       Android.startDownload(API_BASE + '/api/apps/' + currentAppId + '/download');
       var pollTimer = setInterval(function(){
         var pct = Android.getDownloadProgress();
-        if (pct < 0) {
+        if (pct === -2) {
+          clearInterval(pollTimer);
+          progText.textContent = 'Ошибка загрузки';
+          progFill.style.width = '0%';
+          progFill.className = 'dl-progress-fill';
+          btn.style.display = '';
+        } else if (pct < 0) {
           progFill.style.width = '100%';
           progFill.className = 'dl-progress-fill indeterminate';
           progText.textContent = 'Загрузка...';

@@ -193,15 +193,14 @@ html, body {
   background: #fff;
 }
 .spotlight-main .spotlight-hero {
-  width: 85%;
-  height: 420px;
+  width: 75%;
+  height: 440px;
   overflow: hidden;
   position: relative;
   background: #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
-  align-self: center;
 }
 .spotlight-main .spotlight-hero img {
   width: 100%;

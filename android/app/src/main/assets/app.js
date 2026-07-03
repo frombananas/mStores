@@ -111,41 +111,52 @@
       { key: 'other',  label: 'Другое' }
     ];
 
+    var cats = [];
     categories.forEach(function(cat){
       var catApps = apps.filter(function(a){ return (a.category || '').toLowerCase() === cat.key; }).slice(0, 4);
       if (catApps.length === 0) return;
-
-      var category = document.createElement('div');
-      category.className = 'collection-category';
-
-      var tiles = document.createElement('div');
-      tiles.className = 'collection-tiles';
-
-      catApps.forEach(function(app){
-        var tile = document.createElement('div');
-        tile.className = 'collection-tile';
-        tile.title = app.name;
-        if (app.icon_url) {
-          tile.innerHTML = '<img src="' + app.icon_url + '" alt="' + app.name + '">';
-        } else {
-          tile.style.background = app.color_theme;
-          var inits = app.name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
-          tile.innerHTML = '<span class="tile-initials">' + inits + '</span>';
-        }
-        tile.addEventListener('click', function(){
-          window.location.href = 'download.html?id=' + app.id;
-        });
-        tiles.appendChild(tile);
-      });
-
-      var name = document.createElement('div');
-      name.className = 'collection-name';
-      name.textContent = cat.label;
-
-      category.appendChild(tiles);
-      category.appendChild(name);
-      grid.appendChild(category);
+      cats.push({ label: cat.label, apps: catApps });
     });
+
+    for (var i = 0; i < cats.length; i += 2) {
+      var row = document.createElement('div');
+      row.className = 'collections-row';
+
+      for (var j = i; j < i + 2 && j < cats.length; j++) {
+        var cat = cats[j];
+        var category = document.createElement('div');
+        category.className = 'collection-category';
+
+        var tiles = document.createElement('div');
+        tiles.className = 'collection-tiles';
+
+        cat.apps.forEach(function(app){
+          var tile = document.createElement('div');
+          tile.className = 'collection-tile';
+          tile.title = app.name;
+          if (app.icon_url) {
+            tile.innerHTML = '<img src="' + app.icon_url + '" alt="' + app.name + '">';
+          } else {
+            tile.style.background = app.color_theme;
+            var inits = app.name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
+            tile.innerHTML = '<span class="tile-initials">' + inits + '</span>';
+          }
+          tile.addEventListener('click', function(){
+            window.location.href = 'download.html?id=' + app.id;
+          });
+          tiles.appendChild(tile);
+        });
+
+        var name = document.createElement('div');
+        name.className = 'collection-name';
+        name.textContent = cat.label;
+
+        category.appendChild(tiles);
+        category.appendChild(name);
+        row.appendChild(category);
+      }
+      grid.appendChild(row);
+    }
   }
 
   function createSurfaceItem(app, delay) {

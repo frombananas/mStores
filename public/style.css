@@ -265,10 +265,13 @@ html, body {
 .collections-see-all:hover { color: #006800; }
 
 .collections-grid {
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-template-rows: auto auto;
-  gap: 20px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.collections-row {
+  display: flex;
+  gap: 4px;
 }
 
 .collection-category {
@@ -981,7 +984,7 @@ html, body {
   .spotlight-main .spotlight-hero { height: 180px; }
   .spotlight-main .spotlight-body .spotlight-name { font-size: 16px; }
   .spotlight-main .spotlight-body .spotlight-dev { font-size: 13px; }
-  .collections-grid { grid-template-columns: 1fr; gap: 12px; }
+  .collections-grid { gap: 10px; }
   .collection-tile { width: 52px; height: 52px; }
   .surface-list {
     min-width: auto;
@@ -1018,7 +1021,7 @@ html, body {
   .spotlight-sidebar-tile { width: 48px; height: 48px; flex-shrink: 0; }
   .spotlight-main .spotlight-hero { height: 250px; }
   .spotlight-main .spotlight-body .spotlight-name { font-size: 18px; }
-  .collections-grid { grid-template-columns: auto auto; gap: 16px 12px; }
+  .collections-grid { gap: 12px; }
   .collection-tile { width: 60px; height: 60px; }
   .surface-list { min-width: 240px; }
   .surface-item .surface-icon { width: 52px; height: 52px; }
@@ -1104,7 +1107,7 @@ html, body {
   .spotlight-main .spotlight-body .spotlight-name { font-size: 15px; }
   .spotlight-main .spotlight-body .spotlight-dev { font-size: 12px; }
   .spotlight-main .spotlight-body .spotlight-price { font-size: 12px; }
-  .collections-grid { grid-template-columns: 1fr; gap: 12px; }
+  .collections-grid { gap: 8px; }
   .collection-tile { width: 48px; height: 48px; }
   .featured-grid { grid-template-columns: repeat(3, 100px); gap: 4px; }
   .featured-tile { width: 100px; padding: 10px 6px 8px; }

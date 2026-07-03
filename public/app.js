@@ -4,6 +4,7 @@
   }
   var allApps = [];
   var currentUser = null;
+  var currentPlatform = 'android';
 
   function makeIcon(name, color, size) {
     var initials = name.split(' ').map(function(w){ return w[0]; }).join('').substring(0, 2);
@@ -106,15 +107,15 @@
   function fetchApps(query) {
     var params = '';
     if (query) params = '?search=' + encodeURIComponent(query);
-    return fetch('/api/apps' + params).then(function(r){ return r.json(); });
+    return apiFetch('/api/apps' + params);
   }
 
   function fetchApp(id) {
-    return fetch('/api/apps/' + id).then(function(r){ return r.json(); });
+    return apiFetch('/api/apps/' + id);
   }
 
   function installApp(id) {
-    return fetch('/api/apps/' + id + '/install', { method: 'POST' }).then(function(r){ return r.json(); });
+    return apiFetch('/api/apps/' + id + '/install', { method: 'POST' });
   }
 
   var currentModalApp = null;
@@ -136,7 +137,7 @@
       document.getElementById('modalCategory').textContent = catMap[app.category] || app.category;
       document.getElementById('modalPrice').textContent = app.price;
       document.getElementById('modalRatingVal').textContent = app.rating + ' / 5';
-      document.getElementById('moreInfoLink').href = '/download.html?id=' + app.id;
+      document.getElementById('moreInfoLink').href = 'download.html?id=' + app.id;
       updateInstallBtn(app);
       overlay.classList.add('active');
     });
@@ -175,6 +176,7 @@
   }
 
   function renderHome(apps) {
+    if (currentPlatform) apps = apps.filter(function(a){ return a.platform === currentPlatform; });
     var spotlightEl = document.getElementById('spotlightContainer');
     var surfaceEl = document.getElementById('surfaceList');
     var featuredEl = document.getElementById('featuredGrid');
@@ -238,7 +240,7 @@
   function tileClickHandler(e) {
     var el = e.currentTarget;
     var id = el.dataset.id;
-    if (id) window.location.href = '/download.html?id=' + id;
+    if (id) window.location.href = 'download.html?id=' + id;
   }
 
   function doSearch() {
@@ -326,8 +328,7 @@
   function loadUser() {
     var token = getToken();
     if (!token) return;
-    fetch('/api/me', { headers: { 'x-auth-token': token } })
-      .then(function(r){ return r.json(); })
+    apiFetch('/api/me', { headers: { 'x-auth-token': token } })
       .then(function(user){
         if (user && user.displayName) setLoggedIn(user);
       }).catch(function(){});
@@ -448,7 +449,7 @@
       var password = document.getElementById('loginPassword').value;
       var msg = document.getElementById('loginMsg');
       if (!username || !password) { msg.textContent = 'Заполните все поля'; return; }
-      fetch('/api/login', {
+      apiFetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, password: password })
@@ -469,7 +470,7 @@
       var password = document.getElementById('regPassword').value;
       var msg = document.getElementById('regMsg');
       if (!username || !password) { msg.textContent = 'Заполните все поля'; return; }
-      fetch('/api/register', {
+      apiFetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, displayName: displayName, password: password })
@@ -499,7 +500,7 @@
       var newPw = document.getElementById('cpNewPassword').value;
       var msg = document.getElementById('cpMsg');
       if (!oldPw || !newPw) { msg.textContent = 'Заполните все поля'; return; }
-      fetch('/api/changepass', {
+      apiFetch('/api/changepass', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-auth-token': getToken() },
         body: JSON.stringify({ oldPassword: oldPw, newPassword: newPw })
@@ -525,12 +526,39 @@
   }
 
   function loadStats() {
-    fetch('/api/stats').then(function(r){ return r.json(); }).then(function(s){
+    apiFetch('/api/stats').then(function(r){ return r.json(); }).then(function(s){
       document.getElementById('statsTotal').textContent = s.totalDownloads || 0;
     }).catch(function(){});
   }
 
+  function checkPermission() {
+    if (typeof Android === 'undefined') return;
+    if (localStorage.getItem('perm_shown')) return;
+    var granted = Android.checkInstallPermission();
+    if (granted) { localStorage.setItem('perm_shown', '1'); return; }
+    localStorage.setItem('perm_shown', '1');
+    var ov = document.getElementById('errOverlay');
+    document.getElementById('errTitle').textContent = 'Требуется разрешение';
+    document.getElementById('errDesc').textContent = 'Для установки приложений из mStore необходимо разрешить установку из неизвестных источников. Без этого приложения могут не установиться.';
+    document.getElementById('errBtn').textContent = 'Открыть настройки';
+    ov.style.display = 'flex';
+    document.getElementById('errBtn').onclick = function(){
+      Android.requestInstallPermission();
+    };
+    document.getElementById('errDismiss').onclick = function(){
+      ov.style.display = 'none';
+    };
+    function recheck() {
+      if (typeof Android !== 'undefined' && Android.checkInstallPermission()) {
+        ov.style.display = 'none';
+        document.removeEventListener('visibilitychange', recheck);
+      }
+    }
+    document.addEventListener('visibilitychange', recheck);
+  }
+
   function init() {
+    checkPermission();
     initAuth();
 
     fetchApps().then(function(apps){

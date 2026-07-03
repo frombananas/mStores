@@ -107,15 +107,15 @@
   function fetchApps(query) {
     var params = '';
     if (query) params = '?search=' + encodeURIComponent(query);
-    return apiFetch('/api/apps' + params).then(function(r){ return r.json(); });
+    return apiFetch('/api/apps' + params);
   }
 
   function fetchApp(id) {
-    return apiFetch('/api/apps/' + id).then(function(r){ return r.json(); });
+    return apiFetch('/api/apps/' + id);
   }
 
   function installApp(id) {
-    return apiFetch('/api/apps/' + id + '/install', { method: 'POST' }).then(function(r){ return r.json(); });
+    return apiFetch('/api/apps/' + id + '/install', { method: 'POST' });
   }
 
   var currentModalApp = null;
@@ -329,7 +329,6 @@
     var token = getToken();
     if (!token) return;
     apiFetch('/api/me', { headers: { 'x-auth-token': token } })
-      .then(function(r){ return r.json(); })
       .then(function(user){
         if (user && user.displayName) setLoggedIn(user);
       }).catch(function(){});

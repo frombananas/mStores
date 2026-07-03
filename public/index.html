@@ -2,17 +2,21 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=1280, initial-scale=0.5, user-scalable=yes">
+  <style>
+    html, body { -webkit-overflow-scrolling: auto; overscroll-behavior: none; }
+  </style>
   <title>mStore</title>
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="stylesheet" href="/style.css?v=3">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css?v=3">
+  <script src="config.js"></script>
 </head>
 <body>
 
   <header class="metro-header">
     <nav class="header-nav">
       <a href="#" class="header-logo" data-nav="home">
-        <img src="/favicon.png" width="40" height="40" alt="" style="display:block;">
+        <img src="favicon.png" width="40" height="40" alt="" style="display:block;">
         <span>mStore</span>
       </a>
       <div class="account-dropdown" id="accountDropdown">
@@ -66,7 +70,7 @@
   <div class="submit-overlay" id="submitOverlay" style="display:none;">
     <div class="submit-panel">
       <div class="auth-header">
-        <img src="/favicon.png" width="36" height="36" alt="">
+        <img src="favicon.png" width="36" height="36" alt="">
         <span>Подать заявку</span>
       </div>
       <div class="auth-body">
@@ -118,7 +122,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
       </button>
       <div class="auth-header">
-        <img src="/favicon.png" width="36" height="36" alt="" style="display:block;">
+        <img src="favicon.png" width="36" height="36" alt="" style="display:block;">
         <span id="authTitle">Metro Store</span>
       </div>
       <div class="auth-tabs" id="authTabs">
@@ -185,6 +189,17 @@
   </div>
 
 
-  <script src="/app.js"></script>
+  <div class="err-overlay" id="errOverlay" style="display:none;">
+    <div class="err-bar">
+      <div class="err-body">
+        <h2 class="err-title" id="errTitle"></h2>
+        <p class="err-desc" id="errDesc"></p>
+        <button class="err-btn" id="errBtn">Продолжить</button>
+        <button class="err-btn err-btn-secondary" id="errDismiss">Позже</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

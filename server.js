@@ -13,6 +13,12 @@ const PUBLIC_DIR = process.env.PUBLIC_DIR || (isVercel ? '/tmp/public' : path.jo
 process.env.DB_PATH = path.join(DATA_DIR, 'store.db');
 const db = require('./db');
 
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-auth-token');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
 app.use(express.json({ limit: '100mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 if (PUBLIC_DIR !== path.join(__dirname, 'public')) {

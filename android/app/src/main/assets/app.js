@@ -4,7 +4,7 @@
   }
   var allApps = [];
   var currentUser = null;
-  var currentPlatform = 'android';
+  var currentPlatform = typeof Android !== 'undefined' ? 'android' : '';
 
   function getInstalledApps() {
     try { return JSON.parse(localStorage.getItem('installed') || '[]'); }

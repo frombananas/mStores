@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         request.setTitle("mStore");
         request.setDescription("Загрузка " + fileName);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, fileName);
         request.setMimeType("application/vnd.android.package-archive");
         DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         downloadId = dm.enqueue(request);
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         request.setTitle("mStore");
         request.setDescription("Загрузка " + fileName);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, fileName);
         request.setMimeType("application/vnd.android.package-archive");
         DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         downloadId = dm.enqueue(request);

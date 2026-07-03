@@ -561,7 +561,7 @@
     fetchApps().then(function(apps){
       allApps = apps;
       renderHome(apps);
-    });
+    }).catch(function(){});
 
     loadStats();
     setInterval(loadStats, 5000);

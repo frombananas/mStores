@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
+import android.webkit.JavascriptInterface;
 import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         webView.setLongClickable(false);
         webView.setOnLongClickListener(null);
 
+        webView.addJavascriptInterface(this, "Android");
+
         webView.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
@@ -67,6 +71,48 @@ public class MainActivity extends AppCompatActivity {
         webView.clearCache(true);
         webView.clearHistory();
         webView.loadUrl("file:///android_asset/index.html");
+    }
+
+    @JavascriptInterface
+    public void startDownload(String url) {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        String fileName = URLUtil.guessFileName(url, null, null);
+        if (!fileName.endsWith(".apk")) fileName = "app.apk";
+        request.setTitle("mStore");
+        request.setDescription("Загрузка " + fileName);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+        request.setMimeType("application/vnd.android.package-archive");
+        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        downloadId = dm.enqueue(request);
+    }
+
+    @JavascriptInterface
+    public int getDownloadProgress() {
+        if (downloadId < 0) return 0;
+        try {
+            DownloadManager.Query query = new DownloadManager.Query();
+            query.setFilterById(downloadId);
+            DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+            Cursor cursor = dm.query(query);
+            if (cursor == null || !cursor.moveToFirst()) {
+                if (cursor != null) cursor.close();
+                return 0;
+            }
+            int bytesIdx = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
+            int totalIdx = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES);
+            int statusIdx = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+            if (bytesIdx < 0 || totalIdx < 0 || statusIdx < 0) { cursor.close(); return 0; }
+            int bytesDownloaded = cursor.getInt(bytesIdx);
+            int totalBytes = cursor.getInt(totalIdx);
+            int status = cursor.getInt(statusIdx);
+            cursor.close();
+            if (status == DownloadManager.STATUS_SUCCESSFUL) return 100;
+            if (totalBytes <= 0) return 0;
+            return (int) ((bytesDownloaded * 100L) / totalBytes);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     private void downloadAndInstall(String url, String contentDisposition) {

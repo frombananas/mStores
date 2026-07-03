@@ -278,21 +278,40 @@
     progFill.style.width = '0%';
     progText.textContent = '0%';
 
-    var a = document.createElement('a');
-    a.href = API_BASE + '/api/apps/' + currentAppId + '/download';
-    a.download = '';
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    progFill.style.width = '100%';
-    progText.textContent = 'Загрузка...';
-    setTimeout(function(){
+    if (typeof Android !== 'undefined') {
+      Android.startDownload(API_BASE + '/api/apps/' + currentAppId + '/download');
+      var pollTimer = setInterval(function(){
+        var pct = Android.getDownloadProgress();
+        progFill.style.width = pct + '%';
+        progText.textContent = pct + '%';
+        if (pct >= 100) {
+          clearInterval(pollTimer);
+          progText.textContent = 'Установка...';
+          setTimeout(function(){
+            btn.style.display = '';
+            btn.textContent = 'Скачано';
+            btn.classList.add('done');
+            progDiv.style.display = 'none';
+          }, 2000);
+        }
+      }, 500);
+    } else {
+      var a = document.createElement('a');
+      a.href = API_BASE + '/api/apps/' + currentAppId + '/download';
+      a.download = '';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
       document.body.removeChild(a);
-      btn.style.display = '';
-      btn.textContent = 'Скачано';
-      btn.classList.add('done');
-      progDiv.style.display = 'none';
-    }, 1000);
+      progFill.style.width = '100%';
+      progText.textContent = 'Загрузка...';
+      setTimeout(function(){
+        btn.style.display = '';
+        btn.textContent = 'Скачано';
+        btn.classList.add('done');
+        progDiv.style.display = 'none';
+      }, 2000);
+    }
   }
 
   function init() {

@@ -130,7 +130,7 @@ html, body {
   width: 750px;
 }
 #sectionSpotlight {
-  width: 1400px;
+  width: 1280px;
 }
 
 .panorama-group {
@@ -157,7 +157,7 @@ html, body {
 }
 
 .spotlight-tile {
-  width: 1400px;
+  width: 1280px;
   height: auto;
   cursor: pointer;
   transition: transform 0.1s ease-out;
@@ -175,7 +175,7 @@ html, body {
 
 .spotlight-hero {
   width: 100%;
-  height: 680px;
+  height: 600px;
   overflow: hidden;
   position: relative;
   background: #ccc;

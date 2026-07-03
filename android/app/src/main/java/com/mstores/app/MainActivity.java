@@ -123,25 +123,28 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= 26) {
                 return getPackageManager().canRequestPackageInstalls();
             }
+            return Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS, 1) == 1;
         } catch (Exception e) {
             return false;
         }
-        return true;
     }
 
     @JavascriptInterface
     public void requestInstallPermission() {
-        if (Build.VERSION.SDK_INT >= 26) {
-            try {
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
                 intent.setData(Uri.parse("package:" + getPackageName()));
                 startActivity(intent);
-            } catch (Exception e) {
-                try {
-                    Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
-                    startActivity(intent);
-                } catch (Exception ex) {}
+            } else {
+                Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+                startActivity(intent);
             }
+        } catch (Exception e) {
+            try {
+                Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+                startActivity(intent);
+            } catch (Exception ex) {}
         }
     }
 

@@ -112,7 +112,7 @@
     ];
 
     categories.forEach(function(cat){
-      var catApps = apps.filter(function(a){ return a.category === cat.key; }).slice(0, 4);
+      var catApps = apps.filter(function(a){ return (a.category || '').toLowerCase() === cat.key; }).slice(0, 4);
       if (catApps.length === 0) return;
 
       var category = document.createElement('div');

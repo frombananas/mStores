@@ -193,7 +193,7 @@ html, body {
   background: #fff;
 }
 .spotlight-main .spotlight-hero {
-  width: 75%;
+  width: 60%;
   height: 400px;
   overflow: hidden;
   position: relative;
@@ -248,10 +248,10 @@ html, body {
 .collections-header {
   display: flex;
   align-items: baseline;
-  margin: 24px 0 10px;
+  margin: 12px 0 8px;
 }
 .collections-title {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   font-weight: 300;
   color: #333;
 }

@@ -46,7 +46,12 @@
     main.innerHTML = '';
 
     function showMain(app) {
-      main.innerHTML = '';
+      var heroWrap = document.getElementById('spotlightHeroWrap');
+      var bodyWrap = document.getElementById('spotlightBodyWrap');
+      if (!heroWrap || !bodyWrap) return;
+      heroWrap.innerHTML = '';
+      bodyWrap.innerHTML = '';
+
       var hero = document.createElement('div');
       hero.className = 'spotlight-hero';
       if (app.screenshots && app.screenshots.length) {
@@ -56,7 +61,7 @@
         var iconUrl = app.icon_url || makeIcon(app.name, app.color_theme, 180);
         hero.innerHTML = '<img class="spotlight-hero-icon" src="' + iconUrl + '" alt="">';
       }
-      main.appendChild(hero);
+      heroWrap.appendChild(hero);
 
       var body = document.createElement('div');
       body.className = 'spotlight-body';
@@ -68,10 +73,10 @@
           '<div class="spotlight-stars-row">' + renderStars(app.rating) + '</div>' +
           '<div class="spotlight-review-count">' + (app.reviewCount || 0) + ' отзывов</div>' +
         '</div>';
-      main.appendChild(body);
+      bodyWrap.appendChild(body);
 
-      main.style.cursor = 'pointer';
-      main.onclick = function(){
+      bodyWrap.style.cursor = 'pointer';
+      bodyWrap.onclick = function(){
         window.location.href = 'download.html?id=' + app.id;
       };
     }

@@ -130,7 +130,7 @@ html, body {
   width: 750px;
 }
 #sectionSpotlight {
-  width: 1200px;
+  width: 1350px;
 }
 
 .panorama-group {
@@ -161,13 +161,13 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: 56px;
+  width: 64px;
   flex-shrink: 0;
 }
 
 .spotlight-sidebar-tile {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   cursor: pointer;
   background: #0078D7;
   display: flex;
@@ -194,7 +194,7 @@ html, body {
 }
 .spotlight-main .spotlight-hero {
   width: 75%;
-  height: 360px;
+  height: 400px;
   overflow: hidden;
   position: relative;
   background: #ccc;

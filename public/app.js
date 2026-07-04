@@ -43,7 +43,10 @@
     if (!sidebar || !main) return;
 
     sidebar.innerHTML = '';
-    main.innerHTML = '';
+    var heroWrap = document.getElementById('spotlightHeroWrap');
+    var bodyWrap = document.getElementById('spotlightBodyWrap');
+    if (heroWrap) heroWrap.innerHTML = '';
+    if (bodyWrap) bodyWrap.innerHTML = '';
 
     function showMain(app) {
       var heroWrap = document.getElementById('spotlightHeroWrap');

@@ -137,7 +137,6 @@ html, body {
   display: flex;
   flex-shrink: 0;
   gap: 0;
-  margin-left: -20px;
 }
 .panorama-group .panorama-section {
   width: 375px;
@@ -249,7 +248,8 @@ html, body {
 .collections-header {
   display: flex;
   align-items: baseline;
-  margin: 24px 0 8px;
+  margin: 16px 0 8px;
+  padding: 0 0;
 }
 .collections-title {
   font-size: 1.6rem;

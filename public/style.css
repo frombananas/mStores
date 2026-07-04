@@ -137,6 +137,7 @@ html, body {
   display: flex;
   flex-shrink: 0;
   gap: 0;
+  margin-left: -20px;
 }
 .panorama-group .panorama-section {
   width: 375px;

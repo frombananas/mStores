@@ -271,7 +271,7 @@ html, body {
 }
 .collections-row {
   display: flex;
-  gap: 16px;
+  gap: 32px;
 }
 
 .collection-category {

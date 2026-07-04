@@ -283,7 +283,7 @@
       return b.rating - a.rating;
     });
 
-    var sidebarApps = sorted.slice(0, 6);
+    var sidebarApps = sorted.slice(0, 5);
     var mainApp = sorted[0];
     renderSpotlight(sidebarApps, mainApp);
     renderCollections(apps);

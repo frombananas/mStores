@@ -130,7 +130,7 @@ html, body {
   width: 750px;
 }
 #sectionSpotlight {
-  width: 1100px;
+  width: 1200px;
 }
 
 .panorama-group {
@@ -248,7 +248,7 @@ html, body {
 .collections-header {
   display: flex;
   align-items: baseline;
-  margin: 16px 0 8px;
+  margin: 24px 0 10px;
 }
 .collections-title {
   font-size: 1.3rem;

@@ -139,7 +139,7 @@ html, body {
   gap: 0;
 }
 .panorama-group .panorama-section {
-  width: 375px;
+  width: 420px;
   margin-right: 0;
 }
 
@@ -414,12 +414,12 @@ html, body {
 
 .featured-grid {
   display: grid;
-  grid-template-columns: repeat(3, 150px);
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
 .featured-tile {
-  width: 150px;
+  width: 100%;
   background: #fff;
   cursor: pointer;
   display: flex;
@@ -951,7 +951,7 @@ html, body {
 }
 
 .search-section .featured-grid {
-  grid-template-columns: repeat(auto-fill, 150px);
+  grid-template-columns: repeat(auto-fill, 180px);
 }
 
 @media (max-width: 600px) {
@@ -1027,8 +1027,8 @@ html, body {
   .surface-list { min-width: 240px; }
   .surface-item .surface-icon { width: 52px; height: 52px; }
   .surface-item .surface-icon img { width: 100%; height: 100%; object-fit: cover; }
-  .featured-grid { grid-template-columns: repeat(3, 120px); gap: 6px; }
-  .featured-tile { width: 120px; padding: 12px 8px 10px; }
+  .featured-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .featured-tile { width: 100%; padding: 12px 8px 10px; }
   .featured-tile .featured-icon { width: 80px; height: 80px; }
   .featured-tile .featured-icon img { width: 100%; height: 100%; object-fit: cover; }
   .featured-tile .featured-name { font-size: 11px; }
@@ -1110,8 +1110,8 @@ html, body {
   .spotlight-main .spotlight-body .spotlight-price { font-size: 12px; }
   .collections-grid { gap: 8px; }
   .collection-tile { width: 48px; height: 48px; }
-  .featured-grid { grid-template-columns: repeat(3, 100px); gap: 4px; }
-  .featured-tile { width: 100px; padding: 10px 6px 8px; }
+  .featured-grid { grid-template-columns: repeat(2, 1fr); gap: 4px; }
+  .featured-tile { width: 100%; padding: 10px 6px 8px; }
   .featured-tile .featured-icon { width: 58px; height: 58px; }
   .featured-tile .featured-icon img { width: 100%; height: 100%; object-fit: cover; }
   .featured-tile .featured-name { font-size: 10px; }

@@ -305,7 +305,7 @@
       delay += step;
     });
 
-    var featuredApps = apps.slice(3, 12);
+    var featuredApps = apps.slice(0, 4);
     featuredApps.forEach(function(app){
       var el = createFeaturedTile(app, delay);
       featuredEl.appendChild(el);

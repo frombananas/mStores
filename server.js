@@ -471,4 +471,71 @@ if (!isVercel) {
   });
 }
 
+// ─── Social API ─────────────────────────────────────────────────────────
+
+app.get('/api/social/me', (req, res) => {
+  const token = req.headers['x-auth-token'];
+  if (!token) return res.status(401).json({ error: 'Требуется авторизация' });
+  try {
+    const payload = JSON.parse(Buffer.from(token, 'base64').toString());
+    const profile = db.getProfile(payload.id);
+    if (!profile) return res.status(404).json({ error: 'Профиль не найден' });
+    profile.friends = db.getFriends(payload.id);
+    res.json(profile);
+  } catch { res.status(401).json({ error: 'Неверный токен' }); }
+});
+
+app.get('/api/social/user/:id', (req, res) => {
+  const profile = db.getProfile(parseInt(req.params.id));
+  if (!profile) return res.status(404).json({ error: 'Пользователь не найден' });
+  profile.friends = db.getFriends(profile.user_id);
+  profile.posts = db.getWallPosts(profile.user_id);
+  res.json(profile);
+});
+
+app.put('/api/social/profile', (req, res) => {
+  const token = req.headers['x-auth-token'];
+  try {
+    const payload = JSON.parse(Buffer.from(token, 'base64').toString());
+    db.updateProfile(payload.id, req.body);
+    res.json({ success: true });
+  } catch { res.status(400).json({ error: 'Ошибка' }); }
+});
+
+app.get('/api/social/posts/:userId', (req, res) => {
+  res.json(db.getWallPosts(parseInt(req.params.userId)));
+});
+
+app.post('/api/social/posts', (req, res) => {
+  const token = req.headers['x-auth-token'];
+  try {
+    const payload = JSON.parse(Buffer.from(token, 'base64').toString());
+    const targetId = req.body.userId || payload.id;
+    db.addWallPost(targetId, payload.id, req.body.text);
+    res.json({ success: true });
+  } catch { res.status(400).json({ error: 'Ошибка' }); }
+});
+
+app.post('/api/social/friends/:id', (req, res) => {
+  const token = req.headers['x-auth-token'];
+  try {
+    const payload = JSON.parse(Buffer.from(token, 'base64').toString());
+    db.addFriend(payload.id, parseInt(req.params.id));
+    res.json({ success: true });
+  } catch { res.status(400).json({ error: 'Ошибка' }); }
+});
+
+app.delete('/api/social/friends/:id', (req, res) => {
+  const token = req.headers['x-auth-token'];
+  try {
+    const payload = JSON.parse(Buffer.from(token, 'base64').toString());
+    db.removeFriend(payload.id, parseInt(req.params.id));
+    res.json({ success: true });
+  } catch { res.status(400).json({ error: 'Ошибка' }); }
+});
+
+app.get('/api/social/search', (req, res) => {
+  res.json(db.searchPeople(req.query.q || ''));
+});
+
 module.exports = app;

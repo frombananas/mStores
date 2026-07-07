@@ -86,6 +86,39 @@ db.exec(`
 // Migration: add spotlight column if missing
 try { db.exec(`ALTER TABLE apps ADD COLUMN spotlight INTEGER DEFAULT 0`); } catch(e) {}
 
+// ─── Social Tables ─────────────────────────────────────────────────────
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS profiles (
+    user_id INTEGER PRIMARY KEY,
+    first_name TEXT DEFAULT '',
+    last_name TEXT DEFAULT '',
+    status TEXT DEFAULT '',
+    city TEXT DEFAULT '',
+    birth_date TEXT DEFAULT '',
+    avatar_url TEXT DEFAULT '',
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS wall_posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    author_id INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS friends (
+    user_id INTEGER NOT NULL,
+    friend_id INTEGER NOT NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    PRIMARY KEY (user_id, friend_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (friend_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+`);
+
 // ─── Prepared Statements ────────────────────────────────────────────────
 
 // Apps
@@ -237,5 +270,46 @@ module.exports = {
     const approvedAt = status === 'approved' ? new Date().toISOString() : null;
     stmtUpdateSubStatus.run(status, approvedAt, id);
   },
-  deleteSubmission(id) { stmtDeleteSub.run(id); }
+  deleteSubmission(id) { stmtDeleteSub.run(id); },
+
+  // ─── Social ──────────────────────────────────────────────────────────
+  getProfile(userId) {
+    let p = db.prepare('SELECT * FROM profiles WHERE user_id = ?').get(userId);
+    if (!p) {
+      const u = this.getUser(userId);
+      if (!u) return null;
+      db.prepare('INSERT OR IGNORE INTO profiles (user_id, first_name, last_name) VALUES (?, ?, ?)').run(userId, u.display_name, '');
+      return { user_id: userId, first_name: u.display_name, last_name: '', status: '', city: '', birth_date: '', avatar_url: u.avatar_url };
+    }
+    const u = this.getUser(userId);
+    if (u) p.avatar_url = p.avatar_url || u.avatar_url;
+    return p;
+  },
+  updateProfile(userId, fields) {
+    const keys = Object.keys(fields).filter(k => ['first_name','last_name','status','city','birth_date','avatar_url'].includes(k));
+    if (!keys.length) return;
+    const sets = keys.map(k => `${k} = ?`).join(', ');
+    const vals = keys.map(k => fields[k]);
+    db.prepare(`INSERT INTO profiles (user_id, ${keys.join(',')}) VALUES (?, ${keys.map(()=>'?').join(',')}) ON CONFLICT(user_id) DO UPDATE SET ${sets}`).run(userId, ...vals, ...vals);
+  },
+  getWallPosts(userId) {
+    return db.prepare(`SELECT w.*, u.display_name as author_name, u.avatar_url as author_avatar FROM wall_posts w JOIN users u ON w.author_id = u.id WHERE w.user_id = ? ORDER BY w.created_at DESC LIMIT 50`).all(userId);
+  },
+  addWallPost(userId, authorId, text) {
+    return db.prepare('INSERT INTO wall_posts (user_id, author_id, text) VALUES (?, ?, ?)').run(userId, authorId, text);
+  },
+  getFriends(userId) {
+    return db.prepare(`SELECT u.id, u.display_name, u.avatar_url, p.first_name, p.last_name FROM friends f JOIN users u ON f.friend_id = u.id LEFT JOIN profiles p ON u.id = p.user_id WHERE f.user_id = ?`).all(userId);
+  },
+  addFriend(userId, friendId) {
+    db.prepare('INSERT OR IGNORE INTO friends (user_id, friend_id) VALUES (?, ?)').run(userId, friendId);
+    db.prepare('INSERT OR IGNORE INTO friends (user_id, friend_id) VALUES (?, ?)').run(friendId, userId);
+  },
+  removeFriend(userId, friendId) {
+    db.prepare('DELETE FROM friends WHERE user_id = ? AND friend_id = ?').run(userId, friendId);
+    db.prepare('DELETE FROM friends WHERE user_id = ? AND friend_id = ?').run(friendId, userId);
+  },
+  searchPeople(query) {
+    return db.prepare(`SELECT u.id, u.display_name, u.avatar_url FROM users u WHERE u.display_name LIKE ? LIMIT 20`).all(`%${query}%`);
+  },
 };

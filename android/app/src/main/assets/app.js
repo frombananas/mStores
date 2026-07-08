@@ -195,7 +195,7 @@
     var catMap = {
       social: 'Соцсети', games: 'Игры', productivity: 'Продукты',
       entertainment: 'Развлечения', news: 'Новости', creativity: 'Творчество',
-      music: 'Музыка', photo: 'Фото', other: 'Другое'
+      music: 'Музыка', photo: 'Фото', weather: 'Погода', sports: 'Спорт', other: 'Другое'
     };
     var cat = catMap[app.category] || app.category;
     var price = app.price === 'Free' ? 'Бесплатно' : app.price;
@@ -241,7 +241,7 @@
       document.getElementById('modalDev').textContent = app.developer;
       document.getElementById('modalRating').innerHTML = renderStars(app.rating);
       document.getElementById('modalDesc').textContent = app.description;
-      var catMap = { social: 'Соцсети', games: 'Игры', productivity: 'Продукты', entertainment: 'Развлечения', news: 'Новости', creativity: 'Творчество', music: 'Музыка', photo: 'Фото', other: 'Другое' };
+      var catMap = { social: 'Соцсети', games: 'Игры', productivity: 'Продукты', entertainment: 'Развлечения', news: 'Новости', creativity: 'Творчество', music: 'Музыка', photo: 'Фото', weather: 'Погода', sports: 'Спорт', other: 'Другое' };
       document.getElementById('modalCategory').textContent = catMap[app.category] || app.category;
       document.getElementById('modalPrice').textContent = app.price;
       document.getElementById('modalRatingVal').textContent = app.rating + ' / 5';
@@ -614,7 +614,8 @@
 
   function loadStats() {
     apiFetch('/api/stats').then(function(s){
-      document.getElementById('statsTotal').textContent = s.totalDownloads || 0;
+      var el = document.getElementById('statsTotal');
+      if (el) el.textContent = s.totalDownloads || 0;
     }).catch(function(){});
   }
 

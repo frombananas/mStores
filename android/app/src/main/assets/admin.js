@@ -17,7 +17,7 @@
       headers['Content-Type'] = 'application/json';
       body = body ? JSON.stringify(body) : undefined;
     }
-    return apiFetch(path, {
+    return fetch(API_BASE + path, {
       method: opts.method || 'GET',
       headers: headers,
       body: body
